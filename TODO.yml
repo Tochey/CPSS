@@ -1,0 +1,4 @@
+Main:
+    Task:
+        1: Create infrastructure for main component that handles submissions
+        2: Test and validate it

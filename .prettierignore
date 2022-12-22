@@ -1,0 +1,5 @@
+.next
+dist
+build
+.serverless
+node_modules
