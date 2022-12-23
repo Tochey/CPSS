@@ -1,6 +1,9 @@
-POST https://cus2qzdlzl.execute-api.us-east-1.amazonaws.com/dev/hello
+POST https://kohug5bs2m.execute-api.us-east-1.amazonaws.com/dev/hello
 Content-Type: application/json
 
 {
     "name" : "tochi"
 }
+###
+
+GET https://kohug5bs2m.execute-api.us-east-1.amazonaws.com/dev/psURLs
