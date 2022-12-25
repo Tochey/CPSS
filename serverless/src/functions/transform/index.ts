@@ -1,7 +1,9 @@
 import { handlerPath } from "@libs/handler-resolver"
-
 export default {
     handler: `${handlerPath(__dirname)}/handler.main`,
+    destinations: {
+        onSuccess: "upload"
+    }, 
     events: [
         {
             s3: {

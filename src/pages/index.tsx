@@ -1,6 +1,13 @@
-// import Head from "next/head"
-// import Image from "next/image"
+import algoliasearch from 'algoliasearch/lite';
+import { Hits, InstantSearch, SearchBox, Highlight } from 'react-instantsearch-hooks-web';
 
-export default function Home() {
-    return <p className=' font-bold text-3xl'>This app is being built</p>
+const searchClient = algoliasearch(process.env.NEXT_PUBLIC_AGL_APPID!, process.env.NEXT_PUBLIC_ADMIN_API_KEY!);
+
+export default function App() {
+  return (
+    <InstantSearch searchClient={searchClient} indexName="test_index"> 
+      <SearchBox  placeholder='Search here'/>
+      <Hits  />
+    </InstantSearch>
+  );
 }

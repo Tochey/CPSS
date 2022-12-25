@@ -1,6 +1,7 @@
+import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import { formatJSONResponse, s3TypeWrapper } from "@libs/api-gateway"
-import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3"
 import { Readable } from "stream"
+import prettyBytes from "pretty-bytes"
 
 async function streamToString(stream: Readable): Promise<string> {
     return await new Promise((resolve, reject) => {
@@ -12,7 +13,6 @@ async function streamToString(stream: Readable): Promise<string> {
 }
 
 const transform: s3TypeWrapper = async (event) => {
-    console.log(event)
     const { Records } = event
     const {
         s3: {
@@ -21,14 +21,17 @@ const transform: s3TypeWrapper = async (event) => {
         },
     } = Records[0]
 
-    console.log({ size, name })
+    console.log({size : prettyBytes(size), key})
     const client = new S3Client({})
     const command = new GetObjectCommand({ Bucket: name, Key: key })
-    const response = await client.send(command)
-    let res: Readable = response.Body
-    console.log(await streamToString(res))
+    const {Body} = await client.send(command)
+
+    let indexText = await streamToString(Body)
+    
+    console.log(JSON.stringify({data : indexText}))
+    
     return formatJSONResponse({
-        event,
+        data : indexText
     })
 }
 

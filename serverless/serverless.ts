@@ -3,11 +3,13 @@ import type { AWS } from "@serverless/typescript"
 import hello from "@functions/hello"
 import psUrl from "@functions/psUrls"
 import transform from "@functions/transform"
+import upload from "@functions/upload"
 
 const serverlessConfiguration: AWS = {
     service: "serverless",
     frameworkVersion: "3",
-    plugins: ["serverless-esbuild"],
+    useDotenv : true,
+    plugins: ["serverless-esbuild", "serverless-step-functions"],
     provider: {
         name: "aws",
         runtime: "nodejs14.x",
@@ -29,6 +31,8 @@ const serverlessConfiguration: AWS = {
         environment: {
             AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
             NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
+            AGL_APPID: "${env:AGL_APPID}",
+            ADMIN_API_KEY: "${env:ADMIN_API_KEY}"
         },
     },
     resources: {
@@ -42,7 +46,9 @@ const serverlessConfiguration: AWS = {
         },
     },
 
-    functions: { hello, psUrl, transform },
+    functions: { hello, psUrl, transform, upload },
+
+
     package: { individually: true },
     custom: {
         esbuild: {
@@ -56,6 +62,7 @@ const serverlessConfiguration: AWS = {
             concurrency: 10,
         },
     },
+
 }
 
 module.exports = serverlessConfiguration
