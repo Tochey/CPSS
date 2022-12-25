@@ -8,7 +8,7 @@ import upload from "@functions/upload"
 const serverlessConfiguration: AWS = {
     service: "serverless",
     frameworkVersion: "3",
-    useDotenv : true,
+    useDotenv: true,
     plugins: ["serverless-esbuild", "serverless-step-functions"],
     provider: {
         name: "aws",
@@ -32,7 +32,7 @@ const serverlessConfiguration: AWS = {
             AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
             NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
             AGL_APPID: "${env:AGL_APPID}",
-            ADMIN_API_KEY: "${env:ADMIN_API_KEY}"
+            ADMIN_API_KEY: "${env:ADMIN_API_KEY}",
         },
     },
     resources: {
@@ -48,7 +48,6 @@ const serverlessConfiguration: AWS = {
 
     functions: { hello, psUrl, transform, upload },
 
-
     package: { individually: true },
     custom: {
         esbuild: {
@@ -62,7 +61,6 @@ const serverlessConfiguration: AWS = {
             concurrency: 10,
         },
     },
-
 }
 
 module.exports = serverlessConfiguration

@@ -21,17 +21,17 @@ const transform: s3TypeWrapper = async (event) => {
         },
     } = Records[0]
 
-    console.log({size : prettyBytes(size), key})
+    console.log({ size: prettyBytes(size), key })
     const client = new S3Client({})
     const command = new GetObjectCommand({ Bucket: name, Key: key })
-    const {Body} = await client.send(command)
+    const { Body } = await client.send(command)
 
     let indexText = await streamToString(Body)
-    
-    console.log(JSON.stringify({data : indexText}))
-    
+
+    console.log(JSON.stringify({ data: indexText }))
+
     return formatJSONResponse({
-        data : indexText
+        data: indexText,
     })
 }
 
