@@ -41,6 +41,14 @@ const serverlessConfiguration: AWS = {
                 Type: "AWS::S3::Bucket",
                 Properties: {
                     BucketName: "submission-bucket",
+                    CorsConfiguration: {
+                        CorsRules: [
+                            {
+                                AllowedMethods: ["PUT"],
+                                AllowedOrigins: ["*"],
+                            },
+                        ],
+                    },
                 },
             },
         },
@@ -59,6 +67,7 @@ const serverlessConfiguration: AWS = {
             define: { "require.resolve": undefined },
             platform: "node",
             concurrency: 10,
+            keepOutputDirectory : true
         },
     },
 }

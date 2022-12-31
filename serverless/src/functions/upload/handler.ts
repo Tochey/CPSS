@@ -1,4 +1,3 @@
-import { formatJSONResponse } from "@libs/api-gateway"
 import type { Handler, S3CreateEvent } from "aws-lambda"
 import { APIGatewayProxyResult } from "aws-lambda"
 import algoliasearch from "algoliasearch"

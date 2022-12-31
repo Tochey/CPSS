@@ -2,4 +2,4 @@ Main:
     Task:
         1: Create infrastructure for main component that handles submissions
         2: Test and validate it
-        3: packaging with serverless. make sure it takes just what it needs
+        3: packaging with serverless. make sure it takes just what it needs -- done

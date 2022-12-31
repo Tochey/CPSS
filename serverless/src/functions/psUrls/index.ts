@@ -5,8 +5,20 @@ export default {
     events: [
         {
             http: {
-                method: "GET",
+                method: "POST",
                 path: "psURLs",
+                cors: {
+                    origin: "*",
+                    headers: [
+                        "Content-Type",
+                        "X-Amz-Date",
+                        "Authorization",
+                        "X-Api-Key",
+                        "X-Amz-Security-Token",
+                        "X-Amz-User-Agent",
+                    ],
+                    allowCredentials: false,
+                },
             },
         },
     ],
