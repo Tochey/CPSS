@@ -67,7 +67,7 @@ const serverlessConfiguration: AWS = {
             define: { "require.resolve": undefined },
             platform: "node",
             concurrency: 10,
-            keepOutputDirectory : true
+            keepOutputDirectory: true,
         },
     },
 }

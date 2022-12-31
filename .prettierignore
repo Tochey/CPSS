@@ -3,3 +3,4 @@ dist
 build
 .serverless
 node_modules
+.esbuild

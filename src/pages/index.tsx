@@ -68,7 +68,7 @@ export default function App() {
                 id='fileUpload'
                 onChange={changeHandler}
                 className='m-5'
-                accept=".txt"
+                accept='.txt'
             />
             <div>
                 <button
