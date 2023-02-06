@@ -17,7 +17,7 @@ export default function App() {
     }
 
     const handleUpload = async () => {
-        const ans = fetch(process.env.NEXT_PUBLIC_PRESIGNER as unknown as URL, {
+        const url = fetch(process.env.NEXT_PUBLIC_PRESIGNER as unknown as URL, {
             method: "POST",
             headers: {
                 "Content-type": "application/json",
@@ -27,24 +27,24 @@ export default function App() {
             .then((e) => e.json())
             .then((e) => e.res)
 
-        // await fetch(await ans, {
-        //     method: "PUT",
-        //     headers: {
-        //         'Content-type': 'multipart/form-data',
-        //       },
-        //     body: selectedFile,
-        // })
-        //     .then((response) => response.json())
-        //     .then((result) => {
-        //         console.log("Success:", result)
-        //     })
-        //     .catch((error) => {
-        //         console.error("Error:", error)
-        //     })
+        await fetch(await url, {
+            method: "PUT",
+            headers: {
+                'Content-type': 'multipart/form-data',
+              },
+            body: selectedFile,
+        })
+            .then((response) => response.json())
+            .then((result) => {
+                console.log("Success:", result)
+            })
+            .catch((error) => {
+                console.error("Error:", error)
+            })
     }
 
     if (isFilePicked) {
-        var reader = new FileReader()
+        let reader = new FileReader()
         console.log(selectedFile)
         reader.onload = function (e) {
             var content = reader.result
@@ -59,7 +59,7 @@ export default function App() {
     return (
         <div>
             <InstantSearch searchClient={searchClient} indexName='test_index'>
-                <SearchBox placeholder='Search here' searchAsYouType={false} />
+                <SearchBox placeholder='Search here' />
                 <Hits />
             </InstantSearch>
             <input

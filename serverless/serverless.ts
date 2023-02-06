@@ -4,6 +4,7 @@ import hello from "@functions/hello"
 import psUrl from "@functions/psUrls"
 import transform from "@functions/transform"
 import upload from "@functions/upload"
+import server from "@functions/server"
 
 const serverlessConfiguration: AWS = {
     service: "serverless",
@@ -54,7 +55,7 @@ const serverlessConfiguration: AWS = {
         },
     },
 
-    functions: { hello, psUrl, transform, upload },
+    functions: { hello, psUrl, transform, upload, server },
 
     package: { individually: true },
     custom: {
