@@ -6,14 +6,14 @@ export default {
         {
             http: {
                 method: "ANY",
-                path : ''
-            }
+                path: "",
+            },
         },
         {
             http: {
                 method: "ANY",
-                path : '{proxy+}'
-            }
-        }
-    ]
+                path: "{proxy+}",
+            },
+        },
+    ],
 }

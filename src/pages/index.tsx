@@ -30,8 +30,8 @@ export default function App() {
         await fetch(await url, {
             method: "PUT",
             headers: {
-                'Content-type': 'multipart/form-data',
-              },
+                "Content-type": "multipart/form-data",
+            },
             body: selectedFile,
         })
             .then((response) => response.json())
