@@ -20,13 +20,29 @@ const serverlessConfiguration: AWS = {
                     {
                         Effect: "Allow",
                         Action: ["s3:PutObject", "s3:GetObject"],
-                        Resource: { 'Fn::Join': [ '', [ 'arn:aws:s3:::', { Ref: 'indexedSubmissionbucket' }, '/*' ] ] },
+                        Resource: {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    "arn:aws:s3:::",
+                                    { Ref: "indexedSubmissionbucket" },
+                                    "/*",
+                                ],
+                            ],
+                        },
                     },
                     {
                         Effect: "Allow",
-                        Action: ["dynamodb:DescribeTable", "dynamodb:Query", "dynamodb:Scan", "dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:UpdateItem"],
-                        Resource: { 'Fn::GetAtt': ['userTable', 'Arn'] },
-                    }
+                        Action: [
+                            "dynamodb:DescribeTable",
+                            "dynamodb:Query",
+                            "dynamodb:Scan",
+                            "dynamodb:GetItem",
+                            "dynamodb:PutItem",
+                            "dynamodb:UpdateItem",
+                        ],
+                        Resource: { "Fn::GetAtt": ["userTable", "Arn"] },
+                    },
                 ],
             },
         },
@@ -79,29 +95,29 @@ const serverlessConfiguration: AWS = {
                     TableName: "userTable",
                     AttributeDefinitions: [
                         {
-                            AttributeName: 'userId',
-                            AttributeType: 'S',
+                            AttributeName: "userId",
+                            AttributeType: "S",
                         },
                         {
-                            AttributeName: 'email',
-                            AttributeType: 'S',
-                          },
+                            AttributeName: "email",
+                            AttributeType: "S",
+                        },
                     ],
                     KeySchema: [
                         {
-                            AttributeName: 'userId',
-                            KeyType: 'HASH',
+                            AttributeName: "userId",
+                            KeyType: "HASH",
                         },
                         {
-                            AttributeName: 'email',
-                            KeyType: 'RANGE',
-                          },
+                            AttributeName: "email",
+                            KeyType: "RANGE",
+                        },
                     ],
                     ProvisionedThroughput: {
                         ReadCapacityUnits: 1,
                         WriteCapacityUnits: 1,
                     },
-                }
+                },
             },
         },
     },
