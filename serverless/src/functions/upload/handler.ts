@@ -28,7 +28,7 @@ const upload: Handler<asyncLambdaEvent> = async (event) => {
 
     let parsedBody = JSON.parse(body)
     const { data } = parsedBody
-    const index = client.initIndex("test_index")
+    const index = client.initIndex(process.env.ALGOLIA_INDEX_NAME!)
 
     const record = { objectID: uuidv4(), data: data }
     try {

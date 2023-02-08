@@ -20,8 +20,13 @@ const serverlessConfiguration: AWS = {
                     {
                         Effect: "Allow",
                         Action: ["s3:PutObject", "s3:GetObject"],
-                        Resource: "arn:aws:s3:::submission-bucket/*",
+                        Resource: { 'Fn::Join': [ '', [ 'arn:aws:s3:::', { Ref: 'indexedSubmissionbucket' }, '/*' ] ] },
                     },
+                    {
+                        Effect: "Allow",
+                        Action: ["dynamodb:DescribeTable", "dynamodb:Query", "dynamodb:Scan", "dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:UpdateItem"],
+                        Resource: { 'Fn::GetAtt': ['userTable', 'Arn'] },
+                    }
                 ],
             },
         },
@@ -29,19 +34,21 @@ const serverlessConfiguration: AWS = {
             minimumCompressionSize: 1024,
             shouldStartNameWithService: true,
         },
+
         environment: {
             AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
             NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
             AGL_APPID: "${env:AGL_APPID}",
             ADMIN_API_KEY: "${env:ADMIN_API_KEY}",
+            ALGOLIA_INDEX_NAME: "${env:ALGOLIA_INDEX_NAME}",
         },
     },
     resources: {
         Resources: {
-            submissionbucket: {
+            primarySubmissionBucket: {
                 Type: "AWS::S3::Bucket",
                 Properties: {
-                    BucketName: "submission-bucket",
+                    BucketName: "primary-submission-bucket",
                     CorsConfiguration: {
                         CorsRules: [
                             {
@@ -51,6 +58,50 @@ const serverlessConfiguration: AWS = {
                         ],
                     },
                 },
+            },
+            indexedSubmissionbucket: {
+                Type: "AWS::S3::Bucket",
+                Properties: {
+                    BucketName: "indexed-submission-bucket",
+                    CorsConfiguration: {
+                        CorsRules: [
+                            {
+                                AllowedMethods: ["PUT"],
+                                AllowedOrigins: ["*"],
+                            },
+                        ],
+                    },
+                },
+            },
+            userTable: {
+                Type: "AWS::DynamoDB::Table",
+                Properties: {
+                    TableName: "userTable",
+                    AttributeDefinitions: [
+                        {
+                            AttributeName: 'userId',
+                            AttributeType: 'S',
+                        },
+                        {
+                            AttributeName: 'email',
+                            AttributeType: 'S',
+                          },
+                    ],
+                    KeySchema: [
+                        {
+                            AttributeName: 'userId',
+                            KeyType: 'HASH',
+                        },
+                        {
+                            AttributeName: 'email',
+                            KeyType: 'RANGE',
+                          },
+                    ],
+                    ProvisionedThroughput: {
+                        ReadCapacityUnits: 1,
+                        WriteCapacityUnits: 1,
+                    },
+                }
             },
         },
     },

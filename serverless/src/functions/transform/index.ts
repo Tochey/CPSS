@@ -7,7 +7,7 @@ export default {
     events: [
         {
             s3: {
-                bucket: "submission-bucket",
+                bucket: "indexed-submission-bucket",
                 event: "s3:ObjectCreated:*",
                 existing: true,
             },

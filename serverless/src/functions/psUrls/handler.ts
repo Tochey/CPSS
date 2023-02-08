@@ -6,7 +6,7 @@ import { Handler } from "aws-lambda"
 const psUrls: Handler = async (event) => {
     const client = new S3Client({})
     console.log(event)
-    const params = { Bucket: "submission-bucket", Key: "test.txt" }
+    const params = { Bucket: "indexed-submission-bucket", Key: "test.txt" }
     const command = new PutObjectCommand(params)
     const res: string = await getSignedUrl(client, command, {
         expiresIn: 60 * 60,
