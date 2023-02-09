@@ -8,4 +8,4 @@ Main:
         6: Architect main submission bucket
         7: Secure APIGW
         8: Extract s3 bucket names to env file at least or ref through cloudformation
-        9: Custom dynamoose get | set methods 
+        9: Custom dynamoose get | set methods

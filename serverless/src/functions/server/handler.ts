@@ -1,31 +1,34 @@
 import { Request, Response } from "express"
-import * as dynamoose from "dynamoose";
+import * as dynamoose from "dynamoose"
 const serverless = require("serverless-http")
 const express = require("express")
 const app = express()
 app.use(express.json())
 
-const schema = new dynamoose.Schema({
-    "userId": String,
-    "email": String,
-    "age": Number
-}, {
-    "saveUnknown": false,
-    "timestamps": true
-});
+const schema = new dynamoose.Schema(
+    {
+        userId: String,
+        email: String,
+        age: Number,
+    },
+    {
+        saveUnknown: false,
+        timestamps: true,
+    }
+)
 
-const Cat = dynamoose.model("Cat", schema);
-const Table = new dynamoose.Table("userTable", [Cat]);
+const Cat = dynamoose.model("Cat", schema)
+const Table = new dynamoose.Table("userTable", [Cat])
 
 enum ROLE {
     FACULTY = "FACULTY",
     STUDENT = "STUDENT",
 }
 interface IUserSignup {
-    fullName: string;
-    email: string;
-    password: string;
-    ROLE: ROLE;
+    fullName: string
+    email: string
+    password: string
+    ROLE: ROLE
 }
 
 app.get("/", async (req: Request, res: Response) => {

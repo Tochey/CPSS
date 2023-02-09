@@ -4,7 +4,6 @@ const serverless = require("serverless-http")
 const app = express()
 app.use(express.json())
 
-
 console.log("Hello from the serverless function!")
 
 app.get("/", async (req: Request, res: Response) => {
