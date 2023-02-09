@@ -1,6 +1,0 @@
-export { default as hello } from "./hello"
-export { default as psUrl } from "./pre-signs"
-export { default as server } from "./server"
-export { default as transform } from "./transform"
-export { default as upload } from "./upload"
-export { default as student } from "./students"
