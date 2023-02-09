@@ -4,3 +4,4 @@ build
 .serverless
 node_modules
 .esbuild
+.aws-sam
