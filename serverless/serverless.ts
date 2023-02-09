@@ -1,16 +1,17 @@
 import type { AWS } from "@serverless/typescript"
 
 import hello from "@functions/hello"
-import psUrl from "@functions/psUrls"
+import psUrl from "@functions/pre-signs"
+import server from "@functions/server"
 import transform from "@functions/transform"
 import upload from "@functions/upload"
-import server from "@functions/server"
+import student from "@functions/students"
 
 const serverlessConfiguration: AWS = {
     service: "serverless",
     frameworkVersion: "3",
     useDotenv: true,
-    plugins: ["serverless-esbuild", "serverless-step-functions"],
+    plugins: ["serverless-esbuild", "serverless-offline"],
     provider: {
         name: "aws",
         runtime: "nodejs14.x",
@@ -122,7 +123,7 @@ const serverlessConfiguration: AWS = {
         },
     },
 
-    functions: { hello, psUrl, transform, upload, server },
+    functions: { hello, psUrl, transform, upload, server, student },
 
     package: { individually: true },
     custom: {

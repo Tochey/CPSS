@@ -1,15 +1,9 @@
-POST https://kohug5bs2m.execute-api.us-east-1.amazonaws.com/dev/hello
-Content-Type: application/json
+POST  https://localhost:3000
 
 {
-    "name" : "tochi"
+    "email" : "camanze@outlook.com",
+    "password" : "tochi123"
 }
-###
 
-GET https://k0zhdnmbyd.execute-api.us-east-1.amazonaws.com/dev/psURLs
-
-###
-PUT  https://submission-bucket.s3.us-east-1.amazonaws.com/test.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAVOFI52LJBRF2WMOU%2F20221230%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20221230T212622Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEDYaCXVzLWVhc3QtMSJHMEUCIQCq6IvwbK7CxQZs5bk0xwFP2UdhKVZABA11ZYuClwUyVgIgRvmRi4uPk5X2pyHeqfQ4SClTD69mOfWPiJpV31TsOvMq%2FAIIfhAAGgwzNzQwMTY0MzA4MDIiDAOmxep8N9Cn1svpZCrZArTtUeMqAhTthjSSjvJwmewKmPNiJgZy%2FlQEmgFL2TM8TJ7nPzkS18rZO0S0Fu2rB7WG5XWOchRD%2Bl2xjUFVI%2BeaUsrUjMRtXT9sbgyhKkEA7uC5QG0RIT%2Byl9ScdZTy4dETOmF5QxYCv5dTiRziUJaGVK0BCj64to5ZwvPOIt5qjSqupffHTV9sP5Wk97C8hDD9zUCYvd7x5O%2FLFiUMgREZVrwb7CoM%2BK%2BgaHyz%2FPzGBoBwpntHNJrAstVAFLQlfHFXydj%2BONwlxg19kZ2bwVEqiKVJyegXKC3aFzCi%2FF3dTkSC1MBEOSiDS4e3aWBKwwY4QKuh%2FiL6MxHzGTRGxP%2BPlBY1s1YfsT9Wq%2FRk6I6X%2BpESE5nuwpk%2BqTJLsiHxu9%2B7gvGQwqBExDUHaz6AvV%2FeRC%2BNqMFmZP6oimy1BE8E%2BQGFVp%2BTYWVhXw82HYAXxwIcHvqEFj2YaTDJrL2dBjqeAYRmp6tPaOA9B43YBSoeSoTCv2JDkPDLXhPXyRfiALW2dya82oLu9AenkggoO9n8zKuvZXzAQxfCrKWs%2B2w0Xw3ECV%2BfwHhiUpOpcQUqIQEIFFBk8xTsbdAcPpttMp00OldYLV6j8YU2K9usofBC6cX562EHYnSTbnuELQisUQGxDgmNcy4sW0Dn5Sr3NzdiKdoR8%2Fj%2FDIG5KYkuGhVo&X-Amz-Signature=f977bb9d8316b17b925b79c05acb0486833faf417f8349277f5203e8d9381d3c&X-Amz-SignedHeaders=host&x-id=PutObject
-Content-Type: multipart/form-data
-
-< ./test.txt
+### 
+GET https://iscn5mj3ce.execute-api.us-east-1.amazonaws.com/dev/hello
