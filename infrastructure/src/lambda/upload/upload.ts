@@ -22,10 +22,7 @@ export const lambdaHandler: Handler<asyncLambdaEvent> = async (event) => {
         responsePayload: { body },
     } = event
 
-    const client = algoliasearch(
-        process.env.APPID!,
-        process.env.ADMINAPIKEY!
-    )
+    const client = algoliasearch(process.env.APPID!, process.env.ADMINAPIKEY!)
 
     let parsedBody = JSON.parse(body)
     const { data } = parsedBody
