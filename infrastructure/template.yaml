@@ -14,6 +14,15 @@ Globals:
         Architectures:
             - x86_64
 
+Parameters:
+    APPID:
+        Type: String
+        Description: Algolia App ID
+    ADMINAPIKEY:
+        Type: String
+        Description: Algolia Admin API Key
+  
+
 Resources:
     # S3 Bucket to store primary submissions
     PrimarySubmissionBucket:
@@ -95,10 +104,10 @@ Resources:
         Properties:
             CodeUri: src/lambda/upload/
             Handler: upload.lambdaHandler
-            # Environment:
-            #   Variables:
-            #     PRIMARY_SUBMISSION_BUCKET: !Ref PrimarySubmissionBucket
-            #     INDEXED_SUBMISSION_BUCKET: !Ref IndexedSubmissionBucket
+            Environment:
+              Variables:
+                APPID: !Ref APPID
+                ADMINAPIKEY: !Ref ADMINAPIKEY
         Metadata: # Manage esbuild properties
             BuildMethod: esbuild
             BuildProperties:
