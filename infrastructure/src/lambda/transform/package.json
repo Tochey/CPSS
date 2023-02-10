@@ -1,16 +1,16 @@
 {
-  "name": "transform",
-  "version": "1.0.0",
-  "description": "",
-  "main": "transform.ts", 
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@aws-sdk/client-s3": "^3.267.0",
-    "pretty-bytes": "^6.1.0",
-    "esbuild": "^0.14.14"
-  }
+    "name": "transform",
+    "version": "1.0.0",
+    "description": "",
+    "main": "transform.ts",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@aws-sdk/client-s3": "^3.267.0",
+        "pretty-bytes": "^6.1.0",
+        "esbuild": "^0.14.14"
+    }
 }

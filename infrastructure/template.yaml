@@ -15,17 +15,17 @@ Globals:
             - x86_64
 
 Resources:
-# S3 Bucket to store primary submissions
+    # S3 Bucket to store primary submissions
     PrimarySubmissionBucket:
-      Type : AWS::S3::Bucket
-      Properties:
-        BucketName: primary-submission-bucket
+        Type: AWS::S3::Bucket
+        Properties:
+            BucketName: primary-submission-bucket
 
-# S3 Bucket to store indexed submissions
+    # S3 Bucket to store indexed submissions
     IndexedSubmissionBucket:
-      Type : AWS::S3::Bucket
-      Properties:
-        BucketName: indexed-submission-bucket
+        Type: AWS::S3::Bucket
+        Properties:
+            BucketName: indexed-submission-bucket
 
     HelloWorldFunction:
         Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -66,7 +66,7 @@ Resources:
                 # Sourcemap: true # Enabling source maps will create the required NODE_OPTIONS environment variables on your lambda function during sam build
                 EntryPoints:
                     - pre-signed.ts
-    ITransform : 
+    ITransform:
         Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
         Properties:
             CodeUri: src/lambda/transform/
@@ -75,12 +75,12 @@ Resources:
                 StudentUploadEvent:
                     Type: S3 # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
                     Properties:
-                      Bucket: !Ref IndexedSubmissionBucket
-                      Events: 
-                      - s3:ObjectCreated:*
-            Policies: 
-              - LambdaInvokePolicy:
-                  FunctionName: !Ref IUpload
+                        Bucket: !Ref IndexedSubmissionBucket
+                        Events:
+                            - s3:ObjectCreated:*
+            Policies:
+                - LambdaInvokePolicy:
+                      FunctionName: !Ref IUpload
 
         Metadata: # Manage esbuild properties
             BuildMethod: esbuild
@@ -90,7 +90,7 @@ Resources:
                 # Sourcemap: true # Enabling source maps will create the required NODE_OPTIONS environment variables on your lambda function during sam build
                 EntryPoints:
                     - transform.ts
-    IUpload : 
+    IUpload:
         Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
         Properties:
             CodeUri: src/lambda/upload/
@@ -115,9 +115,8 @@ Resources:
             MaximumEventAgeInSeconds: 60
             MaximumRetryAttempts: 0
             DestinationConfig:
-              OnSuccess:
-                Destination: !GetAtt IUpload.Arn
-
+                OnSuccess:
+                    Destination: !GetAtt IUpload.Arn
 
 Outputs:
     # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
