@@ -18,14 +18,14 @@ export default function App() {
 
     const handleUpload = async () => {
         const url = fetch(process.env.NEXT_PUBLIC_PRESIGNER as unknown as URL, {
-            method: "POST",
+            method: "GET",
             headers: {
                 "Content-type": "application/json",
             },
-            body: selectedFile,
+            // body : selectedFile
         })
             .then((e) => e.json())
-            .then((e) => e.res)
+            .then((e) => e.url)
 
         await fetch(await url, {
             method: "PUT",

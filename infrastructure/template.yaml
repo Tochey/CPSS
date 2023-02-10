@@ -13,6 +13,11 @@ Globals:
         Runtime: nodejs14.x
         Architectures:
             - x86_64
+    Api:
+        Cors:
+            AllowMethods: "'GET,POST,OPTIONS'"
+            AllowHeaders: "'Content-type'"
+            AllowOrigin: "'*'"
 
 Parameters:
     APPID:
@@ -34,6 +39,14 @@ Resources:
         Type: AWS::S3::Bucket
         Properties:
             BucketName: indexed-submission-bucket
+            CorsConfiguration:
+                CorsRules:
+                    - AllowedHeaders:
+                          - "*"
+                      AllowedMethods:
+                          - PUT
+                      AllowedOrigins:
+                          - "*"
 
     HelloWorldFunction:
         Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -66,6 +79,9 @@ Resources:
                     Properties:
                         Path: /pre-signed
                         Method: get
+            Policies:
+                - S3WritePolicy:
+                      BucketName: indexed-submission-bucket
         Metadata: # Manage esbuild properties
             BuildMethod: esbuild
             BuildProperties:
@@ -89,6 +105,8 @@ Resources:
             Policies:
                 - LambdaInvokePolicy:
                       FunctionName: !Ref IUpload
+                - S3ReadPolicy:
+                      BucketName: indexed-submission-bucket
 
         Metadata: # Manage esbuild properties
             BuildMethod: esbuild

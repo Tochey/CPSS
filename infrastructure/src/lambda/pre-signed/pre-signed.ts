@@ -32,10 +32,10 @@ export const lambdaHandler: Handler = async (
         headers: {
             "Access-Control-Allow-Headers": "Content-Type",
             "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET",
+            "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
         },
         body: JSON.stringify({
-            message: res,
+            url: res,
         }),
     }
 

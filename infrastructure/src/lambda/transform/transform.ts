@@ -14,7 +14,7 @@ async function streamToString(stream: Readable): Promise<string> {
     })
 }
 
-export const lambdahandler: s3TypeWrapper = async (event) => {
+export const lambdaHandler: s3TypeWrapper = async (event) => {
     const { Records } = event
     const {
         s3: {
