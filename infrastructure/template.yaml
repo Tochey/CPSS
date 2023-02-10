@@ -21,7 +21,6 @@ Parameters:
     ADMINAPIKEY:
         Type: String
         Description: Algolia Admin API Key
-  
 
 Resources:
     # S3 Bucket to store primary submissions
@@ -105,9 +104,9 @@ Resources:
             CodeUri: src/lambda/upload/
             Handler: upload.lambdaHandler
             Environment:
-              Variables:
-                APPID: !Ref APPID
-                ADMINAPIKEY: !Ref ADMINAPIKEY
+                Variables:
+                    APPID: !Ref APPID
+                    ADMINAPIKEY: !Ref ADMINAPIKEY
         Metadata: # Manage esbuild properties
             BuildMethod: esbuild
             BuildProperties:
