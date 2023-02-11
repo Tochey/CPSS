@@ -48,26 +48,6 @@ Resources:
                       AllowedOrigins:
                           - "*"
 
-    HelloWorldFunction:
-        Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-        Properties:
-            CodeUri: src/lambda/hello-world/
-            Handler: app.lambdaHandler
-            Events:
-                HelloWorld:
-                    Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-                    Properties:
-                        Path: /hello
-                        Method: get
-        Metadata: # Manage esbuild properties
-            BuildMethod: esbuild
-            BuildProperties:
-                Minify: true
-                Target: "es2020"
-                # Sourcemap: true # Enabling source maps will create the required NODE_OPTIONS environment variables on your lambda function during sam build
-                EntryPoints:
-                    - app.ts
-
     IPreSigned:
         Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
         Properties:
@@ -143,11 +123,54 @@ Resources:
             DestinationConfig:
                 OnSuccess:
                     Destination: !GetAtt IUpload.Arn
+    IStudent:
+        Type: AWS::Serverless::Function
+        Properties:
+            CodeUri: src/lambda/student/
+            Handler: student.lambdaHandler
+            Events:
+                ExpressLambdaProxy:
+                    Type: Api
+                    Properties:
+                        Path: '/student/{proxy+}'
+                        Method: ANY
+            # Policies:
+            #     - DynamoDBCrudPolicy:
+            #           TableName: !Ref StudentsTable
+        Metadata: # Manage esbuild properties
+            BuildMethod: esbuild
+            BuildProperties:
+                Minify: true
+                Target: "es2020"
+                EntryPoints:
+                    - app.ts
+                    - student.ts
+
+    IFacutly: 
+        Type: AWS::Serverless::Function
+        Properties:
+            CodeUri: src/lambda/faculty/
+            Handler: faculty.lambdaHandler
+            Events:
+                ExpressLambdaProxy:
+                    Type: Api
+                    Properties:
+                        Path: '/faculty/{proxy+}'
+                        Method: ANY
+        Metadata: # Manage esbuild properties
+            BuildMethod: esbuild
+            BuildProperties:
+                Minify: true
+                Target: "es2020"
+                # Sourcemap: true # Enabling source maps will create the required NODE_OPTIONS environment variables on your lambda function during sam build
+                EntryPoints:
+                    - app.ts
+                    - faculty.ts
 
 Outputs:
     # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
     # Find out more about other implicit resources you can reference within SAM
     # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
     BeseAPiEndpoint:
-        Description: "Best API Endpoint"
+        Description: "Base API Endpoint"
         Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
