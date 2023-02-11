@@ -132,7 +132,7 @@ Resources:
                 ExpressLambdaProxy:
                     Type: Api
                     Properties:
-                        Path: '/student/{proxy+}'
+                        Path: "/student/{proxy+}"
                         Method: ANY
             # Policies:
             #     - DynamoDBCrudPolicy:
@@ -146,7 +146,7 @@ Resources:
                     - app.ts
                     - student.ts
 
-    IFacutly: 
+    IFacutly:
         Type: AWS::Serverless::Function
         Properties:
             CodeUri: src/lambda/faculty/
@@ -155,7 +155,7 @@ Resources:
                 ExpressLambdaProxy:
                     Type: Api
                     Properties:
-                        Path: '/faculty/{proxy+}'
+                        Path: "/faculty/{proxy+}"
                         Method: ANY
         Metadata: # Manage esbuild properties
             BuildMethod: esbuild

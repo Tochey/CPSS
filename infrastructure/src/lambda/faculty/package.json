@@ -1,19 +1,19 @@
 {
-  "name": "faculty",
-  "version": "1.0.0",
-  "description": "",
-  "main": "faculty.ts",
-  "scripts": {
-    "start": "nodemon faculty.ts"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "esbuild": "^0.17.7",
-    "express": "^4.18.2",
-    "serverless-http": "^3.1.1"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.20"
-  }
+    "name": "faculty",
+    "version": "1.0.0",
+    "description": "",
+    "main": "faculty.ts",
+    "scripts": {
+        "start": "nodemon faculty.ts"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "esbuild": "^0.17.7",
+        "express": "^4.18.2",
+        "serverless-http": "^3.1.1"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.20"
+    }
 }
