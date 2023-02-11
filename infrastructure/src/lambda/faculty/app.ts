@@ -6,4 +6,5 @@ facultyExpressApp.use(bodyParser.json())
 facultyExpressApp.get("/faculty/hello", function (req: any, res: any) {
     res.send("Hello faculty")
 })
+
 module.exports = facultyExpressApp

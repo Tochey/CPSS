@@ -17,5 +17,5 @@
         "incremental": true
     },
     "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/index.tsx"],
-    "exclude": ["node_modules", "serverless"]
+    "exclude": ["node_modules", "infrastructure"]
 }
