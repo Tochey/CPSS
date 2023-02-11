@@ -1,6 +1,6 @@
-namespace facultyLambda {
-    const serverless = require("serverless-http")
-    const app = require("./app")
 
-    module.exports.lambdaHandler = serverless(app)
-}
+    const studentServerlessWrapper = require("serverless-http")
+    const studentLambdaApp = require("./app")
+
+    module.exports.lambdaHandler = studentServerlessWrapper(studentLambdaApp)
+

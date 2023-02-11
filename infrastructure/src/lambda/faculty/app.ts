@@ -1,11 +1,11 @@
-namespace FaultyApp {
-    const express = require("express")
-    const app = express()
-    const bodyParser = require("body-parser")
-    app.use(bodyParser.json())
 
-    app.get("/faculty/hello", function (req: any, res: any) {
+    const ex = require("express")
+    const facultyExpressApp = ex()
+    const bodyParser = require("body-parser")
+    facultyExpressApp.use(bodyParser.json())
+
+    facultyExpressApp.get("/faculty/hello", function (req: any, res: any) {
         res.send("Hello faculty")
     })
-    module.exports = app
-}
+    module.exports = facultyExpressApp
+
