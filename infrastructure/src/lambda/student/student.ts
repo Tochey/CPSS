@@ -1,6 +1,4 @@
+const studentServerlessWrapper = require("serverless-http")
+const studentLambdaApp = require("./app")
 
-    const studentServerlessWrapper = require("serverless-http")
-    const studentLambdaApp = require("./app")
-
-    module.exports.lambdaHandler = studentServerlessWrapper(studentLambdaApp)
-
+module.exports.lambdaHandler = studentServerlessWrapper(studentLambdaApp)
