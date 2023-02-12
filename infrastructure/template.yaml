@@ -13,11 +13,11 @@ Globals:
         Runtime: nodejs14.x
         Architectures:
             - x86_64
-    Api:
-        Cors:
-            AllowMethods: "'GET,POST,OPTIONS'"
-            AllowHeaders: "'Content-type'"
-            AllowOrigin: "'*'"
+    # Api:
+    #     Cors:
+    #         AllowMethods: "'GET,POST,OPTIONS'"
+    #         AllowHeaders: "'Content-type'"
+    #         AllowOrigin: "'*'"
 
 Parameters:
     APPID:
@@ -28,6 +28,16 @@ Parameters:
         Description: Algolia Admin API Key
 
 Resources:
+
+    CPSSApiGateway:
+        Type: AWS::Serverless::Api
+        Properties:
+            Name : cpss-apigw
+            StageName: dev
+            Cors:
+                AllowMethods: "'GET,POST,OPTIONS,PUT,DELETE'"
+                AllowHeaders: "'Content-type'"
+                AllowOrigin: "'*'"
     # S3 Bucket to store primary submissions
     PrimarySubmissionBucket:
         Type: AWS::S3::Bucket
@@ -48,6 +58,24 @@ Resources:
                       AllowedOrigins:
                           - "*"
 
+    StudentTable:
+        Type: AWS::DynamoDB::Table
+        Properties:
+            TableName: student
+            AttributeDefinitions:
+                - AttributeName: userId
+                  AttributeType: S
+                - AttributeName: email
+                  AttributeType: S
+            KeySchema:
+                - AttributeName: userId
+                  KeyType: HASH
+                - AttributeName: email
+                  KeyType: RANGE
+            ProvisionedThroughput:
+                ReadCapacityUnits: 1
+                WriteCapacityUnits: 1
+
     IPreSigned:
         Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
         Properties:
@@ -57,6 +85,7 @@ Resources:
                 GetPreSignedUrl:
                     Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
                     Properties:
+                        RestApiId: !Ref CPSSApiGateway
                         Path: /pre-signed
                         Method: get
             Policies:
@@ -132,19 +161,20 @@ Resources:
                 ExpressLambdaProxy:
                     Type: Api
                     Properties:
+                        RestApiId: !Ref CPSSApiGateway
                         Path: "/student/{proxy+}"
                         Method: ANY
-            # Policies:
-            #     - DynamoDBCrudPolicy:
-            #           TableName: !Ref StudentsTable
+            Policies:
+                - DynamoDBCrudPolicy:
+                      TableName: !Ref StudentTable
         Metadata: # Manage esbuild properties
             BuildMethod: esbuild
             BuildProperties:
                 Minify: true
                 Target: "es2020"
                 EntryPoints:
-                    - app.ts
                     - student.ts
+
 
     IFacutly:
         Type: AWS::Serverless::Function
@@ -155,6 +185,7 @@ Resources:
                 ExpressLambdaProxy:
                     Type: Api
                     Properties:
+                        RestApiId: !Ref CPSSApiGateway
                         Path: "/faculty/{proxy+}"
                         Method: ANY
         Metadata: # Manage esbuild properties
@@ -173,4 +204,4 @@ Outputs:
     # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
     BeseAPiEndpoint:
         Description: "Base API Endpoint"
-        Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+        Value: !Sub "https://${CPSSApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev/"
