@@ -28,11 +28,10 @@ Parameters:
         Description: Algolia Admin API Key
 
 Resources:
-
     CPSSApiGateway:
         Type: AWS::Serverless::Api
         Properties:
-            Name : cpss-apigw
+            Name: cpss-apigw
             StageName: dev
             Cors:
                 AllowMethods: "'GET,POST,OPTIONS,PUT,DELETE'"
@@ -174,7 +173,6 @@ Resources:
                 Target: "es2020"
                 EntryPoints:
                     - student.ts
-
 
     IFacutly:
         Type: AWS::Serverless::Function
