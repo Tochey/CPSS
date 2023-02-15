@@ -9,3 +9,6 @@ Main:
         7: Secure APIGW
         8: Extract s3 bucket names to env file at least or ref through cloudformation
         9: Custom dynamoose get | set methods
+        10: Figure out pagination of different canvas calls
+        11: Handle expired access tokens
+        12: Ask Bo about closed, available course btw

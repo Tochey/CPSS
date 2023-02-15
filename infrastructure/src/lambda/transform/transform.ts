@@ -2,6 +2,7 @@ import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import { Readable } from "stream"
 import prettyBytes from "pretty-bytes"
 import { APIGatewayProxyResult, Handler, S3CreateEvent } from "aws-lambda"
+import { removeStopwords, eng } from "stopword"
 
 type s3TypeWrapper = Handler<S3CreateEvent, APIGatewayProxyResult>
 
@@ -28,16 +29,13 @@ export const lambdaHandler: s3TypeWrapper = async (event) => {
     const command = new GetObjectCommand({ Bucket: name, Key: key })
     const { Body } = await client.send(command)
 
-    let indexText = await streamToString(Body as Readable)
+    let userText = await streamToString(Body as Readable)
+    const indexText = removeStopwords(userText.split(" "), eng).join(" ")
 
-    console.log(JSON.stringify({ data: indexText }))
-
-    const response = {
+    return {
         statusCode: 200,
         body: JSON.stringify({
             data: indexText,
         }),
     }
-
-    return response
 }

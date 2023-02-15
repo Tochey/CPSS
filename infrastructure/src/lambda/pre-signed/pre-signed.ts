@@ -20,24 +20,22 @@ export const lambdaHandler: Handler = async (
     event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
     const client = new S3Client({})
-    console.log(event)
-    const params = { Bucket: "indexed-submission-bucket", Key: "test.txt" }
+
+    const params = { Bucket: process.env.INDEXEDBUCKETNAME, Key: "test.txt" }
     const command = new PutObjectCommand(params)
     const res: string = await getSignedUrl(client, command, {
         expiresIn: 60 * 60,
     })
 
-    const response = {
+    return {
         statusCode: 200,
         headers: {
             "Access-Control-Allow-Headers": "Content-Type",
             "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+            "Access-Control-Allow-Methods": "POST",
         },
         body: JSON.stringify({
             url: res,
         }),
     }
-
-    return response
 }

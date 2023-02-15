@@ -16,20 +16,19 @@ type asyncLambdaEvent = {
     responseContext: { statusCode: number; executedVersion: string }
     responsePayload: APIGatewayProxyResult
 }
+let client = algoliasearch(process.env.APPID!, process.env.ADMINAPIKEY!)
 
 export const lambdaHandler: Handler<asyncLambdaEvent> = async (event) => {
     let {
         responsePayload: { body },
     } = event
 
-    const client = algoliasearch(process.env.APPID!, process.env.ADMINAPIKEY!)
-
     let parsedBody = JSON.parse(body)
     const { data } = parsedBody
-    const index = client.initIndex("test_index")
 
-    const record = { objectID: uuidv4(), data: data }
     try {
+        const index = client.initIndex("test_index")
+        const record = { objectID: uuidv4(), indexed_text: data }
         await index.saveObject(record)
     } catch (error) {
         console.log(error)

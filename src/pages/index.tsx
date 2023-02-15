@@ -1,6 +1,11 @@
 import algoliasearch from "algoliasearch/lite"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Hits, InstantSearch, SearchBox } from "react-instantsearch-hooks-web"
+
+function validateFileName(fileName: string) {
+    var pattern = /^[a-zA-Z0-9]+_\d{4}-index\.txt$/
+    return pattern.test(fileName)
+}
 
 const searchClient = algoliasearch(
     process.env.NEXT_PUBLIC_AGL_APPID!,
@@ -8,7 +13,7 @@ const searchClient = algoliasearch(
 )
 
 export default function App() {
-    const [selectedFile, setSelectedFile] = useState()
+    const [selectedFile, setSelectedFile] = useState<File>()
     const [isFilePicked, setIsFilePicked] = useState(false)
 
     const changeHandler = (event: any) => {
@@ -22,7 +27,6 @@ export default function App() {
             headers: {
                 "Content-type": "application/json",
             },
-            // body : selectedFile
         })
             .then((e) => e.json())
             .then((e) => e.url)
@@ -43,18 +47,29 @@ export default function App() {
             })
     }
 
-    if (isFilePicked) {
-        let reader = new FileReader()
-        console.log(selectedFile)
-        reader.onload = function (e) {
-            var content = reader.result
+    useEffect(() => {
+        if (isFilePicked) {
+            let reader = new FileReader()
 
-            //validate content
-            console.log(content)
+            if (!validateFileName(selectedFile!.name)) {
+                ;(
+                    document.getElementById("fileUpload") as HTMLInputElement
+                ).value = ""
+                setIsFilePicked(false)
+                alert("Invalid file name")
+                return
+            }
+
+            reader.onload = function (e) {
+                var content = reader.result
+
+                //validate content
+                console.log({ content: content })
+            }
+
+            reader.readAsText(selectedFile!)
         }
-
-        reader.readAsText(selectedFile!)
-    }
+    }, [isFilePicked])
 
     return (
         <div>
