@@ -1,4 +1,8 @@
-import { GetObjectCommand, S3Client, HeadObjectCommand } from "@aws-sdk/client-s3"
+import {
+    GetObjectCommand,
+    S3Client,
+    HeadObjectCommand,
+} from "@aws-sdk/client-s3"
 import { Readable } from "stream"
 import prettyBytes from "pretty-bytes"
 import { APIGatewayProxyResult, Handler, S3CreateEvent } from "aws-lambda"
@@ -30,8 +34,7 @@ export const lambdaHandler: s3TypeWrapper = async (event) => {
     const { Body } = await client.send(command)
 
     const mdCommand = new HeadObjectCommand({ Bucket: name, Key: key })
-    const metaData =  (await client.send(mdCommand)).Metadata
-
+    const metaData = (await client.send(mdCommand)).Metadata
 
     let userText = await streamToString(Body as Readable)
     const indexText = removeStopwords(userText.split(" "), eng).join(" ")
@@ -41,8 +44,8 @@ export const lambdaHandler: s3TypeWrapper = async (event) => {
         body: JSON.stringify({
             data: {
                 rawText: userText,
-                indexText : indexText,
-                metaData : {...metaData, bucket : name, key : key},
+                indexText: indexText,
+                metaData: { ...metaData, bucket: name, key: key },
             },
         }),
     }

@@ -250,9 +250,11 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
         .then((e: AxiosResponse<string>) => {
             return e.data
         })
-    
+
     const fullName = name.toLowerCase().split(" ")
-    const prefix = `${fullName[0].charAt(0) + fullName[1] + "_" + login_id + '/'}`
+    const prefix = `${
+        fullName[0].charAt(0) + fullName[1] + "_" + login_id + "/"
+    }`
     const fileName = prefix + "cpss_index.txt"
 
     // consider encoding with user netadata
