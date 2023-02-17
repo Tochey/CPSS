@@ -9,8 +9,6 @@
             1,
             { "args": "after-used", "argsIgnorePattern": "^_" }
         ],
-        "no-extra-semi" : [
-            1
-        ]
+        "no-extra-semi": [1]
     }
 }
