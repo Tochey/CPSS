@@ -4,7 +4,8 @@ import { studentModel } from "../../model/student.schema"
 import cors from "cors"
 import axios, { AxiosResponse, AxiosError, Axios } from "axios"
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
-import fs from "fs"
+import jwt from "jsonwebtoken"
+import { serialize } from "cookie"
 const app = express()
 app.use(parse.json())
 app.use(cors())
@@ -78,6 +79,21 @@ type CanvasUserFileObject = {
     locked_for_user: boolean
 }
 
+const getUserInfo = async (accessToken: string): Promise<CanvasUserObject> => {
+    return await axios
+        .get("https://canvas.instructure.com/api/v1/users/self/profile", {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        })
+        .then((e: AxiosResponse<CanvasUserObject>) => {
+            return e.data
+        })
+        .catch((e: AxiosError<any>) => {
+            throw new Error(e.response?.data.errors[0].message)
+        })
+}
+
 const getUserSpecFolder = async (
     userId: string,
     accessToken: string
@@ -114,11 +130,14 @@ const getUserSpecFolder = async (
                     return specFolder
                 }
                 throw new Error(
-                    "You are not a computer science student, your are not alowed to use this service"
+                    "You are not a computer science student, your are not allowed to use this service"
                 )
             }
 
             return specFolder
+        })
+        .catch((e: AxiosError<any>) => {
+            throw new Error(e.response?.data.errors[0].message)
         })
 }
 
@@ -139,52 +158,27 @@ const getNextLink = (linkHeader: string) => {
 
 app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
     const { accessToken } = req.body
-    const user = await axios
-        .get("https://canvas.instructure.com/api/v1/users/self/profile", {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        })
-        .then((e: AxiosResponse<CanvasUserObject>) => {
-            return e.data
-        })
-        .catch((e: AxiosError<{ errors: {} }>) => {
-            return e.response?.data
-        })
-
-    if (typeof user === "object" && user.hasOwnProperty("errors")) {
-        return res.status(401).send("Invalid Access Token")
-    }
-
-    const { id, name, primary_email, login_id } = user as CanvasUserObject
-    let specFolder
+    let user, specFolder
 
     try {
-        specFolder = await getUserSpecFolder(id.toString(), accessToken)
+        user = await getUserInfo(accessToken)
+        specFolder = await getUserSpecFolder(user.id.toString(), accessToken)
+        const { id, name, primary_email } = user as CanvasUserObject
+        const student = await studentModel.get({ userId: id.toString() })
+        if (student) {
+            throw Error("This access token has been used already")
+        } else {
+            await studentModel.create({
+                name: name,
+                userId: id.toString(),
+                email: primary_email,
+            })
+        }
     } catch (error) {
         return res.status(403).send(error.message)
     }
 
-    // try {
-    //    const student =  await studentModel.get({ userId: id.toString() })
-    //    if(student) {
-    //        return res.status(404).send("This access token has been used already")
-    //    }
-    // } catch (error) {
-    //     console.log(error)
-    //     return res.status(500).send("Couldnt get user from database")
-    // }
-
-    // try {
-    //     await studentModel.create({
-    //         name: name,
-    //         userId: id.toString(),
-    //         email: primary_email,
-    //     })
-    // } catch (error) {
-    //     console.log(error)
-    //     return res.status(500).send("Couldnt add user to database")
-    // }
+    const { id, name, primary_email, login_id } = user as CanvasUserObject
 
     const { files_url } = specFolder as CanvasUserFolderObject
     const files = await axios
@@ -194,44 +188,40 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
             },
         })
         .then(async (e: AxiosResponse<CanvasUserFileObject[]>) => {
-            const versions: Array<CanvasUserFileObject> = []
-            let problemDescFile = (e.data as CanvasUserFileObject[]).find(
+            let paginatedVersions: Array<CanvasUserFileObject> = []
+
+            let problemDescFile = (e.data as CanvasUserFileObject[]).filter(
                 (e) =>
                     e.filename.includes("problem_desc.txt") &&
                     e["content-type"] === "text/plain"
             )
 
-            problemDescFile && versions.push(problemDescFile)
-
-            if (e.headers.link) {
-                let nextLink = getNextLink(e.headers.link)
-                while (nextLink) {
-                    console.log(e.headers.link)
-                    let res: AxiosResponse<CanvasUserFileObject[]> =
-                        await axios.get(nextLink, {
-                            headers: {
-                                Authorization: `Bearer ${accessToken}`,
-                            },
-                        })
-                    problemDescFile = (res.data as CanvasUserFileObject[]).find(
-                        (e) =>
-                            e.filename.includes("problem_desc.txt") &&
-                            e["content-type"] === "text/plain"
-                    )
-
-                    problemDescFile && versions.push(problemDescFile)
-                    nextLink = getNextLink(res.headers.link)
-                }
+            let nextLink = getNextLink(e.headers.link)
+            while (nextLink) {
+                console.log(e.headers.link)
+                let res: AxiosResponse<CanvasUserFileObject[]> =
+                    await axios.get(nextLink, {
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`,
+                        },
+                    })
+                paginatedVersions = (res.data as CanvasUserFileObject[]).filter(
+                    (e) =>
+                        e.filename.includes("problem_desc.txt") &&
+                        e["content-type"] === "text/plain"
+                )
+                problemDescFile.push(...paginatedVersions)
+                nextLink = getNextLink(res.headers.link)
             }
-            return versions
+            return problemDescFile
         })
-
-    console.log(files)
 
     if (files.length === 0) {
         return res
             .status(401)
-            .send("Could not find problem.desc file. But you are signed up")
+            .send(
+                "Could not find problem.desc file. But you are signed up. Please Login"
+            )
     }
 
     const latestProblemDesc = files.sort((a, b) => {
@@ -240,45 +230,92 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
         )
     })[0]
 
-    // console.log(latestProblemDesc)
+    console.log(latestProblemDesc)
 
-    //     const problemDescdownloadUrl = await axios.get(`https://canvas.instructure.com/api/v1/files/${latestProblemDesc.id}/public_url`, {
-    //         headers: {
-    //             Authorization: `Bearer ${accessToken}`,
-    //         },
-    //     }).then((e: AxiosResponse<{ public_url: string }>) => {
-    //         return e.data.public_url
-    //     })
+    const problemDescdownloadUrl = await axios
+        .get(
+            `https://canvas.instructure.com/api/v1/files/${latestProblemDesc.id}/public_url`,
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        )
+        .then((e: AxiosResponse<{ public_url: string }>) => {
+            return e.data.public_url
+        })
 
-    //     const content = await axios.get(problemDescdownloadUrl).then((e: AxiosResponse<string>) => {
-    //         return e.data
-    //     })
+    const content = await axios
+        .get(problemDescdownloadUrl)
+        .then((e: AxiosResponse<string>) => {
+            return e.data
+        })
 
-    //     const fileName = `${name.split(" ").join("_")}_${login_id}_index.txt`
+    const fileName = `${name.split(" ").join("_")}_${login_id}_index.txt`
 
-    // // consider encoiding with user netadata
-    //     const client = new S3Client({})
-    //     const command = new PutObjectCommand({
-    //         Bucket: "indexed-submission-bucket",
-    //         Key: fileName,
-    //         ContentType: "text/plain",
-    //         Body : content,
-    //         Metadata : {
-    //             "userId": id.toString(),
-    //             "name": name,
-    //             "email": primary_email,
-    //             "login_id": login_id
-    //         },
-    //     })
+    // consider encoding with user netadata
+    const client = new S3Client({})
+    const command = new PutObjectCommand({
+        Bucket: "indexed-submission-bucket",
+        Key: fileName,
+        ContentType: "text/plain",
+        Body: content,
+        Metadata: {
+            userId: id.toString(),
+            name: name,
+            email: primary_email,
+            login_id: login_id,
+        },
+    })
 
-    //     try {
-    //         const data = await client.send(command)
-    //         console.log(data)
-    //     }catch (error) {
-    //         console.log(error)
-    //     }
+    try {
+        const data = await client.send(command)
+        console.log(data)
+    } catch (error) {
+        res.status(500).send(
+            "Files were found but failed to upload to s3. Proceed to login"
+        )
+    }
 
-    res.send("User Created successfully")
+    res.send("Successfully onboarded")
+})
+
+app.post("/iam/login", async (req: express.Request, res: express.Response) => {
+    const { email, accessToken } = req.body
+    let user
+
+    try {
+        user = await getUserInfo(accessToken)
+        const { id, name, primary_email, login_id } = user as CanvasUserObject
+        if (email !== primary_email) {
+            throw Error("Canvas Email doesnt match with the email you provided")
+        }
+        let student = await studentModel.get({ userId: id.toString() })
+        if (!student) {
+            throw Error("The email or access token was not found")
+        }
+
+        const Cookie = serialize(
+            "cpss",
+            jwt.sign(
+                { id: id, primary_email },
+                "6JC2gq6aJo/xx/oB2J2WKaQ8XPQQgV9t4X4WJb89pR8=",
+                {
+                    expiresIn: "2h",
+                }
+            ),
+            {
+                httpOnly: false,
+                sameSite: "strict",
+                maxAge: 60 * 60 * 24 * 7, // expires in 1 week
+                path: "/",
+            }
+        )
+        res.setHeader("Set-Cookie", Cookie)
+        return res.status(200).json("Authenticated")
+    } catch (error) {
+        return res.status(403).send(error?.message)
+    }
 })
 
 export { app }

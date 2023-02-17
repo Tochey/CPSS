@@ -1,19 +1,26 @@
 import { useState } from "react"
+import axios from "axios"
 
 export default function Signup() {
     const [accessToken, setAccessToken] = useState<string | string>("")
+    const [error, setError] = useState<string | string>("")
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const data = {
             accessToken,
         }
-        fetch("http://localhost:8080/iam/signup", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        })
+
+        try {
+            await axios.post("http://localhost:8080/iam/signup", data)
+        } catch (error: any) {
+            if (
+                error.response &&
+                error.response.status >= 400 &&
+                error.response.status <= 500
+            ) {
+                setError(error.response.data)
+            }
+        }
     }
 
     return (
@@ -42,6 +49,11 @@ export default function Signup() {
                         onClick={handleSubmit}>
                         Signup
                     </button>
+                    {error && (
+                        <p className='mt-4 text-xs italic text-red-500'>
+                            {error}
+                        </p>
+                    )}
                 </div>
             </form>
         </div>

@@ -22,9 +22,18 @@ GET https://canvas.instructure.com/api/v1/folders/8~8749065/files?per_page=1
 Authorization: Bearer 8~h9KipNy37bwteKUlCXdZC0FuLHlwTWws3lQHaZQHAkHHPUTguo9DvPZYWDj9dh2U
 
 ###
-GET https://canvas.instructure.com/api/v1/folders/8~8749065/files?per_page=1000
 Authorization: Bearer 8~h9KipNy37bwteKUlCXdZC0FuLHlwTWws3lQHaZQHAkHHPUTguo9DvPZYWDj9dh2U
 
 ### pass in file id and get the download url
 GET https://elearning.salemstate.edu/api/v1/files/80000105515941/public_url
 Authorization: Bearer 8~h9KipNy37bwteKUlCXdZC0FuLHlwTWws3lQHaZQHAkHHPUTguo9DvPZYWDj9dh2U
+
+
+###
+POST  http://localhost:8080/iam/login
+Content-Type: application/json
+
+{
+    "email" : "c_amanze@salemstate.edu",
+    "accessToken" : "8~h9KipNy37bwteKUlCXdZC0FuLHlwTWws3lQHaZQHAkHHPUTguo9DvPZYWDj9dh2U"
+}
