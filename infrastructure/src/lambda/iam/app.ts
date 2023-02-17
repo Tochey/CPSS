@@ -2,7 +2,7 @@ import express from "express"
 import parse from "body-parser"
 import { studentModel } from "../../model/student.schema"
 import cors from "cors"
-import axios, { AxiosResponse, AxiosError, Axios } from "axios"
+import axios, { AxiosResponse, AxiosError } from "axios"
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import jwt from "jsonwebtoken"
 import { serialize } from "cookie"
@@ -250,8 +250,10 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
         .then((e: AxiosResponse<string>) => {
             return e.data
         })
-
-    const fileName = `${name.split(" ").join("_")}_${login_id}_index.txt`
+    
+    const fullName = name.toLowerCase().split(" ")
+    const prefix = `${fullName[0].charAt(0) + fullName[1] + "_" + login_id + '/'}`
+    const fileName = prefix + "cpss_index.txt"
 
     // consider encoding with user netadata
     const client = new S3Client({})

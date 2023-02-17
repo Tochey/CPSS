@@ -12,6 +12,8 @@ const searchClient = algoliasearch(
     process.env.NEXT_PUBLIC_ADMIN_API_KEY!
 )
 
+
+
 export default function App() {
     const [selectedFile, setSelectedFile] = useState<File>()
     const [isFilePicked, setIsFilePicked] = useState(false)
@@ -70,12 +72,14 @@ export default function App() {
             reader.readAsText(selectedFile!)
         }
     }, [isFilePicked])
+    // const Hit = ({ hit }) => <p>{hit.indexed_text}</p>;
+    // hitComponent={Hit}
 
     return (
         <div>
-            <InstantSearch searchClient={searchClient} indexName='test_index'>
+            <InstantSearch searchClient={searchClient} indexName='test_index' >
                 <SearchBox placeholder='Search here' />
-                <Hits />
+                <Hits  />
             </InstantSearch>
             <input
                 type='file'

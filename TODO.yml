@@ -12,3 +12,5 @@ Main:
         10: Figure out pagination of different canvas calls
         11: Handle expired access tokens
         12: Ask Bo about closed, available course btw
+        13: Look into algolia configs
+        14 : Algolia and s3 replicas

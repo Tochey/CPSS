@@ -24,11 +24,11 @@ export const lambdaHandler: Handler<asyncLambdaEvent> = async (event) => {
     } = event
 
     let parsedBody = JSON.parse(body)
-    const { data } = parsedBody
+    const { data : {indexText, metaData, rawText} } = parsedBody
 
     try {
         const index = client.initIndex("test_index")
-        const record = { objectID: uuidv4(), indexed_text: data }
+        const record = { objectID: uuidv4(), indexed_text: indexText, meta_data: metaData, raw_text: rawText }
         await index.saveObject(record)
     } catch (error) {
         console.log(error)
