@@ -254,8 +254,9 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
         })
 
     const fullName = name.toLowerCase().split(" ")
-    const prefix = `${fullName[0].charAt(0) + fullName[1] + "_" + login_id + "/"
-        }`
+    const prefix = `${
+        fullName[0].charAt(0) + fullName[1] + "_" + login_id + "/"
+    }`
     const fileName = prefix + "cpss_index.txt"
 
     // consider encoding with user netadata
@@ -303,7 +304,11 @@ app.post("/iam/login", async (req: express.Request, res: express.Response) => {
         const Cookie = serialize(
             "cpss",
             jwt.sign(
-                { id: student.userId, email: student.email, ROLE: student.ROLE },
+                {
+                    id: student.userId,
+                    email: student.email,
+                    ROLE: student.ROLE,
+                },
                 "6JC2gq6aJo/xx/oB2J2WKaQ8XPQQgV9t4X4WJb89pR8=",
                 {
                     expiresIn: "2h",

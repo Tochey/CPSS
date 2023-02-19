@@ -1,5 +1,5 @@
 import dynamoosee from "dynamoose"
-import { Item } from "dynamoose/dist/Item";
+import { Item } from "dynamoose/dist/Item"
 dynamoosee.aws.ddb.local()
 
 interface User extends Item {
@@ -28,9 +28,9 @@ const userSchema = new dynamoosee.Schema(
             required: true,
             default: "STUDENT",
             index: {
-                name: 'roleIndex',
-            }
-        }
+                name: "roleIndex",
+            },
+        },
     },
     {
         saveUnknown: false,
@@ -38,28 +38,26 @@ const userSchema = new dynamoosee.Schema(
     }
 )
 
-const timeSlotSchema = new dynamoosee.Schema(
-    {
-        time_slot_id: {
-            type: String,
-            hashKey: true,
-        },
-        start_time: Number,
-        end_time: Number,
-        is_available: Boolean,
-        registered_student_id: String,
-    });
+const timeSlotSchema = new dynamoosee.Schema({
+    time_slot_id: {
+        type: String,
+        hashKey: true,
+    },
+    start_time: Number,
+    end_time: Number,
+    is_available: Boolean,
+    registered_student_id: String,
+})
 
-const registrationSchema = new dynamoosee.Schema(
-    {
-        registration_id: {
-            type: String,
-            hashKey: true,
-        },
-        student_id: String,
-        time_slot_id: String,
-        registration_timestamp: Number,
-    });
+const registrationSchema = new dynamoosee.Schema({
+    registration_id: {
+        type: String,
+        hashKey: true,
+    },
+    student_id: String,
+    time_slot_id: String,
+    registration_timestamp: Number,
+})
 
 const user = dynamoosee.model<User>("user", userSchema)
 const timeslot = dynamoosee.model("timeSlot", timeSlotSchema)
@@ -67,4 +65,8 @@ const registration = dynamoosee.model("user", registrationSchema)
 const userTable = new dynamoosee.Table("user", [user])
 const timeSlotTable = new dynamoosee.Table("timelsot", [timeslot])
 const registrationTable = new dynamoosee.Table("registration", [registration])
-export { user as userModel, timeslot as timeSlotModel, registration as registrationModel}
+export {
+    user as userModel,
+    timeslot as timeSlotModel,
+    registration as registrationModel,
+}
