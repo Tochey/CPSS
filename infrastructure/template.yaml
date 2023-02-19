@@ -1,0 +1,213 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+    sammy
+
+    Sample SAM Template for sammy
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+    Function:
+        Timeout: 5
+        MemorySize: 128
+        Runtime: nodejs14.x
+        Architectures:
+            - x86_64
+
+Parameters:
+    APPID:
+        Type: String
+        Description: Algolia App ID
+    ADMINAPIKEY:
+        Type: String
+        Description: Algolia Admin API Key
+
+Resources:
+    CPSSApiGateway:
+        Type: AWS::Serverless::Api
+        Properties:
+            Name: cpss-apigw
+            StageName: dev
+            Cors:
+                AllowMethods: "'GET,POST,OPTIONS,PUT,DELETE'"
+                AllowHeaders: "'Content-type'"
+                AllowOrigin: "'*'"
+    # S3 Bucket to store primary submissions
+    PrimarySubmissionBucket:
+        Type: AWS::S3::Bucket
+        Properties:
+            BucketName: primary-submission-bucket
+
+    # S3 Bucket to store indexed submissions
+    IndexedSubmissionBucket:
+        Type: AWS::S3::Bucket
+        Properties:
+            BucketName: indexed-submission-bucket
+            CorsConfiguration:
+                CorsRules:
+                    - AllowedHeaders:
+                          - "*"
+                      AllowedMethods:
+                          - PUT
+                      AllowedOrigins:
+                          - "*"
+
+    UserTable:
+        Type: AWS::DynamoDB::Table
+        Properties:
+            TableName: user
+            AttributeDefinitions:
+                - AttributeName: userId
+                  AttributeType: S
+                - AttributeName: email
+                  AttributeType: S
+            KeySchema:
+                - AttributeName: userId
+                  KeyType: HASH
+                - AttributeName: email
+                  KeyType: RANGE
+            ProvisionedThroughput:
+                ReadCapacityUnits: 1
+                WriteCapacityUnits: 1
+
+    IIam:
+        Type: AWS::Serverless::Function
+        Properties:
+            CodeUri: src/lambda/iam/
+            Handler: iam.lambdaHandler
+            Events:
+                ExpressLambdaProxy:
+                    Type: Api
+                    Properties:
+                        RestApiId: !Ref CPSSApiGateway
+                        Path: "/iam/{proxy+}"
+                        Method: ANY
+            Environment:
+                Variables:
+                    INDEXEDBUCKETNAME: !Ref IndexedSubmissionBucket
+            Policies:
+                - DynamoDBCrudPolicy:
+                      TableName: !Ref UserTable
+                - S3WritePolicy:
+                      BucketName: !Ref IndexedSubmissionBucket
+        # Metadata: # Manage esbuild properties
+        #     BuildMethod: esbuild
+        #     BuildProperties:
+        #         Minify: true
+        #         Target: "es2020"
+        #         # Sourcemap: true # Enabling source maps will create the required NODE_OPTIONS environment variables on your lambda function during sam build
+        #         EntryPoints:
+        #             - app.ts
+        #             - iam.ts
+        #         CopyFiles:
+        #             - ../../../model/student.schema.ts
+
+    IPreSigned:
+        Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+        Properties:
+            CodeUri: src/lambda/pre-signed/
+            Handler: pre-signed.lambdaHandler
+            Environment:
+                Variables:
+                    INDEXEDBUCKETNAME: !Ref IndexedSubmissionBucket
+            Events:
+                GetPreSignedUrl:
+                    Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+                    Properties:
+                        RestApiId: !Ref CPSSApiGateway
+                        Path: /pre-signed
+                        Method: get
+            Policies:
+                - S3WritePolicy:
+                      BucketName: !Ref IndexedSubmissionBucket
+        Metadata: # Manage esbuild properties
+            BuildMethod: esbuild
+            BuildProperties:
+                Minify: true
+                Target: "es2020"
+                # Sourcemap: true # Enabling source maps will create the required NODE_OPTIONS environment variables on your lambda function during sam build
+                EntryPoints:
+                    - pre-signed.ts
+    ITransform:
+        Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+        Properties:
+            CodeUri: src/lambda/transform/
+            Handler: transform.lambdaHandler
+            Events:
+                StudentUploadEvent:
+                    Type: S3 # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+                    Properties:
+                        Bucket: !Ref IndexedSubmissionBucket
+                        Events:
+                            - s3:ObjectCreated:*
+            Policies:
+                - LambdaInvokePolicy:
+                      FunctionName: !Ref IUpload
+                - S3ReadPolicy:
+                      BucketName: indexed-submission-bucket
+
+        Metadata: # Manage esbuild properties
+            BuildMethod: esbuild
+            BuildProperties:
+                Minify: true
+                Target: "es2020"
+                # Sourcemap: true # Enabling source maps will create the required NODE_OPTIONS environment variables on your lambda function during sam build
+                EntryPoints:
+                    - transform.ts
+    IUpload:
+        Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+        Properties:
+            CodeUri: src/lambda/upload/
+            Handler: upload.lambdaHandler
+            Environment:
+                Variables:
+                    APPID: !Ref APPID
+                    ADMINAPIKEY: !Ref ADMINAPIKEY
+        Metadata: # Manage esbuild properties
+            BuildMethod: esbuild
+            BuildProperties:
+                Minify: true
+                Target: "es2020"
+                # Sourcemap: true # Enabling source maps will create the required NODE_OPTIONS environment variables on your lambda function during sam build
+                EntryPoints:
+                    - upload.ts
+    EventInvokeConfig:
+        Type: AWS::Lambda::EventInvokeConfig
+        Properties:
+            FunctionName: !Ref ITransform
+            Qualifier: $LATEST
+            MaximumEventAgeInSeconds: 60
+            MaximumRetryAttempts: 0
+            DestinationConfig:
+                OnSuccess:
+                    Destination: !GetAtt IUpload.Arn
+    IUser:
+        Type: AWS::Serverless::Function
+        Properties:
+            CodeUri: src/lambda/user/
+            Handler: user.lambdaHandler
+            Events:
+                ExpressLambdaProxy:
+                    Type: Api
+                    Properties:
+                        RestApiId: !Ref CPSSApiGateway
+                        Path: "/user/{proxy+}"
+                        Method: ANY
+            Policies:
+                - DynamoDBCrudPolicy:
+                      TableName: !Ref UserTable
+        Metadata: # Manage esbuild properties
+            BuildMethod: esbuild
+            BuildProperties:
+                Minify: true
+                Target: "es2020"
+                EntryPoints:
+                    - user.ts
+
+Outputs:
+    # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+    # Find out more about other implicit resources you can reference within SAM
+    # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+    BeseAPiEndpoint:
+        Description: "Base API Endpoint"
+        Value: !Sub "https://${CPSSApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev/"

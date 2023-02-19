@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target": "es2020",
+        "strict": true,
+        "preserveConstEnums": true,
+        "noEmit": true,
+        "sourceMap": false,
+        "moduleResolution": "node",
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "esModuleInterop": true,
+        "useUnknownInCatchVariables": false
+    },
+    "exclude": ["node_modules", "**/*.test.ts"]
+}

@@ -16,6 +16,14 @@
         "jsx": "preserve",
         "incremental": true
     },
-    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-    "exclude": ["node_modules", "serverless"]
+    "include": [
+        "next-env.d.ts",
+        "**/*.ts",
+        "**/*.tsx",
+        "src/pages/index.tsx",
+        "infrastructure/src/lambda/iam/app.ts",
+        "infrastructure/src/lambda/iam/app.local.ts",
+        "infrastructure/src/lambda/iam/iam.ts"
+    ],
+    "exclude": ["node_modules", "infrastructure"]
 }
