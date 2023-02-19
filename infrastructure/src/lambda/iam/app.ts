@@ -1,11 +1,11 @@
-import express from "express"
-import parse from "body-parser"
-import { studentModel } from "../../model/student.schema"
-import cors from "cors"
-import axios, { AxiosResponse, AxiosError } from "axios"
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
-import jwt from "jsonwebtoken"
+import axios, { AxiosError, AxiosResponse } from "axios"
+import parse from "body-parser"
 import { serialize } from "cookie"
+import cors from "cors"
+import express from "express"
+import jwt from "jsonwebtoken"
+import { userModel } from "../../model/schema"
 const app = express()
 app.use(parse.json())
 app.use(cors())
@@ -162,16 +162,18 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
 
     try {
         user = await getUserInfo(accessToken)
+        user = { ...user, ROLE: "STUDENT" }
         specFolder = await getUserSpecFolder(user.id.toString(), accessToken)
         const { id, name, primary_email } = user as CanvasUserObject
-        const student = await studentModel.get({ userId: id.toString() })
+        const student = await userModel.get({ userId: id.toString() })
         if (student) {
             throw Error("This access token has been used already")
         } else {
-            await studentModel.create({
+            await userModel.create({
                 name: name,
                 userId: id.toString(),
                 email: primary_email,
+                ROLE: "STUDENT",
             })
         }
     } catch (error) {
@@ -252,9 +254,8 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
         })
 
     const fullName = name.toLowerCase().split(" ")
-    const prefix = `${
-        fullName[0].charAt(0) + fullName[1] + "_" + login_id + "/"
-    }`
+    const prefix = `${fullName[0].charAt(0) + fullName[1] + "_" + login_id + "/"
+        }`
     const fileName = prefix + "cpss_index.txt"
 
     // consider encoding with user netadata
@@ -290,11 +291,11 @@ app.post("/iam/login", async (req: express.Request, res: express.Response) => {
 
     try {
         user = await getUserInfo(accessToken)
-        const { id, name, primary_email, login_id } = user as CanvasUserObject
+        const { id, primary_email } = user as CanvasUserObject
         if (email !== primary_email) {
             throw Error("Canvas Email doesnt match with the email you provided")
         }
-        let student = await studentModel.get({ userId: id.toString() })
+        let student = await userModel.get({ userId: id.toString() })
         if (!student) {
             throw Error("The email or access token was not found")
         }
@@ -302,7 +303,7 @@ app.post("/iam/login", async (req: express.Request, res: express.Response) => {
         const Cookie = serialize(
             "cpss",
             jwt.sign(
-                { id: id, primary_email },
+                { id: student.userId, email: student.email, ROLE: student.ROLE },
                 "6JC2gq6aJo/xx/oB2J2WKaQ8XPQQgV9t4X4WJb89pR8=",
                 {
                     expiresIn: "2h",

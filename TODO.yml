@@ -14,3 +14,4 @@ Main:
         12: Ask Bo about closed, available course btw
         13: Look into algolia configs
         14: Algolia and s3 replicas
+        15: Look into limiting size of s3 uploads
