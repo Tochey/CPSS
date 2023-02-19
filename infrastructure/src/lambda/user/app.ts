@@ -143,27 +143,21 @@ app.delete("/user/deleteTimeSlots", async (req, res) => {
         const registrations = await registrationModel.scan().exec()
 
         if (registrations.length === 0) {
-            return res
-                .status(200)
-                .json({
-                    error: "No registrations found but timeslot have been deleted",
-                })
+            return res.status(200).json({
+                error: "No registrations found but timeslot have been deleted",
+            })
         }
 
         await registrationModel.batchDelete(registrations)
 
-        return res
-            .status(200)
-            .json({
-                message: "All time slots and registrations have been deleted",
-            })
+        return res.status(200).json({
+            message: "All time slots and registrations have been deleted",
+        })
     } catch (err) {
         console.error(err)
-        return res
-            .status(500)
-            .json({
-                error: "An error occurred while deleting time slots and registrations",
-            })
+        return res.status(500).json({
+            error: "An error occurred while deleting time slots and registrations",
+        })
     }
 })
 
