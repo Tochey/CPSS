@@ -196,13 +196,13 @@ Resources:
             Policies:
                 - DynamoDBCrudPolicy:
                       TableName: !Ref UserTable
-        Metadata: # Manage esbuild properties
-            BuildMethod: esbuild
-            BuildProperties:
-                Minify: true
-                Target: "es2020"
-                EntryPoints:
-                    - user.ts
+        # Metadata: # Manage esbuild properties
+        #     BuildMethod: esbuild
+        #     BuildProperties:
+        #         Minify: true
+        #         Target: "es2020"
+        #         EntryPoints:
+        #             - user.ts
 
 Outputs:
     # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function

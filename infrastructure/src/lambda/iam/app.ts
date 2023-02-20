@@ -90,7 +90,7 @@ const getUserInfo = async (accessToken: string): Promise<CanvasUserObject> => {
             return e.data
         })
         .catch((e: AxiosError<any>) => {
-            throw new Error(e.response?.data.errors[0].message)
+            throw Error(e.response?.data.errors[0].message)
         })
 }
 
@@ -129,15 +129,15 @@ const getUserSpecFolder = async (
 
                     return specFolder
                 }
-                throw new Error(
-                    "You are not a computer science student, your are not allowed to use this service"
+                throw Error(
+                    "You are not a computer science student, you are not allowed to use this service"
                 )
             }
 
             return specFolder
         })
         .catch((e: AxiosError<any>) => {
-            throw new Error(e.response?.data.errors[0].message)
+            throw Error(e.response?.data.errors[0].message)
         })
 }
 
@@ -163,6 +163,7 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
     try {
         user = await getUserInfo(accessToken)
         user = { ...user, ROLE: "STUDENT" }
+        console.log('getting spec folder')
         specFolder = await getUserSpecFolder(user.id.toString(), accessToken)
         const { id, name, primary_email } = user as CanvasUserObject
         const student = await userModel.get({ userId: id.toString() })
@@ -177,6 +178,7 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
             })
         }
     } catch (error) {
+        console.log(error)
         return res.status(403).send(error.message)
     }
 
