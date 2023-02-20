@@ -163,7 +163,7 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
     try {
         user = await getUserInfo(accessToken)
         user = { ...user, ROLE: "STUDENT" }
-        console.log('getting spec folder')
+        console.log("getting spec folder")
         specFolder = await getUserSpecFolder(user.id.toString(), accessToken)
         const { id, name, primary_email } = user as CanvasUserObject
         const student = await userModel.get({ userId: id.toString() })
