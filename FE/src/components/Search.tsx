@@ -6,10 +6,9 @@ import { connectSearchBox } from "react-instantsearch-dom"
 const Search = () => {
     const [query, setQuery] = useState("")
     const [results, setResults] = useState([])
-   
+
     const index = searchClient.initIndex("test_index")
-    const Hits = ({ index_text, metaData}) => {
-    
+    const Hits = ({ index_text, metaData }) => {
         return (
             <div className='w-full flex p-3 pl-4 items-center hover:bg-gray-300 rounded-lg cursor-pointer'>
                 <div className='mr-4'>
