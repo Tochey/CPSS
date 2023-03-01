@@ -1,9 +1,11 @@
-import React from "react"
-import { Hits, InstantSearch, SearchBox } from "react-instantsearch-hooks-web"
-import algoliasearch from "algoliasearch/lite"
+import { Search } from "./Search"
 
 const Dashboard = () => {
-    return <p>Dashboard</p>
+    return (
+        <div>
+            <Search />
+        </div>
+    )
 }
 
 export { Dashboard }
