@@ -11,8 +11,7 @@ const Search = () => {
         "239bafadc92234194000c718993e7374"
     )
     const index = searchClient.initIndex("test_index")
-    const Hits = ({ index_text, metaData}) => {
-    
+    const Hits = ({ index_text, metaData }) => {
         return (
             <div className='w-full flex p-3 pl-4 items-center hover:bg-gray-300 rounded-lg cursor-pointer'>
                 <div className='mr-4'>
