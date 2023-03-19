@@ -2,12 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-*{
+* {
     padding: 0px;
     margin: 0px;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-        
+    font-family: "Poppins", sans-serif;
 }
 html {
     background-color: black;
