@@ -8,11 +8,12 @@ import jwt from "jsonwebtoken"
 import { userModel } from "../../model/schema"
 const app = express()
 app.use(parse.json())
-app.use(cors({
-    origin:"http://localhost:5173",
-    credentials:true
-    
-}))
+app.use(
+    cors({
+        origin: "http://localhost:5173",
+        credentials: true,
+    })
+)
 
 type CanvasUserObject = {
     id: number

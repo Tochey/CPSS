@@ -1,4 +1,10 @@
-import { createContext, useState, useContext, ReactNode, useEffect } from "react"
+import {
+    createContext,
+    useState,
+    useContext,
+    ReactNode,
+    useEffect,
+} from "react"
 import api from "./api"
 import Cookies from "js-cookie"
 import jwt_decode from "jwt-decode"
@@ -32,9 +38,9 @@ const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
     useEffect(() => {
         const user = getUser()
         if (user) {
-          setUser(user);
+            setUser(user)
         }
-      }, []);
+    }, [])
 
     const userLogin = async (user: User) => {
         return await api
@@ -53,7 +59,7 @@ const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
         Cookies.remove("cpss")
     }
 
-    const getUser = () : User | null  => {
+    const getUser = (): User | null => {
         const user = Cookies.get("cpss")
         if (user) {
             return jwt_decode(user)
