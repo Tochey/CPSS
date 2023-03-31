@@ -175,10 +175,10 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
                 userId: id.toString(),
                 email: primary_email,
                 ROLE: "STUDENT",
+                currClass : "CSC520"
             })
         }
     } catch (error) {
-        console.log(error)
         return res.status(403).send(error.message)
     }
 
@@ -202,7 +202,6 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
 
             let nextLink = getNextLink(e.headers.link)
             while (nextLink) {
-                console.log(e.headers.link)
                 let res: AxiosResponse<CanvasUserFileObject[]> =
                     await axios.get(nextLink, {
                         headers: {
@@ -233,8 +232,6 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
             new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
         )
     })[0]
-
-    console.log(latestProblemDesc)
 
     const problemDescdownloadUrl = await axios
         .get(
@@ -277,8 +274,7 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
     })
 
     try {
-        const data = await client.send(command)
-        console.log(data)
+       await client.send(command)
     } catch (error) {
         res.status(500).send(
             "Files were found but failed to upload to s3. Proceed to login"
@@ -324,7 +320,7 @@ app.post("/iam/login", async (req: express.Request, res: express.Response) => {
             }
         )
         res.setHeader("Set-Cookie", Cookie)
-        return res.status(200).json("Authenticated")
+        return res.status(200).json(student)
     } catch (error) {
         return res.status(403).send(error?.message)
     }

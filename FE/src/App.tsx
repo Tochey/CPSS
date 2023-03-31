@@ -4,6 +4,7 @@ import { Navbar } from "./components/Navbar"
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 import { Login } from "./components/Login"
 import { Dashboard } from "./components/Dashboard"
+import ProtectedRoute from "./lib/ProtectedRoute"
 
 function App() {
     const [count, setCount] = useState(0)
@@ -15,7 +16,10 @@ function App() {
                 <Routes>
                     <Route path='/' element={<LandingPage />} />
                     <Route path='/login' element={<Login />} />
-                    <Route path='/dashboard' element={<Dashboard />} />
+                    <Route
+                        path='/dashboard'
+                        element={<ProtectedRoute element={<Dashboard />} />}
+                    />
                 </Routes>
             </Router>
         </>

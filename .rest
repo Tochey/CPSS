@@ -10,7 +10,7 @@ GET https://vacixemn1i.execute-api.us-east-1.amazonaws.com/Prod/pre-signed
 
 
 ### get user information
-GET  https://canvas.instructure.com/api/v1/users/self/profile
+GET  https://canvas.instructure.com/api/v1/users/80000004019824/profile
 Authorization: Bearer 8~h9KipNy37bwteKUlCXdZC0FuLHlwTWws3lQHaZQHAkHHPUTguo9DvPZYWDj9dh2U
 
 ### get user files and find csc 520 folder
@@ -29,7 +29,7 @@ GET https://elearning.salemstate.edu/api/v1/files/80000105515941/public_url
 Authorization: Bearer 8~h9KipNy37bwteKUlCXdZC0FuLHlwTWws3lQHaZQHAkHHPUTguo9DvPZYWDj9dh2U
 
 ###
-GET  http://localhost:8080/user/getAllStudents
+GET  http://localhost:8081/user/getAllStudents
 
 ####
 POST http://localhost:8081/user/createTimeSlots

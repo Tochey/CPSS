@@ -7,6 +7,7 @@ interface User extends Item {
     email: string
     name: string
     ROLE: "STUDENT" | "FACULTY" | "ADMIN"
+    currClass: string
 }
 
 const userSchema = new dynamoosee.Schema(
@@ -30,6 +31,11 @@ const userSchema = new dynamoosee.Schema(
             index: {
                 name: "roleIndex",
             },
+        },
+        currClass: {
+            type: String,
+            required: true,
+            default: "CSC520",
         },
     },
     {
