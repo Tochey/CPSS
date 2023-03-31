@@ -16,10 +16,9 @@ function App() {
                 <Routes>
                     <Route path='/' element={<LandingPage />} />
                     <Route path='/login' element={<Login />} />
-                    <Route
-                        path='/dashboard'
-                        element={<ProtectedRoute element={<Dashboard />} />}
-                    />
+                    <Route path='/' element={<ProtectedRoute />}>
+                        <Route path='/dashboard' element={<Dashboard />} />
+                    </Route>
                 </Routes>
             </Router>
         </>

@@ -1,7 +1,7 @@
-POST  https://localhost:3000
+POST  https://localhost:8081/iam/login
 
 {
-    "email" : "camanze@outlook.com",
+    "email" : "camanze@salemstate.com",
     "password" : "tochi123"
 }
 

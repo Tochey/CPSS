@@ -8,7 +8,11 @@ import jwt from "jsonwebtoken"
 import { userModel } from "../../model/schema"
 const app = express()
 app.use(parse.json())
-app.use(cors())
+app.use(cors({
+    origin:"http://localhost:5173",
+    credentials:true
+    
+}))
 
 type CanvasUserObject = {
     id: number
@@ -285,11 +289,11 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
 })
 
 app.post("/iam/login", async (req: express.Request, res: express.Response) => {
-    const { email, accessToken } = req.body
+    const { email, canvasAccessToken } = req.body
     let user
 
     try {
-        user = await getUserInfo(accessToken)
+        user = await getUserInfo(canvasAccessToken)
         const { id, primary_email } = user as CanvasUserObject
         if (email !== primary_email) {
             throw Error("Canvas Email doesnt match with the email you provided")
@@ -320,7 +324,7 @@ app.post("/iam/login", async (req: express.Request, res: express.Response) => {
             }
         )
         res.setHeader("Set-Cookie", Cookie)
-        return res.status(200).json(student)
+        return res.status(200).json("Successfully logged in")
     } catch (error) {
         return res.status(403).send(error?.message)
     }

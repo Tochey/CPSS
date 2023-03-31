@@ -3,7 +3,7 @@ Main:
         1: Create infrastructure for main component that handles submissions
         2: Test and validate it
         3: packaging with serverless. make sure it takes just what it needs
-        4: Login api with jwt authoziring lambdas -> normal auth flow with cookies
+        4: Login api with jwt authoziring lambdas -> normal auth flow with cookies --done
         5: Create more necessary tables
         6: Architect main submission bucket
         7: Secure APIGW
@@ -17,3 +17,5 @@ Main:
         15: Look into limiting size of s3 uploads
         16: assign class stamps to user submissions
         17: Let admins advance students to 521
+        18: Set up github actions to deploy website to s3 and run sam deploy
+        19: Set up properr cors origin in iam/login
