@@ -175,7 +175,7 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
                 userId: id.toString(),
                 email: primary_email,
                 ROLE: "STUDENT",
-                currClass : "CSC520"
+                currClass: "CSC520",
             })
         }
     } catch (error) {
@@ -274,7 +274,7 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
     })
 
     try {
-       await client.send(command)
+        await client.send(command)
     } catch (error) {
         res.status(500).send(
             "Files were found but failed to upload to s3. Proceed to login"

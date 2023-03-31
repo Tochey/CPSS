@@ -2,8 +2,8 @@ Main:
     Task:
         1: Create infrastructure for main component that handles submissions
         2: Test and validate it
-        3: packaging with serverless. make sure it takes just what it needs 
-        4: Login api with jwt authoziring lambdas -> normal auth flow with cookies  
+        3: packaging with serverless. make sure it takes just what it needs
+        4: Login api with jwt authoziring lambdas -> normal auth flow with cookies
         5: Create more necessary tables
         6: Architect main submission bucket
         7: Secure APIGW
