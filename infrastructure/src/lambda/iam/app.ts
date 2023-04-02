@@ -180,7 +180,8 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
                 userId: id.toString(),
                 email: primary_email,
                 ROLE: "STUDENT",
-                currClass: "CSC520",
+                is_graduated: false,
+                is_520_student: true,
             })
         }
     } catch (error) {
@@ -309,7 +310,6 @@ app.post("/iam/login", async (req: express.Request, res: express.Response) => {
             jwt.sign(
                 {
                     id: student.userId,
-                    email: student.email,
                     ROLE: student.ROLE,
                 },
                 "6JC2gq6aJo/xx/oB2J2WKaQ8XPQQgV9t4X4WJb89pR8=",
@@ -330,5 +330,37 @@ app.post("/iam/login", async (req: express.Request, res: express.Response) => {
         return res.status(403).send(error?.message)
     }
 })
+
+// app.post("/iam/admin/login", async (req: express.Request, res: express.Response) => {
+//     const { email, password } = req.body
+//     let user
+
+   
+
+//         const Cookie = serialize(
+//             "cpss",
+//             jwt.sign(
+//                 {
+//                     // id: student.userId,
+//                     // ROLE: student.ROLE,
+//                 },
+//                 "6JC2gq6aJo/xx/oB2J2WKaQ8XPQQgV9t4X4WJb89pR8=",
+//                 {
+//                     expiresIn: "2h",
+//                 }
+//             ),
+//             {
+//                 httpOnly: false,
+//                 sameSite: "strict",
+//                 maxAge: 60 * 60 * 24 * 7, // expires in 1 week
+//                 path: "/",
+//             }
+//         )
+//         res.setHeader("Set-Cookie", Cookie)
+//         return res.status(200).json("Successfully logged in")
+//     } catch (error) {
+//         return res.status(403).send(error?.message)
+//     }
+// })
 
 export { app }

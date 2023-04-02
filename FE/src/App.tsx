@@ -1,23 +1,49 @@
-import { useState } from "react"
+import {
+    Navigate,
+    Route,
+    BrowserRouter as Router,
+    Routes,
+} from "react-router-dom"
 import { LandingPage } from "./components/LandingPage"
-import { Navbar } from "./components/Navbar"
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
-import { Login } from "./components/Login"
-import { Dashboard } from "./components/Dashboard"
-import ProtectedRoute from "./lib/ProtectedRoute"
+import { StudentDashboard } from "./components/student/StudentDashboard"
+import { StudentLogin } from "./components/student/StudentLogin"
+import { Navbar } from "./components/student/StudentNavbar"
+import { useAuth } from "./lib/AuthContext"
+import ProtectedRoute from "./lib/ProtectedRoutes"
+import AdminLogin from "./components/admin/AdminLogin"
 
 function App() {
-    const [count, setCount] = useState(0)
-
+    const { user } = useAuth()
+    
     return (
         <>
             <Router>
                 <Navbar />
                 <Routes>
-                    <Route path='/' element={<LandingPage />} />
-                    <Route path='/login' element={<Login />} />
-                    <Route path='/' element={<ProtectedRoute />}>
-                        <Route path='/dashboard' element={<Dashboard />} />
+                    <Route
+                        path='/'
+                        element={
+                            user ? (
+                                <Navigate to={"/dashboard"} />
+                            ) : (
+                                <LandingPage />
+                            )
+                        }
+                    />
+                    <Route
+                        path='/login'
+                        element={
+                            user ? <Navigate to={"/dashboard"} /> : <StudentLogin />
+                        }
+                    />
+                    <Route
+                        path='/admin/login'
+                        element={
+                            <AdminLogin />
+                        }
+                    />
+                    <Route path='/' element={<ProtectedRoute  role="STUDENT"/>}>
+                        <Route path='/dashboard' element={<StudentDashboard />} />
                     </Route>
                 </Routes>
             </Router>

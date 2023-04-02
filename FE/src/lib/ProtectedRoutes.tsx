@@ -12,11 +12,12 @@ interface ProtectedRouteProps extends PathRouteProps {
     component: FC<any>
 }
 
-const ProtectedRoute: FC<any> = ({ component: Component, ...rest }) => {
+const ProtectedRoute: FC<any & { role: string }> = ({ component: Component, role, ...rest }) => {
     const { getUser } = useAuth()
     const user = getUser()
 
-    return user ? <Outlet /> : <Navigate to='/login' />
+    return user && user.ROLE == role ? <Outlet /> : <Navigate to='/login' />
 }
 
-export default ProtectedRoute
+export default ProtectedRoute;
+
