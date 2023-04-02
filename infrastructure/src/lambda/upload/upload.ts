@@ -2,7 +2,7 @@ import type { Handler, S3CreateEvent } from "aws-lambda"
 import { APIGatewayProxyResult } from "aws-lambda"
 import algoliasearch from "algoliasearch"
 import { v4 as uuidv4 } from "uuid"
-import { SSMClient, GetParametersByPathCommand } from "@aws-sdk/client-ssm";
+import { SSMClient, GetParametersByPathCommand } from "@aws-sdk/client-ssm"
 
 type asyncLambdaEvent = {
     version: string
@@ -28,23 +28,28 @@ export const lambdaHandler: Handler<asyncLambdaEvent> = async (event) => {
         data: { indexText, metaData, rawText },
     } = parsedBody
 
+    const ssmClient = new SSMClient({})
+    const prefix = "/cpss/algolia"
 
-const ssmClient = new SSMClient({});
-const prefix = "/cpss/algolia";
+    const config = {
+        Path: prefix,
+        WithDecryption: false,
+        Recursive: true,
+    }
 
-const config = {
-  Path: prefix,
-  WithDecryption: false,
-  Recursive: true,
-};
+    const command = new GetParametersByPathCommand(config)
+    const response = await ssmClient.send(command)
 
-const command = new GetParametersByPathCommand(config);
-const response = await ssmClient.send(command);
-
-const appid = response.Parameters!.find((p) => p.Name === `${prefix}/appid`)?.Value;
-const adminApiKey = response.Parameters!.find((p) => p.Name === `${prefix}/adminapikey`)?.Value;
-const indexName = response.Parameters!.find((p) => p.Name === `${prefix}/indexname`)?.Value;
-let alogoliaClient = algoliasearch(appid!, adminApiKey!)
+    const appid = response.Parameters!.find(
+        (p) => p.Name === `${prefix}/appid`
+    )?.Value
+    const adminApiKey = response.Parameters!.find(
+        (p) => p.Name === `${prefix}/adminapikey`
+    )?.Value
+    const indexName = response.Parameters!.find(
+        (p) => p.Name === `${prefix}/indexname`
+    )?.Value
+    let alogoliaClient = algoliasearch(appid!, adminApiKey!)
 
     try {
         const index = alogoliaClient.initIndex(indexName!)

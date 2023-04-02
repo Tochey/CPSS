@@ -15,13 +15,13 @@ interface StudentLoginParam {
 }
 
 interface AdminLoginParam {
-    email  : string
-    password : string
+    email: string
+    password: string
 }
 
 interface UserCookieObject {
     id: string
-    ROLE : "STUDENT" | "ADMIN"
+    ROLE: "STUDENT" | "ADMIN"
 }
 
 interface AuthContextType {
@@ -72,7 +72,7 @@ const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
         Cookies.remove("cpss")
     }
 
-    const adminLogin = async (admin : AdminLoginParam) => {
+    const adminLogin = async (admin: AdminLoginParam) => {
         return await api
             .post("/iam/admin/login", admin, {
                 withCredentials: true,
@@ -94,7 +94,13 @@ const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
         }
     }
 
-    const contextValue = { user, studentLogin, adminLogin, studentLogout, getUser }
+    const contextValue = {
+        user,
+        studentLogin,
+        adminLogin,
+        studentLogout,
+        getUser,
+    }
 
     return (
         <AuthContext.Provider value={contextValue}>

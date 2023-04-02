@@ -14,7 +14,7 @@ import AdminLogin from "./components/admin/AdminLogin"
 
 function App() {
     const { user } = useAuth()
-    
+
     return (
         <>
             <Router>
@@ -33,17 +33,19 @@ function App() {
                     <Route
                         path='/login'
                         element={
-                            user ? <Navigate to={"/dashboard"} /> : <StudentLogin />
+                            user ? (
+                                <Navigate to={"/dashboard"} />
+                            ) : (
+                                <StudentLogin />
+                            )
                         }
                     />
-                    <Route
-                        path='/admin/login'
-                        element={
-                            <AdminLogin />
-                        }
-                    />
-                    <Route path='/' element={<ProtectedRoute  role="STUDENT"/>}>
-                        <Route path='/dashboard' element={<StudentDashboard />} />
+                    <Route path='/admin/login' element={<AdminLogin />} />
+                    <Route path='/' element={<ProtectedRoute role='STUDENT' />}>
+                        <Route
+                            path='/dashboard'
+                            element={<StudentDashboard />}
+                        />
                     </Route>
                 </Routes>
             </Router>

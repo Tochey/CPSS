@@ -50,7 +50,7 @@ const userSchema = new dynamoosee.Schema(
             type: Boolean,
             required: true,
             default: false,
-        }
+        },
     },
     {
         saveUnknown: false,

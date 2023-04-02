@@ -335,8 +335,6 @@ app.post("/iam/login", async (req: express.Request, res: express.Response) => {
 //     const { email, password } = req.body
 //     let user
 
-   
-
 //         const Cookie = serialize(
 //             "cpss",
 //             jwt.sign(
