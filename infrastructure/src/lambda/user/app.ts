@@ -34,6 +34,24 @@ app.get(
     }
 )
 
+app.post("/user/updateStudent/:userId", async (req, res) => {
+    const { userId } = req.params;
+    const updates = req.body;
+    try {
+
+        userModel.update(
+            { userId },
+            updates
+        )
+        return res.status(200).send("Student updated successfully")
+
+    } catch (err) {
+        console.error(err)
+        res.status(500).json({ error: err.message })
+    }
+})
+
+
 app.delete(
     "/user/deleteStudent/:userId",
     async function (req: express.Request, res: express.Response) {

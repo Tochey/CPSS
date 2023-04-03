@@ -10,6 +10,7 @@ interface User extends Item {
     currClass: string
     is_520_student: boolean
     is_graduated: boolean
+    student_id: string //ssu's student id
 }
 
 const userSchema = new dynamoosee.Schema(
@@ -34,12 +35,6 @@ const userSchema = new dynamoosee.Schema(
                 name: "roleIndex",
             },
         },
-        currClass: {
-            type: String,
-            required: true,
-            default: "CSC520",
-        },
-
         is_520_student: {
             type: Boolean,
             required: true,
@@ -51,6 +46,10 @@ const userSchema = new dynamoosee.Schema(
             required: true,
             default: false,
         },
+        student_id: {
+            type: String,
+            required: true,
+        }
     },
     {
         saveUnknown: false,

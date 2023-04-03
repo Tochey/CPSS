@@ -5,12 +5,15 @@ import {
     Routes,
 } from "react-router-dom"
 import { LandingPage } from "./components/LandingPage"
+import AdminDashboard from "./components/admin/AdminDashboard"
+import AdminLogin from "./components/admin/AdminLogin"
 import { StudentDashboard } from "./components/student/StudentDashboard"
 import { StudentLogin } from "./components/student/StudentLogin"
-import { Navbar } from "./components/student/StudentNavbar"
 import { useAuth } from "./lib/AuthContext"
 import ProtectedRoute from "./lib/ProtectedRoutes"
-import AdminLogin from "./components/admin/AdminLogin"
+import { Navbar } from "./components/Navbar"
+import Students from "./components/student/Students"
+import ArchiveStudents from "./components/student/ArchiveStudents"
 
 function App() {
     const { user } = useAuth()
@@ -46,6 +49,14 @@ function App() {
                             path='/dashboard'
                             element={<StudentDashboard />}
                         />
+                    </Route>
+                    <Route path='/' element={<ProtectedRoute role='ADMIN' />}>
+                        <Route
+                            path='/admin/dashboard'
+                            element={<AdminDashboard />}
+                        />
+                        <Route path='/admin/students' element={<Students />} />
+                        <Route path='/admin/archive' element={<ArchiveStudents />} />
                     </Route>
                 </Routes>
             </Router>

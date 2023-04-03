@@ -4,7 +4,8 @@ import {
     Handler,
 } from "aws-lambda"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
+import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3"
+import { parse } from "path"
 
 /**
  *
@@ -20,11 +21,13 @@ export const lambdaHandler: Handler = async (
     event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
     const client = new S3Client({})
+    const e = JSON.parse(event.body || "{}")
+    
 
-    const params = { Bucket: process.env.INDEXEDBUCKETNAME, Key: "test.txt" }
-    const command = new PutObjectCommand(params)
+    const params = { Bucket: process.env.INDEXEDBUCKETNAME, Key: e.fileName}
+    const command = new GetObjectCommand(params)
     const res: string = await getSignedUrl(client, command, {
-        expiresIn: 60 * 60,
+        expiresIn: 10,
     })
 
     return {

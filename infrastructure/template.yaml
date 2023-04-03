@@ -111,9 +111,9 @@ Resources:
                     Properties:
                         RestApiId: !Ref CPSSApiGateway
                         Path: /pre-signed
-                        Method: get
+                        Method: post
             Policies:
-                - S3WritePolicy:
+                - S3ReadPolicy:
                       BucketName: !Ref IndexedSubmissionBucket
         Metadata:
             BuildMethod: esbuild

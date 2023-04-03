@@ -53,3 +53,11 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:8081/user/deleteTimeSlots
+
+###
+POST  https://mpo126cgvl.execute-api.us-east-1.amazonaws.com/dev/pre-signed
+Content-type: application/json
+
+{
+    "fileName": "testdad.txt"
+}

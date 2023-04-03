@@ -5,7 +5,7 @@ import {
     ReactNode,
     useEffect,
 } from "react"
-import api from "./api"
+import {iamEndpoint} from "./api"
 import Cookies from "js-cookie"
 import jwt_decode from "jwt-decode"
 
@@ -55,7 +55,7 @@ const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
     }, [])
 
     const studentLogin = async (student: StudentLoginParam) => {
-        return await api
+        return await iamEndpoint
             .post("/iam/login", student, {
                 withCredentials: true,
             })
@@ -73,7 +73,7 @@ const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
     }
 
     const adminLogin = async (admin: AdminLoginParam) => {
-        return await api
+        return await iamEndpoint
             .post("/iam/admin/login", admin, {
                 withCredentials: true,
             })
