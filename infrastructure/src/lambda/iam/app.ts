@@ -6,9 +6,16 @@ import cors from "cors"
 import express from "express"
 import jwt from "jsonwebtoken"
 import { userModel } from "../../model/schema"
+import { SSMClient, GetParametersByPathCommand } from "@aws-sdk/client-ssm"
+
 const app = express()
 app.use(parse.json())
-app.use(cors())
+app.use(
+    cors({
+        origin: "http://localhost:5173",
+        credentials: true,
+    })
+)
 
 type CanvasUserObject = {
     id: number
@@ -90,7 +97,7 @@ const getUserInfo = async (accessToken: string): Promise<CanvasUserObject> => {
             return e.data
         })
         .catch((e: AxiosError<any>) => {
-            throw new Error(e.response?.data.errors[0].message)
+            throw Error(e.response?.data.errors[0].message)
         })
 }
 
@@ -129,15 +136,15 @@ const getUserSpecFolder = async (
 
                     return specFolder
                 }
-                throw new Error(
-                    "You are not a computer science student, your are not allowed to use this service"
+                throw Error(
+                    "You are not a computer science student, you are not allowed to use this service"
                 )
             }
 
             return specFolder
         })
         .catch((e: AxiosError<any>) => {
-            throw new Error(e.response?.data.errors[0].message)
+            throw Error(e.response?.data.errors[0].message)
         })
 }
 
@@ -163,6 +170,7 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
     try {
         user = await getUserInfo(accessToken)
         user = { ...user, ROLE: "STUDENT" }
+        console.log("getting spec folder")
         specFolder = await getUserSpecFolder(user.id.toString(), accessToken)
         const { id, name, primary_email } = user as CanvasUserObject
         const student = await userModel.get({ userId: id.toString() })
@@ -174,6 +182,9 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
                 userId: id.toString(),
                 email: primary_email,
                 ROLE: "STUDENT",
+                is_graduated: false,
+                is_520_student: true,
+                student_id: user.login_id,
             })
         }
     } catch (error) {
@@ -200,7 +211,6 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
 
             let nextLink = getNextLink(e.headers.link)
             while (nextLink) {
-                console.log(e.headers.link)
                 let res: AxiosResponse<CanvasUserFileObject[]> =
                     await axios.get(nextLink, {
                         headers: {
@@ -231,8 +241,6 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
             new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
         )
     })[0]
-
-    console.log(latestProblemDesc)
 
     const problemDescdownloadUrl = await axios
         .get(
@@ -275,8 +283,7 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
     })
 
     try {
-        const data = await client.send(command)
-        console.log(data)
+        await client.send(command)
     } catch (error) {
         res.status(500).send(
             "Files were found but failed to upload to s3. Proceed to login"
@@ -287,11 +294,11 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
 })
 
 app.post("/iam/login", async (req: express.Request, res: express.Response) => {
-    const { email, accessToken } = req.body
+    const { email, canvasAccessToken } = req.body
     let user
 
     try {
-        user = await getUserInfo(accessToken)
+        user = await getUserInfo(canvasAccessToken)
         const { id, primary_email } = user as CanvasUserObject
         if (email !== primary_email) {
             throw Error("Canvas Email doesnt match with the email you provided")
@@ -306,7 +313,6 @@ app.post("/iam/login", async (req: express.Request, res: express.Response) => {
             jwt.sign(
                 {
                     id: student.userId,
-                    email: student.email,
                     ROLE: student.ROLE,
                 },
                 "6JC2gq6aJo/xx/oB2J2WKaQ8XPQQgV9t4X4WJb89pR8=",
@@ -322,10 +328,70 @@ app.post("/iam/login", async (req: express.Request, res: express.Response) => {
             }
         )
         res.setHeader("Set-Cookie", Cookie)
-        return res.status(200).json("Authenticated")
+        return res.status(200).json("Successfully logged in")
     } catch (error) {
         return res.status(403).send(error?.message)
     }
 })
+
+app.post(
+    "/iam/admin/login",
+    async (req: express.Request, res: express.Response) => {
+        const { email, password } = req.body
+
+        const ssmClient = new SSMClient({})
+        const prefix = "/cpss/admin"
+
+        const config = {
+            Path: prefix,
+            WithDecryption: false,
+            Recursive: true,
+        }
+
+        const command = new GetParametersByPathCommand(config)
+        const response = await ssmClient.send(command)
+
+        const adminEmail = response.Parameters?.find(
+            (e) => e.Name === `${prefix}/email`
+        )?.Value
+        const adminPassword = response.Parameters?.find(
+            (e) => e.Name === `${prefix}/password`
+        )?.Value
+
+        if (email !== adminEmail || password !== adminPassword) {
+            return res
+                .status(403)
+                .send(
+                    "Invalid email or password, Check AWS Parameter Store for the correct credentials"
+                )
+        }
+
+        try {
+            const Cookie = serialize(
+                "cpss",
+                jwt.sign(
+                    {
+                        id: adminEmail,
+                        ROLE: "ADMIN",
+                    },
+                    "6JC2gq6aJo/xx/oB2J2WKaQ8XPQQgV9t4X4WJb89pR8=",
+                    {
+                        expiresIn: "2h",
+                    }
+                ),
+                {
+                    httpOnly: false,
+                    sameSite: "strict",
+                    maxAge: 60 * 60 * 24 * 7, // expires in 1 week
+                    path: "/",
+                }
+            )
+            res.setHeader("Set-Cookie", Cookie)
+            return res.status(200).json("Successfully logged in")
+        } catch (error) {
+            return res.status(403).send(error?.message)
+        }
+    }
+)
 
 export { app }

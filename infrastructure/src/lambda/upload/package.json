@@ -9,6 +9,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@aws-sdk/client-ssm": "^3.303.0",
         "algoliasearch": "^4.14.3",
         "esbuild": "^0.14.14",
         "uuid": "^9.0.0"

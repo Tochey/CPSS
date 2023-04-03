@@ -1,7 +1,7 @@
-.next
 dist
 build
 .serverless
 node_modules
 .esbuild
 .aws-sam
+.next

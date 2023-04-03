@@ -1,7 +1,7 @@
-POST  https://localhost:3000
+POST  https://localhost:8081/iam/login
 
 {
-    "email" : "camanze@outlook.com",
+    "email" : "camanze@salemstate.com",
     "password" : "tochi123"
 }
 
@@ -10,7 +10,7 @@ GET https://vacixemn1i.execute-api.us-east-1.amazonaws.com/Prod/pre-signed
 
 
 ### get user information
-GET  https://canvas.instructure.com/api/v1/users/self/profile
+GET  https://canvas.instructure.com/api/v1/users/80000004019824/profile
 Authorization: Bearer 8~h9KipNy37bwteKUlCXdZC0FuLHlwTWws3lQHaZQHAkHHPUTguo9DvPZYWDj9dh2U
 
 ### get user files and find csc 520 folder
@@ -29,26 +29,35 @@ GET https://elearning.salemstate.edu/api/v1/files/80000105515941/public_url
 Authorization: Bearer 8~h9KipNy37bwteKUlCXdZC0FuLHlwTWws3lQHaZQHAkHHPUTguo9DvPZYWDj9dh2U
 
 ###
-GET  http://localhost:8080/user/getAllStudents
+GET  http://localhost:8081/user/getAllStudents
 
 ####
-POST http://localhost:8080/user/createTimeSlots
+POST http://localhost:8081/user/createTimeSlots
 Content-Type: application/json
 
 {
   "start_time": "2023-02-20T10:00:00.000Z",
-  "end_time": "2023-02-20T10:30:00.000Z",
+  "end_time": "2023-02-20T11:00:00.000Z",
   "presentation_duration": 15
 }
+  #### add break time
 
 ####
-POST http://localhost:8080/user/registerTimeSlot
+POST http://localhost:8081/user/registerTimeSlot
 Content-Type: application/json
 
 {
-    "time_slot_id": "1676892000000",
+    "time_slot_id": "1676889000000",
     "student_id": "3432"
 }
 
 ###
-DELETE http://localhost:8080/user/deleteTimeSlots
+DELETE http://localhost:8081/user/deleteTimeSlots
+
+###
+POST  https://mpo126cgvl.execute-api.us-east-1.amazonaws.com/dev/pre-signed
+Content-type: application/json
+
+{
+    "fileName": "testdad.txt"
+}
