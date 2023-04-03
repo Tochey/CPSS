@@ -49,7 +49,7 @@ const userSchema = new dynamoosee.Schema(
         student_id: {
             type: String,
             required: true,
-        }
+        },
     },
     {
         saveUnknown: false,

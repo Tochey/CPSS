@@ -262,8 +262,9 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
         })
 
     const fullName = name.toLowerCase().split(" ")
-    const prefix = `${fullName[0].charAt(0) + fullName[1] + "_" + login_id + "/"
-        }`
+    const prefix = `${
+        fullName[0].charAt(0) + fullName[1] + "_" + login_id + "/"
+    }`
     const fileName = prefix + "cpss_index.txt"
 
     // consider encoding with user netadata
@@ -333,55 +334,64 @@ app.post("/iam/login", async (req: express.Request, res: express.Response) => {
     }
 })
 
-app.post("/iam/admin/login", async (req: express.Request, res: express.Response) => {
-    const { email, password } = req.body
+app.post(
+    "/iam/admin/login",
+    async (req: express.Request, res: express.Response) => {
+        const { email, password } = req.body
 
+        const ssmClient = new SSMClient({})
+        const prefix = "/cpss/admin"
 
-    const ssmClient = new SSMClient({})
-    const prefix = "/cpss/admin"
+        const config = {
+            Path: prefix,
+            WithDecryption: false,
+            Recursive: true,
+        }
 
-    const config = {
-        Path: prefix,
-        WithDecryption: false,
-        Recursive: true,
-    }
+        const command = new GetParametersByPathCommand(config)
+        const response = await ssmClient.send(command)
 
-    const command = new GetParametersByPathCommand(config)
-    const response = await ssmClient.send(command)
+        const adminEmail = response.Parameters?.find(
+            (e) => e.Name === `${prefix}/email`
+        )?.Value
+        const adminPassword = response.Parameters?.find(
+            (e) => e.Name === `${prefix}/password`
+        )?.Value
 
-    const adminEmail = response.Parameters?.find((e) => e.Name === `${prefix}/email`)?.Value
-    const adminPassword = response.Parameters?.find((e) => e.Name === `${prefix}/password`)?.Value
+        if (email !== adminEmail || password !== adminPassword) {
+            return res
+                .status(403)
+                .send(
+                    "Invalid email or password, Check AWS Parameter Store for the correct credentials"
+                )
+        }
 
-
-    if (email !== adminEmail || password !== adminPassword) {
-        return res.status(403).send("Invalid email or password, Check AWS Parameter Store for the correct credentials")
-    }
-
-    try {
-        const Cookie = serialize(
-            "cpss",
-            jwt.sign(
+        try {
+            const Cookie = serialize(
+                "cpss",
+                jwt.sign(
+                    {
+                        id: adminEmail,
+                        ROLE: "ADMIN",
+                    },
+                    "6JC2gq6aJo/xx/oB2J2WKaQ8XPQQgV9t4X4WJb89pR8=",
+                    {
+                        expiresIn: "2h",
+                    }
+                ),
                 {
-                    id: adminEmail,
-                    ROLE: "ADMIN"
-                },
-                "6JC2gq6aJo/xx/oB2J2WKaQ8XPQQgV9t4X4WJb89pR8=",
-                {
-                    expiresIn: "2h",
+                    httpOnly: false,
+                    sameSite: "strict",
+                    maxAge: 60 * 60 * 24 * 7, // expires in 1 week
+                    path: "/",
                 }
-            ),
-            {
-                httpOnly: false,
-                sameSite: "strict",
-                maxAge: 60 * 60 * 24 * 7, // expires in 1 week
-                path: "/",
-            }
-        )
-        res.setHeader("Set-Cookie", Cookie)
-        return res.status(200).json("Successfully logged in")
-    } catch (error) {
-        return res.status(403).send(error?.message)
+            )
+            res.setHeader("Set-Cookie", Cookie)
+            return res.status(200).json("Successfully logged in")
+        } catch (error) {
+            return res.status(403).send(error?.message)
+        }
     }
-})
+)
 
 export { app }

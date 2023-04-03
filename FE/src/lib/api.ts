@@ -1,4 +1,4 @@
-import Axios from "axios";
+import Axios from "axios"
 
 const urls = {
     development: {
@@ -6,10 +6,12 @@ const urls = {
         USER_ENDPOINT: "http://localhost:8081",
     },
     production: {
-        IAM_ENDPOINT: "https://mpo126cgvl.execute-api.us-east-1.amazonaws.com/dev/",
-        USER_ENDPOINT: "https://mpo126cgvl.execute-api.us-east-1.amazonaws.com/dev/",
+        IAM_ENDPOINT:
+            "https://mpo126cgvl.execute-api.us-east-1.amazonaws.com/dev/",
+        USER_ENDPOINT:
+            "https://mpo126cgvl.execute-api.us-east-1.amazonaws.com/dev/",
     },
-};
+}
 
 const api = (baseURL: string) =>
     Axios.create({
@@ -18,18 +20,23 @@ const api = (baseURL: string) =>
             Accept: "application/json",
             "Content-Type": "application/json",
         },
-    });
+    })
 
 const iamEndpoint = api(
-    process.env.NODE_ENV === "production" ? urls.production.IAM_ENDPOINT : urls.development.IAM_ENDPOINT
-);
+    process.env.NODE_ENV === "production"
+        ? urls.production.IAM_ENDPOINT
+        : urls.development.IAM_ENDPOINT
+)
 const userEndpoint = api(
-    process.env.NODE_ENV === "production" ? urls.production.USER_ENDPOINT : urls.development.USER_ENDPOINT
-);
+    process.env.NODE_ENV === "production"
+        ? urls.production.USER_ENDPOINT
+        : urls.development.USER_ENDPOINT
+)
 
 const psEndpoint = api(
-    process.env.NODE_ENV === "production" ? urls.production.USER_ENDPOINT  : "https://mpo126cgvl.execute-api.us-east-1.amazonaws.com/dev/"
-);
+    process.env.NODE_ENV === "production"
+        ? urls.production.USER_ENDPOINT
+        : "https://mpo126cgvl.execute-api.us-east-1.amazonaws.com/dev/"
+)
 
-export { iamEndpoint, userEndpoint, psEndpoint };
-
+export { iamEndpoint, userEndpoint, psEndpoint }

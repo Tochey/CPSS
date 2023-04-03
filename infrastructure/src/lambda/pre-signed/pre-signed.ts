@@ -22,9 +22,8 @@ export const lambdaHandler: Handler = async (
 ): Promise<APIGatewayProxyResult> => {
     const client = new S3Client({})
     const e = JSON.parse(event.body || "{}")
-    
 
-    const params = { Bucket: process.env.INDEXEDBUCKETNAME, Key: e.fileName}
+    const params = { Bucket: process.env.INDEXEDBUCKETNAME, Key: e.fileName }
     const command = new GetObjectCommand(params)
     const res: string = await getSignedUrl(client, command, {
         expiresIn: 10,

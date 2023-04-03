@@ -5,7 +5,7 @@ import {
     ReactNode,
     useEffect,
 } from "react"
-import {iamEndpoint} from "./api"
+import { iamEndpoint } from "./api"
 import Cookies from "js-cookie"
 import jwt_decode from "jwt-decode"
 
