@@ -176,7 +176,7 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
         const student = await userModel.get({ userId: id.toString() })
         if (student) {
             throw Error("This access token has been used already")
-        } 
+        }
     } catch (error) {
         return res.status(403).send(error.message)
     }
@@ -225,7 +225,6 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
                 "Could not find problem.desc file. Upload it on canvas with the format problem_desc.txt"
             )
     }
-
 
     const latestProblemDesc = files.sort((a, b) => {
         return (
@@ -282,7 +281,7 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
             is_graduated: false,
             is_520_student: true,
             student_id: user.login_id,
-            has_uploaded_capstone : false
+            has_uploaded_capstone: false,
         })
 
         await client.send(command)

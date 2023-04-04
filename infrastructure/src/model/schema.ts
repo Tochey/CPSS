@@ -54,7 +54,7 @@ const userSchema = new dynamoosee.Schema(
         has_uploaded_capstone: {
             type: Boolean,
             required: true,
-        }
+        },
     },
     {
         saveUnknown: false,
@@ -69,7 +69,7 @@ const presentationSchema = new dynamoosee.Schema({
     },
     start_time: Number,
     end_time: Number,
-    presentation_duration : Number,
+    presentation_duration: Number,
     break_time: Number,
 })
 

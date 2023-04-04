@@ -2,7 +2,12 @@ import parse from "body-parser"
 import cors from "cors"
 import express from "express"
 import { v4 } from "uuid"
-import { presentationModel, registrationModel, timeSlotModel, userModel } from "../../model/schema"
+import {
+    presentationModel,
+    registrationModel,
+    timeSlotModel,
+    userModel,
+} from "../../model/schema"
 
 const app = express()
 app.use(parse.json())
@@ -48,13 +53,13 @@ app.post("/user/updateStudent/:userId", async (req, res) => {
 
 app.get("/user/getPresentationIfAny", async (req, res) => {
     try {
-        const p = await presentationModel.scan().exec();
-        return res.status(200).json(p);
+        const p = await presentationModel.scan().exec()
+        return res.status(200).json(p)
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: err.message });
+        console.error(err)
+        res.status(500).json({ error: err.message })
     }
-});
+})
 
 app.delete(
     "/user/deleteStudent/:userId",
@@ -83,13 +88,12 @@ app.delete(
 )
 
 app.post("/user/createPresentation", async (req, res) => {
-    const { start_time, end_time, presentation_duration, break_time } = req.body;
+    const { start_time, end_time, presentation_duration, break_time } = req.body
     try {
-        const p = await presentationModel.scan().exec();
-        
+        const p = await presentationModel.scan().exec()
 
         if (p.length > 0) {
-            throw new Error("There is an active presentation already");
+            throw new Error("There is an active presentation already")
         }
 
         await presentationModel.create({
@@ -98,20 +102,20 @@ app.post("/user/createPresentation", async (req, res) => {
             end_time: new Date(end_time).getTime(),
             presentation_duration: parseInt(presentation_duration),
             break_time: parseInt(break_time),
-        });
+        })
 
-        const st = new Date(start_time);
-        const et = new Date(end_time);
-        const duration = presentation_duration;
-        const breakDuration = break_time || 0; 
+        const st = new Date(start_time)
+        const et = new Date(end_time)
+        const duration = presentation_duration
+        const breakDuration = break_time || 0
 
-        const time_slots = [];
-        let time = st;
+        const time_slots = []
+        let time = st
         while (time < et) {
-            const time_slot_id = v4();
-            const slotEndTime = time.getTime() + duration * 60 * 1000;
+            const time_slot_id = v4()
+            const slotEndTime = time.getTime() + duration * 60 * 1000
             if (slotEndTime > et.getTime()) {
-                break; 
+                break
             }
             time_slots.push({
                 time_slot_id,
@@ -119,21 +123,20 @@ app.post("/user/createPresentation", async (req, res) => {
                 end_time: slotEndTime,
                 is_available: true,
                 registered_student_id: "",
-            });
-            time = new Date(slotEndTime + breakDuration * 60 * 1000); 
+            })
+            time = new Date(slotEndTime + breakDuration * 60 * 1000)
         }
 
         await Promise.all(
             time_slots.map((time_slot) => timeSlotModel.create(time_slot))
-        );
+        )
 
-        res.json({ message: "Time slots created successfully" });
+        res.json({ message: "Time slots created successfully" })
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: err.message });
+        console.error(err)
+        res.status(500).json({ error: err.message })
     }
-});
-
+})
 
 app.post("/user/registerTimeSlot", async (req, res) => {
     try {
@@ -166,9 +169,9 @@ app.post("/user/registerTimeSlot", async (req, res) => {
 
 app.delete("/user/deletePresentation", async (req, res) => {
     try {
-        const p = await presentationModel.scan().exec();
-        await presentationModel.batchDelete(p);
-        
+        const p = await presentationModel.scan().exec()
+        await presentationModel.batchDelete(p)
+
         const timeSlots = await timeSlotModel.scan().exec()
 
         if (timeSlots.length === 0) {

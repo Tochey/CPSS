@@ -56,7 +56,10 @@ function App() {
                             path='/admin/archive'
                             element={<StudentArchive />}
                         />
-                           <Route path='/admin/schedule' element={<AdminSchedule />} />
+                        <Route
+                            path='/admin/schedule'
+                            element={<AdminSchedule />}
+                        />
                     </Route>
                 </Routes>
             </Router>
