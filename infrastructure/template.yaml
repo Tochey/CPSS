@@ -70,6 +70,8 @@ Resources:
             Policies:
                 - SSMParameterWithSlashPrefixReadPolicy:
                       ParameterName: /cpss/admin
+                - S3WritePolicy:
+                      BucketName: !Ref IndexedSubmissionBucket
             Events:
                 ExpressLambdaProxy:
                     Type: Api

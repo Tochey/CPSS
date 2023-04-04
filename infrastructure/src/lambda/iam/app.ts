@@ -176,17 +176,7 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
         const student = await userModel.get({ userId: id.toString() })
         if (student) {
             throw Error("This access token has been used already")
-        } else {
-            await userModel.create({
-                name: name,
-                userId: id.toString(),
-                email: primary_email,
-                ROLE: "STUDENT",
-                is_graduated: false,
-                is_520_student: true,
-                student_id: user.login_id,
-            })
-        }
+        } 
     } catch (error) {
         return res.status(403).send(error.message)
     }
@@ -232,9 +222,10 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
         return res
             .status(401)
             .send(
-                "Could not find problem.desc file. But you are signed up. Please Login"
+                "Could not find problem.desc file. Upload it on canvas with the format problem_desc.txt"
             )
     }
+
 
     const latestProblemDesc = files.sort((a, b) => {
         return (
@@ -283,6 +274,17 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
     })
 
     try {
+        await userModel.create({
+            name: name,
+            userId: id.toString(),
+            email: primary_email,
+            ROLE: "STUDENT",
+            is_graduated: false,
+            is_520_student: true,
+            student_id: user.login_id,
+            has_uploaded_capstone : false
+        })
+
         await client.send(command)
     } catch (error) {
         res.status(500).send(

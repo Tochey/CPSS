@@ -32,13 +32,16 @@ Authorization: Bearer 8~h9KipNy37bwteKUlCXdZC0FuLHlwTWws3lQHaZQHAkHHPUTguo9DvPZY
 GET  http://localhost:8081/user/getAllStudents
 
 ####
-POST http://localhost:8081/user/createTimeSlots
+POST http://localhost:8081/user/createPresentation
 Content-Type: application/json
 
 {
   "start_time": "2023-02-20T10:00:00.000Z",
   "end_time": "2023-02-20T11:00:00.000Z",
-  "presentation_duration": 15
+  "presentation_duration": 30,
+  "break_time": 15
+
+
 }
   #### add break time
 
@@ -52,7 +55,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:8081/user/deleteTimeSlots
+DELETE http://localhost:8081/user/deletePresentation
 
 ###
 POST  https://mpo126cgvl.execute-api.us-east-1.amazonaws.com/dev/pre-signed

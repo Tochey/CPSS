@@ -1,8 +1,8 @@
 import parse from "body-parser"
 import cors from "cors"
-import { Item } from "dynamoose/dist/Item"
 import express from "express"
-import { registrationModel, timeSlotModel, userModel } from "../../model/schema"
+import { v4 } from "uuid"
+import { presentationModel, registrationModel, timeSlotModel, userModel } from "../../model/schema"
 
 const app = express()
 app.use(parse.json())
@@ -46,6 +46,16 @@ app.post("/user/updateStudent/:userId", async (req, res) => {
     }
 })
 
+app.get("/user/getPresentationIfAny", async (req, res) => {
+    try {
+        const p = await presentationModel.scan().exec();
+        return res.status(200).json(p);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 app.delete(
     "/user/deleteStudent/:userId",
     async function (req: express.Request, res: express.Response) {
@@ -72,62 +82,74 @@ app.delete(
     }
 )
 
-// Define route for creating time slots
-app.post("/user/createTimeSlots", async (req, res) => {
-    const { start_time, end_time, presentation_duration } = req.body
+app.post("/user/createPresentation", async (req, res) => {
+    const { start_time, end_time, presentation_duration, break_time } = req.body;
     try {
-        const st = new Date(start_time)
-        const et = new Date(end_time)
-        const duration = presentation_duration
+        const p = await presentationModel.scan().exec();
+        
 
-        // Calculate time slots based on duration and start/end times
-        const time_slots = []
-        for (
-            let time = st;
-            time < et && time.getTime() + duration * 60 * 1000 <= et.getTime();
-            time.setMinutes(time.getMinutes() + duration)
-        ) {
-            const time_slot_id = `${time.getTime()}`
+        if (p.length > 0) {
+            throw new Error("There is an active presentation already");
+        }
+
+        await presentationModel.create({
+            presentation_id: v4(),
+            start_time: new Date(start_time).getTime(),
+            end_time: new Date(end_time).getTime(),
+            presentation_duration: parseInt(presentation_duration),
+            break_time: parseInt(break_time),
+        });
+
+        const st = new Date(start_time);
+        const et = new Date(end_time);
+        const duration = presentation_duration;
+        const breakDuration = break_time || 0; 
+
+        const time_slots = [];
+        let time = st;
+        while (time < et) {
+            const time_slot_id = v4();
+            const slotEndTime = time.getTime() + duration * 60 * 1000;
+            if (slotEndTime > et.getTime()) {
+                break; 
+            }
             time_slots.push({
                 time_slot_id,
                 start_time: time.getTime(),
-                end_time: time.getTime() + duration * 60 * 1000,
+                end_time: slotEndTime,
                 is_available: true,
                 registered_student_id: "",
-            })
+            });
+            time = new Date(slotEndTime + breakDuration * 60 * 1000); 
         }
 
-        // Add time slots to DynamoDB
         await Promise.all(
             time_slots.map((time_slot) => timeSlotModel.create(time_slot))
-        )
+        );
 
-        res.json({ message: "Time slots created successfully" })
+        res.json({ message: "Time slots created successfully" });
     } catch (err) {
-        console.error(err)
-        res.status(500).json({ error: err.message })
+        console.error(err);
+        res.status(500).json({ error: err.message });
     }
-})
+});
 
-// Define route for registering for a time slot
+
 app.post("/user/registerTimeSlot", async (req, res) => {
     try {
         const { student_id, time_slot_id } = req.body
 
-        // Check if time slot is available
         const time_slot = await timeSlotModel.get({ time_slot_id })
         if (!time_slot.is_available) {
             return res.status(400).json({ error: "Time slot is not available" })
         }
 
-        // Register student for time slot
         await timeSlotModel.update({
             time_slot_id,
             is_available: false,
             registered_student_id: student_id,
         })
 
-        // Add registration to DynamoDB
         await registrationModel.create({
             registration_id: `${time_slot_id}_${student_id}`,
             student_id,
@@ -142,8 +164,11 @@ app.post("/user/registerTimeSlot", async (req, res) => {
     }
 })
 
-app.delete("/user/deleteTimeSlots", async (req, res) => {
+app.delete("/user/deletePresentation", async (req, res) => {
     try {
+        const p = await presentationModel.scan().exec();
+        await presentationModel.batchDelete(p);
+        
         const timeSlots = await timeSlotModel.scan().exec()
 
         if (timeSlots.length === 0) {
