@@ -3,13 +3,11 @@ frontend:
     phases:
         preBuild:
             commands:
-                - cd FE
-                - env | grep -e NODE_ENV >> .env.production
-                - env | grep -e VITE_PUBLIC_ >> .env.production
-                - npm install
+                - echo "Running-----> preBuild"
         build:
             commands:
-                - npm run build
+                - cd FE && npm install
+                - CD FE && npm run build
     artifacts:
         baseDirectory: dist
         files:
