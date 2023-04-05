@@ -1,0 +1,19 @@
+version: 1
+frontend:
+    phases:
+        preBuild:
+            commands:
+                - cd FE
+                - env | grep -e NODE_ENV >> .env.production
+                - env | grep -e VITE_PUBLIC_ >> .env.production
+                - npm install
+        build:
+            commands:
+                - npm run build
+    artifacts:
+        baseDirectory: dist
+        files:
+            - "**/*"
+    cache:
+        paths:
+            - node_modules/**/*

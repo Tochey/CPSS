@@ -22,3 +22,9 @@ Main:
         20: Cant  do a big sync without storing all canvas access tokens
         21: have presentation id alogn with registration id
         22: Capstone Abstract Limit
+        23: needed SSM parameters for CPPS
+            - /cpss/admin/email
+            - /cpss/admin/password
+            - /cpss/algolia/adminapikey
+            - /cpss/algolia/appid
+            - /cpss/algolia/indexname
