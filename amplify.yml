@@ -6,7 +6,7 @@ frontend:
                 - echo "Running-----> preBuild"
         build:
             commands:
-                - cd FE && npm install
+                - cd FE && npm ci
                 - npm run build
     artifacts:
         baseDirectory: dist
