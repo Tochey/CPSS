@@ -39,7 +39,6 @@ app.get("/user/getStudent/:userId", async (req, res) => {
     }
 })
 
-
 app.get(
     "/user/getAllFaculty",
     async function (req: express.Request, res: express.Response) {
@@ -133,7 +132,6 @@ app.get("/user/getAllRegistrations", async (req, res) => {
     }
 })
 
-
 app.get("/user/getTimeSlot/:timeSlotId", async (req, res) => {
     try {
         const { timeSlotId } = req.params
@@ -144,7 +142,6 @@ app.get("/user/getTimeSlot/:timeSlotId", async (req, res) => {
         res.status(500).json({ error: err.message })
     }
 })
-
 
 app.delete(
     "/user/deleteStudent/:userId",
@@ -231,7 +228,8 @@ app.post("/user/createPresentation", async (req, res) => {
 
 app.post("/user/registerTimeSlot", async (req, res) => {
     try {
-        const { student_id, time_slot_id, capstone_title, capstone_abstract } = req.body
+        const { student_id, time_slot_id, capstone_title, capstone_abstract } =
+            req.body
 
         const time_slot = await timeSlotModel.get({ time_slot_id })
         if (!time_slot.is_available) {
@@ -250,7 +248,7 @@ app.post("/user/registerTimeSlot", async (req, res) => {
             time_slot_id,
             registration_timestamp: Date.now(),
             capstone_title,
-            capstone_abstract
+            capstone_abstract,
         })
 
         res.json({ message: "Registration successful" })
@@ -265,7 +263,9 @@ app.delete("/user/deletePresentation", async (req, res) => {
         const p = await presentationModel.scan().exec()
 
         for (const pres of p) {
-            await presentationModel.delete({ presentation_id: pres.presentation_id })
+            await presentationModel.delete({
+                presentation_id: pres.presentation_id,
+            })
         }
 
         const timeSlots = await timeSlotModel.scan().exec()

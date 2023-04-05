@@ -90,17 +90,16 @@ const registrationSchema = new dynamoosee.Schema({
         hashKey: true,
     },
     student_id: {
-
         type: String,
         required: true,
         index: {
             name: "studentIdIndex",
-        }
+        },
     },
     time_slot_id: String,
     registration_timestamp: Number,
-    capstone_title : String,
-    capstone_abstract : String
+    capstone_title: String,
+    capstone_abstract: String,
 })
 
 const user = dynamoosee.model<User>("user", userSchema)

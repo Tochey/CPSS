@@ -59,7 +59,9 @@ const CapstoneModal = ({ sm, handleSignup }: any) => {
                                                     type='text'
                                                     placeholder='Build a spaceship'
                                                     name='capstone_title'
-                                                    onChange={(e) => handleChange(e)}
+                                                    onChange={(e) =>
+                                                        handleChange(e)
+                                                    }
                                                 />
                                             </div>
                                             <div className='w-full px-3'>
@@ -73,7 +75,9 @@ const CapstoneModal = ({ sm, handleSignup }: any) => {
                                                     spellCheck
                                                     datatype='string'
                                                     name='capstone_abstract'
-                                                    onChange={(e) => handleChange(e)}
+                                                    onChange={(e) =>
+                                                        handleChange(e)
+                                                    }
                                                 />
                                                 <p className='text-gray-600 text-xs italic'>
                                                     Make it as long and as crazy
@@ -89,7 +93,12 @@ const CapstoneModal = ({ sm, handleSignup }: any) => {
                             <button
                                 type='button'
                                 className='inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto'
-                                onClick={() => handleSignup(data.capstone_title, data.capstone_abstract)}>
+                                onClick={() =>
+                                    handleSignup(
+                                        data.capstone_title,
+                                        data.capstone_abstract
+                                    )
+                                }>
                                 Sign up
                             </button>
                             <button
