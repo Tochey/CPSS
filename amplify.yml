@@ -7,7 +7,7 @@ frontend:
         build:
             commands:
                 - cd FE && npm install
-                - cd FE && npm run build
+                - npm run build
     artifacts:
         baseDirectory: dist
         files:
