@@ -20,3 +20,5 @@ Main:
         18: Set up github actions to deploy website to s3 and run sam deploy
         19: Set up properr cors origin in iam/login
         20: Cant  do a big sync without storing all canvas access tokens
+        21: have presentation id alogn with registration id 
+        22: Capstone Abstract Limit

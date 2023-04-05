@@ -41,4 +41,3 @@ node_modules
 *.aws-sam
 package-lock.json
 
-FE/src/components/
