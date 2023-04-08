@@ -6,7 +6,6 @@ import {
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3"
 
-
 /**
  *
  * Event doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format

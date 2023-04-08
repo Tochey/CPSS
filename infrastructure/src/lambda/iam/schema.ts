@@ -1,8 +1,9 @@
 import dynamoosee from "dynamoose"
 import { Item } from "dynamoose/dist/Item"
 
-if (process.env.NODE_ENV !== "production") { dynamoosee.aws.ddb.local() }
-
+if (process.env.NODE_ENV !== "production") {
+    dynamoosee.aws.ddb.local()
+}
 
 interface User extends Item {
     userId: string
@@ -21,7 +22,7 @@ const userSchema = new dynamoosee.Schema(
         userId: {
             type: String,
             required: true,
-            hashKey: true
+            hashKey: true,
         },
         email: {
             type: String,
@@ -37,7 +38,7 @@ const userSchema = new dynamoosee.Schema(
             default: "STUDENT",
             index: {
                 name: "ROLE-index",
-            }
+            },
         },
         is_520_student: {
             type: Boolean,

@@ -14,7 +14,7 @@ app.use(
     cors({
         origin: [
             "http://localhost:5173",
-            "https://main.d77mtlby88qvh.amplifyapp.com"
+            "https://main.d77mtlby88qvh.amplifyapp.com",
         ],
         credentials: true,
     })
@@ -27,7 +27,6 @@ app.get(
         res.status(200).send(students)
     }
 )
-
 
 app.get("/user/getStudent/:userId", async (req, res) => {
     try {
