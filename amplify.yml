@@ -6,6 +6,7 @@ frontend:
                 - echo "Running-----> preBuild"
         build:
             commands:
+                - sam --version
                 - cd FE && npm ci
                 - npm run build
     artifacts:

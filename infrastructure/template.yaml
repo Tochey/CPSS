@@ -253,6 +253,13 @@ Resources:
             Policies:
                 - DynamoDBCrudPolicy:
                       TableName: !Ref UserTable
+                - DynamoDBCrudPolicy:
+                      TableName: !Ref PresentationTable
+                - DynamoDBCrudPolicy:
+                      TableName: !Ref TimeSlotTable
+                - DynamoDBCrudPolicy:
+                      TableName: !Ref RegistrationTable
+
         Metadata:
             BuildMethod: esbuild
             BuildProperties:
