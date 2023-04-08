@@ -8,7 +8,7 @@ frontend:
         build:
             commands:
                 - cd infrastructure
-                - sam build && sam deploy
+                - sam build --beta-features && sam deploy
                 - cd FE && npm ci
                 - npm run build
     artifacts:
