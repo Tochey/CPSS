@@ -1,4 +1,3 @@
-import parse from "body-parser"
 import cors from "cors"
 import express from "express"
 import { v4 } from "uuid"
@@ -7,24 +6,28 @@ import {
     registrationModel,
     timeSlotModel,
     userModel,
-} from "../../model/schema"
+} from "./schema"
 
 const app = express()
-app.use(parse.json())
-app.use(cors())
+app.use(express.json())
+app.use(
+    cors({
+        origin: [
+            "http://localhost:5173",
+            "https://main.d77mtlby88qvh.amplifyapp.com"
+        ],
+        credentials: true,
+    })
+)
 
 app.get(
     "/user/getAllStudents",
     async function (req: express.Request, res: express.Response) {
-        return userModel
-            .query("ROLE")
-            .eq("STUDENT")
-            .exec()
-            .then((data) => {
-                res.status(200).send(data)
-            })
+        const students = await userModel.query("ROLE").eq("STUDENT").exec()
+        res.status(200).send(students)
     }
 )
+
 
 app.get("/user/getStudent/:userId", async (req, res) => {
     try {
@@ -42,13 +45,8 @@ app.get("/user/getStudent/:userId", async (req, res) => {
 app.get(
     "/user/getAllFaculty",
     async function (req: express.Request, res: express.Response) {
-        return userModel
-            .query("ROLE")
-            .eq("FACULTY")
-            .exec()
-            .then((data) => {
-                res.status(200).send(data)
-            })
+        const fac = await userModel.get({ ROLE: "FACULTY" })
+        res.status(200).send(fac)
     }
 )
 

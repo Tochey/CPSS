@@ -28,3 +28,6 @@ Main:
             - /cpss/algolia/adminapikey
             - /cpss/algolia/appid
             - /cpss/algolia/indexname
+        24: abstract limit - 50 
+        25: different prentation schedule for 520/521
+        26: FIgure out origins for s3 and lambda

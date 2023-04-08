@@ -8,8 +8,8 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
     Function:
-        Timeout: 5
-        MemorySize: 128
+        Timeout: 10
+        MemorySize: 3008
         Runtime: nodejs14.x
         Architectures:
             - x86_64
@@ -22,8 +22,9 @@ Resources:
             StageName: dev
             Cors:
                 AllowMethods: "'GET,POST,OPTIONS,PUT,DELETE'"
-                AllowHeaders: "'Content-type'"
-                AllowOrigin: "'*'"
+                AllowHeaders: "'*'"
+                AllowOrigin: "'https://main.d77mtlby88qvh.amplifyapp.com'"
+
     # S3 Bucket to store primary submissions
     PrimarySubmissionBucket:
         Type: AWS::S3::Bucket
@@ -47,20 +48,84 @@ Resources:
     UserTable:
         Type: AWS::DynamoDB::Table
         Properties:
-            TableName: user
+            TableName: cpss-user
             AttributeDefinitions:
                 - AttributeName: userId
                   AttributeType: S
-                - AttributeName: email
+                - AttributeName: ROLE
                   AttributeType: S
             KeySchema:
                 - AttributeName: userId
                   KeyType: HASH
-                - AttributeName: email
+            GlobalSecondaryIndexes:
+                - IndexName: ROLE-index
+                  KeySchema:
+                      - AttributeName: ROLE
+                        KeyType: HASH
+                  Projection:
+                      ProjectionType: ALL
+                  ProvisionedThroughput:
+                      ReadCapacityUnits: 1
+                      WriteCapacityUnits: 1
+            ProvisionedThroughput:
+                ReadCapacityUnits: 1
+                WriteCapacityUnits: 1
+
+    PresentationTable:
+        Type: AWS::DynamoDB::Table
+        Properties:
+            TableName: cpss-presentation
+            AttributeDefinitions:
+                - AttributeName: presentation_id
+                  AttributeType: S
+            KeySchema:
+                - AttributeName: presentation_id
+                  KeyType: HASH
+            ProvisionedThroughput:
+                ReadCapacityUnits: 1
+                WriteCapacityUnits: 1
+
+    TimeSlotTable:
+        Type: AWS::DynamoDB::Table
+        Properties:
+            TableName: cpss-timeSlot
+            AttributeDefinitions:
+                - AttributeName: time_slot_id
+                  AttributeType: S
+            KeySchema:
+                - AttributeName: time_slot_id
+                  KeyType: HASH
+            ProvisionedThroughput:
+                ReadCapacityUnits: 1
+                WriteCapacityUnits: 1
+
+    RegistrationTable:
+        Type: AWS::DynamoDB::Table
+        Properties:
+            TableName: cpss-registration
+            AttributeDefinitions:
+                - AttributeName: registration_id
+                  AttributeType: S
+                - AttributeName: student_id
+                  AttributeType: S
+            KeySchema:
+                - AttributeName: registration_id
+                  KeyType: HASH
+                - AttributeName: student_id
                   KeyType: RANGE
             ProvisionedThroughput:
                 ReadCapacityUnits: 1
                 WriteCapacityUnits: 1
+            GlobalSecondaryIndexes:
+                - IndexName: studentIdIndex
+                  KeySchema:
+                      - AttributeName: student_id
+                        KeyType: HASH
+                  Projection:
+                      ProjectionType: ALL
+                  ProvisionedThroughput:
+                      ReadCapacityUnits: 1
+                      WriteCapacityUnits: 1
 
     IIam:
         Type: AWS::Serverless::Function
@@ -70,6 +135,10 @@ Resources:
             Policies:
                 - SSMParameterWithSlashPrefixReadPolicy:
                       ParameterName: /cpss/admin
+                - S3WritePolicy:
+                      BucketName: !Ref IndexedSubmissionBucket
+                - DynamoDBCrudPolicy:
+                      TableName: !Ref UserTable
                 - S3WritePolicy:
                       BucketName: !Ref IndexedSubmissionBucket
             Events:
@@ -82,22 +151,14 @@ Resources:
             Environment:
                 Variables:
                     INDEXEDBUCKETNAME: !Ref IndexedSubmissionBucket
-        Policies:
-            - DynamoDBCrudPolicy:
-                  TableName: !Ref UserTable
-            - S3WritePolicy:
-                  BucketName: !Ref IndexedSubmissionBucket
-        # Metadata: # Manage esbuild properties
-        #     BuildMethod: esbuild
-        #     BuildProperties:
-        #         Minify: true
-        #         Target: "es2020"
-        #         # Sourcemap: true # Enabling source maps will create the required NODE_OPTIONS environment variables on your lambda function during sam build
-        #         EntryPoints:
-        #             - app.ts
-        #             - iam.ts
-        #         CopyFiles:
-        #             - ../../../model/student.schema.ts
+                    NODE_ENV: "production"
+        Metadata:
+            BuildMethod: esbuild
+            BuildProperties:
+                Minify: true
+                Target: "es2020"
+                EntryPoints:
+                    - iam.ts
 
     IPreSigned:
         Type: AWS::Serverless::Function
@@ -179,6 +240,9 @@ Resources:
         Properties:
             CodeUri: src/lambda/user/
             Handler: user.lambdaHandler
+            Environment:
+                Variables:
+                    NODE_ENV: "production"
             Events:
                 ExpressLambdaProxy:
                     Type: Api
@@ -189,18 +253,15 @@ Resources:
             Policies:
                 - DynamoDBCrudPolicy:
                       TableName: !Ref UserTable
-        # Metadata:
-        #     BuildMethod: esbuild
-        #     BuildProperties:
-        #         Minify: true
-        #         Target: "es2020"
-        #         EntryPoints:
-        #             - user.ts
+        Metadata:
+            BuildMethod: esbuild
+            BuildProperties:
+                Minify: true
+                Target: "es2020"
+                EntryPoints:
+                    - user.ts
 
 Outputs:
-    # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-    # Find out more about other implicit resources you can reference within SAM
-    # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
     BeseAPiEndpoint:
         Description: "Base API Endpoint"
         Value: !Sub "https://${CPSSApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev/"

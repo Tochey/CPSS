@@ -1,6 +1,8 @@
 import dynamoosee from "dynamoose"
 import { Item } from "dynamoose/dist/Item"
-dynamoosee.aws.ddb.local()
+
+if (process.env.NODE_ENV !== "production") { dynamoosee.aws.ddb.local() }
+
 
 interface User extends Item {
     userId: string
@@ -19,6 +21,7 @@ const userSchema = new dynamoosee.Schema(
         userId: {
             type: String,
             required: true,
+            hashKey: true
         },
         email: {
             type: String,
@@ -33,8 +36,8 @@ const userSchema = new dynamoosee.Schema(
             required: true,
             default: "STUDENT",
             index: {
-                name: "roleIndex",
-            },
+                name: "ROLE-index",
+            }
         },
         is_520_student: {
             type: Boolean,
@@ -102,14 +105,23 @@ const registrationSchema = new dynamoosee.Schema({
     capstone_abstract: String,
 })
 
-const user = dynamoosee.model<User>("user", userSchema)
-const timeslot = dynamoosee.model("timeSlot", timeSlotSchema)
-const registration = dynamoosee.model("registration", registrationSchema)
-const presentation = dynamoosee.model("presentation", presentationSchema)
-const userTable = new dynamoosee.Table("user", [user])
-const timeSlotTable = new dynamoosee.Table("timelsot", [timeslot])
-const registrationTable = new dynamoosee.Table("registration", [registration])
-const presentationTable = new dynamoosee.Table("presentation", [presentation])
+const user = dynamoosee.model<User>("cpss-user", userSchema, {
+    create: false,
+    waitForActive: false,
+})
+const timeslot = dynamoosee.model("cpss-timeSlot", timeSlotSchema, {
+    create: false,
+    waitForActive: false,
+})
+const registration = dynamoosee.model("cpss-registration", registrationSchema, {
+    create: false,
+    waitForActive: false,
+})
+const presentation = dynamoosee.model("cpss-presentation", presentationSchema, {
+    create: false,
+    waitForActive: false,
+})
+
 export {
     user as userModel,
     timeslot as timeSlotModel,

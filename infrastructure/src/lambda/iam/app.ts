@@ -1,18 +1,20 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
+import { GetParametersByPathCommand, SSMClient } from "@aws-sdk/client-ssm"
 import axios, { AxiosError, AxiosResponse } from "axios"
-import parse from "body-parser"
 import { serialize } from "cookie"
 import cors from "cors"
 import express from "express"
 import jwt from "jsonwebtoken"
-import { userModel } from "../../model/schema"
-import { SSMClient, GetParametersByPathCommand } from "@aws-sdk/client-ssm"
+import { userModel } from "./schema"
 
 const app = express()
-app.use(parse.json())
+app.use(express.json())
 app.use(
     cors({
-        origin: "http://localhost:5173",
+        origin: [
+            "http://localhost:5173",
+            "https://main.d77mtlby88qvh.amplifyapp.com"
+        ],
         credentials: true,
     })
 )
@@ -173,7 +175,7 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
         console.log("getting spec folder")
         specFolder = await getUserSpecFolder(user.id.toString(), accessToken)
         const { id, name, primary_email } = user as CanvasUserObject
-        const student = await userModel.get({ userId: id.toString() })
+        const student = await userModel.get({ userId: id.toString() } )
         if (student) {
             throw Error("This access token has been used already")
         }
@@ -252,9 +254,8 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
         })
 
     const fullName = name.toLowerCase().split(" ")
-    const prefix = `${
-        fullName[0].charAt(0) + fullName[1] + "_" + login_id + "/"
-    }`
+    const prefix = `${fullName[0].charAt(0) + fullName[1] + "_" + login_id + "/"
+        }`
     const fileName = prefix + "cpss_index.txt"
 
     // consider encoding with user netadata
@@ -290,11 +291,11 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
             "Files were found but failed to upload to s3. Proceed to login"
         )
     }
-
-    res.send("Successfully onboarded")
+    res.status(200).send("Successfully onboarded")
 })
 
 app.post("/iam/login", async (req: express.Request, res: express.Response) => {
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
     const { email, canvasAccessToken } = req.body
     let user
 
@@ -304,7 +305,7 @@ app.post("/iam/login", async (req: express.Request, res: express.Response) => {
         if (email !== primary_email) {
             throw Error("Canvas Email doesnt match with the email you provided")
         }
-        let student = await userModel.get({ userId: id.toString() })
+        let student = await userModel.get({ userId: id.toString(), ROLE: "STUDENT" })
         if (!student) {
             throw Error("The email or access token was not found")
         }
@@ -328,8 +329,7 @@ app.post("/iam/login", async (req: express.Request, res: express.Response) => {
                 path: "/",
             }
         )
-        res.setHeader("Set-Cookie", Cookie)
-        return res.status(200).json("Successfully logged in")
+        return res.status(200).json(Cookie)
     } catch (error) {
         return res.status(403).send(error?.message)
     }
@@ -338,6 +338,7 @@ app.post("/iam/login", async (req: express.Request, res: express.Response) => {
 app.post(
     "/iam/admin/login",
     async (req: express.Request, res: express.Response) => {
+        res.setHeader('Access-Control-Allow-Credentials', 'true');
         const { email, password } = req.body
 
         const ssmClient = new SSMClient({})
@@ -386,9 +387,9 @@ app.post(
                     maxAge: 60 * 60 * 24 * 7, // expires in 1 week
                     path: "/",
                 }
-            )
-            res.setHeader("Set-Cookie", Cookie)
-            return res.status(200).json("Successfully logged in")
+            )          
+     
+            return res.status(200).json(Cookie)
         } catch (error) {
             return res.status(403).send(error?.message)
         }

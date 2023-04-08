@@ -25,6 +25,7 @@ function StudentLogin() {
         const regex = /^[a-zA-Z0-9._%+-]+@salemstate\.edu$/
         if (!regex.test(data.email)) {
             setError("Please enter a valid Salem State email address")
+            setIsLoading(false)
             return
         }
         const error = await studentLogin(data)

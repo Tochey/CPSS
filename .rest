@@ -55,7 +55,15 @@ Content-Type: application/json
 }
 
 ###
-GET  http://localhost:8081/user/getPresentationIfAny
+POST  https://mpo126cgvl.execute-api.us-east-1.amazonaws.com/dev/iam/signup
+Content-type: application/json
+
+{
+  "accessToken" : "8~h9KipNy37bwteKUlCXdZC0FuLHlwTWws3lQHaZQHAkHHPUTguo9DvPZYWDj9dh2U"
+}
+
+###
+GET  https://mpo126cgvl.execute-api.us-east-1.amazonaws.com/dev/user/getAllStudents
 
 
 ###

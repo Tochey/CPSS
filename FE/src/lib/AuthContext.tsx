@@ -56,11 +56,10 @@ const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
 
     const studentLogin = async (student: StudentLoginParam) => {
         return await iamEndpoint
-            .post("/iam/login", student, {
-                withCredentials: true,
-            })
+            .post("/iam/login", student)
             .then((res) => {
-                setUser(res.data)
+                Cookies.set("cpss", res.data)
+                setUser(jwt_decode(res.data))
             })
             .catch((err) => {
                 return err
@@ -74,11 +73,10 @@ const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
 
     const adminLogin = async (admin: AdminLoginParam) => {
         return await iamEndpoint
-            .post("/iam/admin/login", admin, {
-                withCredentials: true,
-            })
+            .post("/iam/admin/login", admin)
             .then((res) => {
-                setUser(res.data)
+                Cookies.set("cpss", res.data)
+                setUser(jwt_decode(res.data))
             })
             .catch((err) => {
                 return err
