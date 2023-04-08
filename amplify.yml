@@ -4,7 +4,7 @@ frontend:
         preBuild:
             commands:
                 - echo "Running-----> preBuild"
-                - sam version
+                - sam --version
         build:
             commands:
                 - cd infrastructure
