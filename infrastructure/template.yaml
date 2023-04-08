@@ -134,7 +134,7 @@ Resources:
             Handler: iam.lambdaHandler
             Policies:
                 - SSMParameterWithSlashPrefixReadPolicy:
-                      ParameterName: /cpss/admin
+                    ParameterName: /cpss/admin
                 - S3WritePolicy:
                       BucketName: !Ref IndexedSubmissionBucket
                 - DynamoDBCrudPolicy:
@@ -217,7 +217,7 @@ Resources:
             Handler: upload.lambdaHandler
             Policies:
                 - SSMParameterWithSlashPrefixReadPolicy:
-                      ParameterName: /cpss/algolia
+                    ParameterName: /cpss/algolia
         Metadata:
             BuildMethod: esbuild
             BuildProperties:

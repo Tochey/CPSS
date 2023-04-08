@@ -4,9 +4,11 @@ frontend:
         preBuild:
             commands:
                 - echo "Running-----> preBuild"
+                - sam version
         build:
             commands:
-                - sam --version
+                - cd infrastructure
+                - sam build && sam deploy
                 - cd FE && npm ci
                 - npm run build
     artifacts:
