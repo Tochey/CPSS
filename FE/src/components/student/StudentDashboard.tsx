@@ -140,7 +140,9 @@ const StudentDashboard = () => {
         const wordCount = words.length
 
         if (wordCount < 50 || wordCount > 150) {
-            alert("Capstone abstract must be at least 50 words and no more than 150 words")
+            alert(
+                "Capstone abstract must be at least 50 words and no more than 150 words"
+            )
             return
         }
 

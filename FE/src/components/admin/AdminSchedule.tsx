@@ -58,10 +58,9 @@ const AdminSchedule = () => {
                     className='border border-solid rounded-md p-2 text-white font-bold text-sm hover:text-blue-500 mt-4 mb-4'>
                     Create Schedule
                 </button>
-                <div className="flex gap-20">
-                {presentation.map((p) => {
-                    return (
-                      
+                <div className='flex gap-20'>
+                    {presentation.map((p) => {
+                        return (
                             <Presentation
                                 presentation_id={p.presentation_id}
                                 start_time={p.start_time}
@@ -70,8 +69,8 @@ const AdminSchedule = () => {
                                 break_time={p.break_time}
                                 className={p.className}
                             />
-                    )
-                })}
+                        )
+                    })}
                 </div>
             </div>
             {/* {registeredStudents.length > 0 ? (

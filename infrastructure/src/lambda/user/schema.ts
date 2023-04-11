@@ -71,7 +71,7 @@ const presentationSchema = new dynamoosee.Schema({
 
     className: {
         type: String,
-        required: true
+        required: true,
     },
     start_time: {
         type: Number,
@@ -117,7 +117,7 @@ const registrationSchema = new dynamoosee.Schema({
     },
     className: {
         type: String,
-        required: true, 
+        required: true,
     },
     time_slot_id: String,
     registration_timestamp: Number,

@@ -43,7 +43,7 @@ const ScheduleModal = ({ setIsOpen }: any) => {
         }
 
         try {
-            await userEndpoint.post('user/createPresentation', req)
+            await userEndpoint.post("user/createPresentation", req)
         } catch (error) {
             alert("Error creating presentation schedule")
             setIsOpen(false)
