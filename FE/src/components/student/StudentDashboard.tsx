@@ -66,16 +66,25 @@ const StudentDashboard = () => {
     const [modalIsShown, setModalIsShown] = useState(false)
 
     useEffect(() => {
-        userEndpoint.get("/user/getPresentationIfAny").then((res) => {
-            setPresentation(res.data)
-        })
-
         userEndpoint.get(`/user/getStudent/${getUser()!.id}`).then((res) => {
             setUserData(res.data)
-        })
-
-        userEndpoint.get("/user/getTimeSlots").then((res) => {
-            setTimeSlots(res.data)
+            if (res.data.is_520_student) {
+                const cn = "CSC520"
+                userEndpoint.get(`/user/getTimeSlots/${cn}`).then((res) => {
+                    setTimeSlots(res.data)
+                })
+                userEndpoint.get(`/user/getPresentation/${cn}`).then((res) => {
+                    setPresentation(res.data)
+                })
+            } else {
+                const cn = "CSC521"
+                userEndpoint.get(`/user/getTimeSlots/${cn}`).then((res) => {
+                    setTimeSlots(res.data)
+                })
+                userEndpoint.get(`/user/getPresentation/${cn}`).then((res) => {
+                    setPresentation(res.data)
+                })
+            }
         })
 
         userEndpoint
@@ -130,8 +139,8 @@ const StudentDashboard = () => {
 
         const wordCount = words.length
 
-        if (wordCount < 1) {
-            alert("Capstone abstract must be at least 100 words")
+        if (wordCount < 50 || wordCount > 150) {
+            alert("Capstone abstract must be at least 50 words and no more than 150 words")
             return
         }
 
@@ -142,6 +151,7 @@ const StudentDashboard = () => {
                     student_id: userData!.userId,
                     capstone_title: ct,
                     capstone_abstract: ca,
+                    className: userData!.is_520_student ? "CSC520" : "CSC521",
                 })
                 .then((res) => {
                     window.location.reload()
@@ -154,23 +164,20 @@ const StudentDashboard = () => {
     return (
         <>
             {presentation.length > 0 &&
-                userData &&
-                !userData.is_520_student &&
                 registration &&
                 registration.length === 0 && <PresentationAlertToast />}
             <div className='container mx-auto px-60'>
                 <StudentSearch />
             </div>
-            {userData && !userData.is_520_student && (
-                <div className='container mx-auto mt-10'>
+            <div className='container mx-auto mt-10'>
+                {presentation.length > 0 && (
                     <div className='block max-w-md p-6 bg-white border rounded-lg shadow dark:bg-gray-800 border-gray-700 hover:bg-gray-700'>
                         <h1 className='text-xl text-blue-600'>
                             Presentation Date:{" "}
                             <span className='text-white font-bold'>
-                                {presentation.length > 0 &&
-                                    moment(presentation[0].start_time).format(
-                                        "MMMM Do, h:mm a"
-                                    )}
+                                {moment(presentation[0].start_time).format(
+                                    "MMMM Do, h:mm a"
+                                )}
                             </span>
                         </h1>
                         {registration && registration.length > 0 && (
@@ -221,14 +228,12 @@ const StudentDashboard = () => {
                             </>
                         )}
                     </div>
-                </div>
-            )}
+                )}
+            </div>
             {presentation.length > 0 &&
                 registration &&
-                registration.length === 0 &&
-                userData &&
-                !userData.is_520_student && (
-                    <div className='container mx-auto mt-10 p-2'>
+                registration.length === 0 && (
+                    <div className='container mx-auto p-2'>
                         <div className='flex flex-wrap -mx-2 mt-10 justify-center'>
                             {timeSlots
                                 .filter(({ is_available }) => is_available)

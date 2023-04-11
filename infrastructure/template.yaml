@@ -78,9 +78,21 @@ Resources:
             AttributeDefinitions:
                 - AttributeName: presentation_id
                   AttributeType: S
+                - AttributeName: className
+                  AttributeType: S
             KeySchema:
                 - AttributeName: presentation_id
                   KeyType: HASH
+            GlobalSecondaryIndexes:
+                - IndexName: classNameIndex
+                  KeySchema:
+                      - AttributeName: className
+                        KeyType: HASH
+                  Projection:
+                      ProjectionType: ALL
+                  ProvisionedThroughput:
+                      ReadCapacityUnits: 1
+                      WriteCapacityUnits: 1
             ProvisionedThroughput:
                 ReadCapacityUnits: 1
                 WriteCapacityUnits: 1

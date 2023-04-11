@@ -17,8 +17,8 @@ Main:
         15: Look into limiting size of s3 uploads
         16: assign class stamps to user submissions
         17: Let admins advance students to 521
-        18: Set up github actions to deploy website to s3 and run sam deploy
-        19: Set up properr cors origin in iam/login
+        18: Set up github actions to deploy website to s3 and run sam deploy ---taking care of by amplify
+        19: Set up proper cors origin in iam/login
         20: Cant  do a big sync without storing all canvas access tokens
         21: have presentation id alogn with registration id
         22: Capstone Abstract Limit
@@ -29,5 +29,7 @@ Main:
             - /cpss/algolia/appid
             - /cpss/algolia/indexname
         24: abstract limit - 50
-        25: different prentation schedule for 520/521
-        26: FIgure out origins for s3 and lambda
+        25: different prentation schedule for 520/521 ---working on
+        26: Export capstone schedules into pdf
+        27: Figure out origins for s3 and lambda
+        28: Get amplify to delpoy SAM

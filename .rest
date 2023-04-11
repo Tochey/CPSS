@@ -63,12 +63,20 @@ Content-type: application/json
 }
 
 ###
-GET  https://mpo126cgvl.execute-api.us-east-1.amazonaws.com/dev/user/getAllStudents
+GET  http://localhost:8081/user/getAllStudents
 
 
 ###
-DELETE http://localhost:8081/user/deletePresentation
+POST http://localhost:8081/user/createPresentation
+Content-Type: application/json
 
+{
+  "start_time": "2023-02-20T10:00:00.000Z",
+  "end_time": "2023-02-20T13:11:00.000Z",
+  "presentation_duration": 10,
+  "break_time": 5,
+  "className" : "CSC520"
+}
 ###
 POST  https://mpo126cgvl.execute-api.us-east-1.amazonaws.com/dev/pre-signed
 Content-type: application/json

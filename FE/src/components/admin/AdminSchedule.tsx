@@ -11,6 +11,7 @@ interface PresentationProps {
     end_time: number
     presentation_duration: number
     break_time: number
+    className: string
 }
 interface Student {
     ROLE: string
@@ -40,42 +41,40 @@ const AdminSchedule = () => {
             setPresentation(res.data)
         })
 
-        userEndpoint.get("user/getAllRegistrations").then((res) => {
-            userEndpoint
-                .get(`/user/getStudent/${res.data[0].student_id}`)
-                .then((res) => {
-                    setRegiteredStudents([...registeredStudents, res.data])
-                })
-        })
+        // userEndpoint.get("user/getAllRegistrations").then((res) => {
+        //     userEndpoint
+        //         .get(`/user/getStudent/${res.data[0].student_id}`)
+        //         .then((res) => {
+        //             setRegiteredStudents([...registeredStudents, res.data])
+        //         })
+        // })
     }, [])
 
     return (
         <>
             <div className='container mx-auto'>
-                {presentation.length > 0 ? (
-                    <Presentation
-                        start_time={presentation[0].start_time}
-                        end_time={presentation[0].end_time}
-                        break_time={presentation[0].break_time}
-                        presentation_duration={
-                            presentation[0].presentation_duration
-                        }
-                        presentation_id={presentation[0].presentation_id}
-                    />
-                ) : (
-                    <>
-                        <h3 className='text-blue-500 font-bold text-lg'>
-                            No Active Presentation Schedule
-                        </h3>
-                        <button
-                            onClick={() => setIsOpen(true)}
-                            className='border border-solid rounded-md p-2 text-white font-bold text-sm hover:text-blue-500 mt-4'>
-                            Create Schedule
-                        </button>
-                    </>
-                )}
+                <button
+                    onClick={() => setIsOpen(true)}
+                    className='border border-solid rounded-md p-2 text-white font-bold text-sm hover:text-blue-500 mt-4 mb-4'>
+                    Create Schedule
+                </button>
+                <div className="flex gap-20">
+                {presentation.map((p) => {
+                    return (
+                      
+                            <Presentation
+                                presentation_id={p.presentation_id}
+                                start_time={p.start_time}
+                                end_time={p.end_time}
+                                presentation_duration={p.presentation_duration}
+                                break_time={p.break_time}
+                                className={p.className}
+                            />
+                    )
+                })}
+                </div>
             </div>
-            {registeredStudents.length > 0 ? (
+            {/* {registeredStudents.length > 0 ? (
                 <div className='container mx-auto flex flex-wrap'>
                     {registeredStudents.map((s) => {
                         return (
@@ -93,7 +92,7 @@ const AdminSchedule = () => {
                         )
                     })}
                 </div>
-            ) : null}
+            ) : null} */}
             {isOpen && <ScheduleModal setIsOpen={setIsOpen} />}
         </>
     )

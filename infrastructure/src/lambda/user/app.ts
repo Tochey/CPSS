@@ -23,7 +23,7 @@ app.use(
 app.get(
     "/user/getAllStudents",
     async function (req: express.Request, res: express.Response) {
-        const students = await userModel.query("ROLE").eq("STUDENT").exec()
+        const students = await userModel.scan("ROLE").eq("STUDENT").exec()
         res.status(200).send(students)
     }
 )
@@ -62,6 +62,7 @@ app.post("/user/updateStudent/:userId", async (req, res) => {
 })
 
 app.get("/user/getPresentationIfAny", async (req, res) => {
+
     try {
         const p = await presentationModel.scan().exec()
         return res.status(200).json(p)
@@ -70,10 +71,21 @@ app.get("/user/getPresentationIfAny", async (req, res) => {
         res.status(500).json({ error: err.message })
     }
 })
-
-app.get("/user/getTimeSlots", async (req, res) => {
+app.get("/user/getPresentation/:className", async (req, res) => {
+    const { className } = req.params
     try {
-        const time_slots = await timeSlotModel.scan().exec()
+        const p = await presentationModel.scan("className").eq(className).exec()
+        return res.status(200).json(p)
+    } catch (err) {
+        console.error(err)
+        res.status(500).json({ error: err.message })
+    }
+})
+
+app.get("/user/getTimeSlots/:className", async (req, res) => {
+    const { className } = req.params
+    try {
+        const time_slots = await timeSlotModel.scan("className").eq(className).exec()
         return res.status(200).json(time_slots)
     } catch (err) {
         console.error(err)
@@ -84,10 +96,7 @@ app.get("/user/getTimeSlots", async (req, res) => {
 app.get("/user/getRegistration/:studentId", async (req, res) => {
     try {
         const { studentId } = req.params
-        const registration = await registrationModel
-            .query("student_id")
-            .eq(studentId)
-            .exec()
+        const registration = await registrationModel.scan("student_id").eq(studentId).exec()
         return res.status(200).json(registration)
     } catch (err) {
         console.error(err)
@@ -98,20 +107,19 @@ app.get("/user/getRegistration/:studentId", async (req, res) => {
 app.delete("/user/deleteRegistration/:studentId", async (req, res) => {
     try {
         const { studentId } = req.params
-        const registration = await registrationModel
-            .query("student_id")
-            .eq(studentId)
-            .exec()
+        const registration = await registrationModel.scan("student_id").eq(studentId).exec()
         if (registration.length === 0) {
             return res.status(404).send("Registration not found")
         }
 
         await timeSlotModel.update(
             { time_slot_id: registration[0].time_slot_id },
-            { is_available: true }
+            { is_available: true },
         )
 
-        await registration[0].delete()
+        for (const r of registration) {
+            await r.delete()
+        }
         return res.status(200).send("Registration deleted successfully")
     } catch (err) {
         console.error(err)
@@ -167,12 +175,12 @@ app.delete(
 )
 
 app.post("/user/createPresentation", async (req, res) => {
-    const { start_time, end_time, presentation_duration, break_time } = req.body
+    const { start_time, end_time, presentation_duration, break_time, className } = req.body
     try {
-        const p = await presentationModel.scan().exec()
+        const p = await presentationModel.scan("className").eq(className).exec()
 
         if (p.length > 0) {
-            throw new Error("There is an active presentation already")
+            throw new Error(`There is an active presentation already for ${className} `)
         }
 
         const st = new Date(start_time)
@@ -194,6 +202,7 @@ app.post("/user/createPresentation", async (req, res) => {
                 end_time: slotEndTime,
                 is_available: true,
                 registered_student_id: "",
+                className: className
             })
             time = new Date(slotEndTime + breakDuration * 60 * 1000)
         }
@@ -210,6 +219,7 @@ app.post("/user/createPresentation", async (req, res) => {
             end_time: new Date(end_time).getTime(),
             presentation_duration: parseInt(presentation_duration),
             break_time: parseInt(break_time),
+            className: className
         })
 
         await Promise.all(
@@ -225,7 +235,7 @@ app.post("/user/createPresentation", async (req, res) => {
 
 app.post("/user/registerTimeSlot", async (req, res) => {
     try {
-        const { student_id, time_slot_id, capstone_title, capstone_abstract } =
+        const { student_id, time_slot_id, capstone_title, capstone_abstract, className } =
             req.body
 
         const time_slot = await timeSlotModel.get({ time_slot_id })
@@ -237,6 +247,7 @@ app.post("/user/registerTimeSlot", async (req, res) => {
             time_slot_id,
             is_available: false,
             registered_student_id: student_id,
+            className: className
         })
 
         await registrationModel.create({
@@ -246,6 +257,7 @@ app.post("/user/registerTimeSlot", async (req, res) => {
             registration_timestamp: Date.now(),
             capstone_title,
             capstone_abstract,
+            className: className
         })
 
         res.json({ message: "Registration successful" })
@@ -255,17 +267,16 @@ app.post("/user/registerTimeSlot", async (req, res) => {
     }
 })
 
-app.delete("/user/deletePresentation", async (req, res) => {
-    try {
-        const p = await presentationModel.scan().exec()
+app.delete("/user/deletePresentation/:className", async (req, res) => {
 
-        for (const pres of p) {
-            await presentationModel.delete({
-                presentation_id: pres.presentation_id,
-            })
+    const { className } = req.params
+    try {
+        const p = await presentationModel.scan("className").eq(className).exec()
+        for (const presentation of p) {
+            await presentation.delete()
         }
 
-        const timeSlots = await timeSlotModel.scan().exec()
+        const timeSlots = await timeSlotModel.scan("className").eq(className).exec()
 
         if (timeSlots.length === 0) {
             return res.status(404).json({ error: "No time slots found" })
@@ -275,7 +286,7 @@ app.delete("/user/deletePresentation", async (req, res) => {
             await timeSlotModel.delete({ time_slot_id: timeSlot.time_slot_id })
         }
 
-        const registrations = await registrationModel.scan().exec()
+        const registrations = await registrationModel.scan("className").eq(className).exec()
 
         if (registrations.length === 0) {
             return res.status(200).json({

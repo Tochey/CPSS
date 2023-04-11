@@ -7,6 +7,7 @@ import { RiCloseCircleFill } from "react-icons/ri"
 import { ImCheckmark } from "react-icons/im"
 import { MdFileDownload } from "react-icons/md"
 import { MdOutlineSettingsBackupRestore } from "react-icons/md"
+import { Student } from "../../types/students"
 
 interface IProps {
     student: {
@@ -24,7 +25,6 @@ interface IProps {
 }
 
 const StudentProfile = ({ student }: IProps) => {
-    console.log(student)
     const [isClicked, setIsClicked] = useState(false)
 
     const getIndexDoc = async () => {

@@ -10,16 +10,17 @@ const ScheduleModal = ({ setIsOpen }: any) => {
     const [data, setData] = useState({
         presentation_duration: 0,
         break_time: 0,
+        className: "CSC520",
     })
 
     const handleStudentChange: (
-        event: React.ChangeEvent<HTMLInputElement>
+        event:
+            | React.ChangeEvent<HTMLInputElement>
+            | React.SyntheticEvent<HTMLSelectElement, Event>
     ) => void = ({ currentTarget: input }) => {
         setData({ ...data, [input.name]: input.value })
     }
 
-    const handleCalendarClose = () => console.log("Calendar closed")
-    const handleCalendarOpen = () => console.log("Calendar opened")
     let handleColor = (time: { getHours: () => number }) => {
         return time.getHours() > 12 ? "text-success" : "text-error"
     }
@@ -42,9 +43,11 @@ const ScheduleModal = ({ setIsOpen }: any) => {
         }
 
         try {
-            await userEndpoint.post("user/createPresentation", req)
+            await userEndpoint.post('user/createPresentation', req)
         } catch (error) {
             alert("Error creating presentation schedule")
+            setIsOpen(false)
+            return
         }
 
         setIsOpen(false)
@@ -97,12 +100,6 @@ const ScheduleModal = ({ setIsOpen }: any) => {
                                                     onChange={(date) =>
                                                         setStartDateTime(date!)
                                                     }
-                                                    onCalendarClose={
-                                                        handleCalendarClose
-                                                    }
-                                                    onCalendarOpen={
-                                                        handleCalendarOpen
-                                                    }
                                                     showTimeSelect
                                                     timeClassName={handleColor}
                                                     timeIntervals={30}
@@ -122,12 +119,6 @@ const ScheduleModal = ({ setIsOpen }: any) => {
                                                     selected={endDateTime}
                                                     onChange={(date) =>
                                                         setEndDateTime(date!)
-                                                    }
-                                                    onCalendarClose={
-                                                        handleCalendarClose
-                                                    }
-                                                    onCalendarOpen={
-                                                        handleCalendarOpen
                                                     }
                                                     showTimeSelect
                                                     timeClassName={handleColor}
@@ -169,6 +160,26 @@ const ScheduleModal = ({ setIsOpen }: any) => {
                                                     }
                                                     placeholder='0'
                                                 />
+                                            </div>
+                                            <div className='w-full md:w-1/2 px-3'>
+                                                <label
+                                                    className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'
+                                                    htmlFor='className'>
+                                                    Class Name
+                                                </label>
+                                                <select
+                                                    name='className'
+                                                    className='outline-none p-2 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 cursor-pointer'
+                                                    onChange={(e) =>
+                                                        handleStudentChange(e)
+                                                    }>
+                                                    <option value='CSC520'>
+                                                        CSC520
+                                                    </option>
+                                                    <option value='CSC521'>
+                                                        CSC521
+                                                    </option>
+                                                </select>
                                             </div>
                                         </div>
                                         <p className='text-sm text-gray-500 font-bold italic'>

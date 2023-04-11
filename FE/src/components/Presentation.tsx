@@ -1,9 +1,13 @@
-import React from "react"
+import React, { useState } from "react"
 import { RiCloseCircleFill } from "react-icons/ri"
 import { ImCheckmark } from "react-icons/im"
 import { BsTrash, BsFillPersonFill } from "react-icons/bs"
 import moment from "moment"
 import { userEndpoint } from "../lib/api"
+import { FaFileExport } from "react-icons/fa"
+import { useNavigate } from "react-router-dom"
+import { PDFDownloadLink } from "@react-pdf/renderer"
+import SchedulePDF from "./SchedulePDF"
 
 interface PresentationProps {
     presentation_id: string
@@ -11,6 +15,7 @@ interface PresentationProps {
     end_time: number
     presentation_duration: number
     break_time: number
+    className: string
 }
 
 const Presentation = ({
@@ -19,16 +24,19 @@ const Presentation = ({
     end_time,
     break_time,
     presentation_duration,
+    className,
 }: PresentationProps) => {
-    const [isClicked, setIsClicked] = React.useState(false)
+    const [isClicked, setIsClicked] = useState(false)
+    const nav = useNavigate()
     const handlePresentationDelete = async () => {
         try {
-            await userEndpoint.delete("user/deletePresentation/")
+            await userEndpoint.delete(`user/deletePresentation/${className}`)
             window.location.reload()
         } catch (err) {
             alert("something went wrong. Contact tochey@outlook.com")
         }
     }
+
     return (
         <div className='max-w-xs rounded-lg bg-black shadow-lg text-center border border-solid'>
             <img
@@ -49,6 +57,8 @@ const Presentation = ({
                     <span className='italic  text-white'>to: </span>{" "}
                     {moment(end_time).format("MMMM Do, h:mm a")}
                     <br />
+                    <span className='italic  text-white'>for: </span>{" "}
+                    {className}
                 </p>
                 <p className='mb-4 text-md text-blue-600 font-bold'>
                     <span className='italic text-white'>
@@ -82,9 +92,16 @@ const Presentation = ({
                             </li>
                         )}
 
-                        <li className=' flex font-bold'>
+                        <li className='flex'>
                             <BsFillPersonFill className='h-6 w-6 text-blue-600 hover:text-white' />
-                            {/* <span className='text-lg'>{numOfStudents}</span> */}
+                            <span className='text-lg text-white ml-2'>20</span>
+                        </li>
+                        <li>
+                            <PDFDownloadLink
+                                document={<SchedulePDF />}
+                                fileName='PresentationSchedule'>
+                                <FaFileExport className='h-6 w-6 text-blue-600 hover:text-white' />
+                            </PDFDownloadLink>
                         </li>
                     </ul>
                 </>
