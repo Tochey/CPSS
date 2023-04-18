@@ -30,7 +30,9 @@ const Students521 = () => {
             .get("user/getAllStudents")
             .then((res) => {
                 setStudents(
-                    res.data.filter((s: any) => !s.is_graduated  && !s.is_520_student)
+                    res.data.filter(
+                        (s: any) => !s.is_graduated && !s.is_520_student
+                    )
                 )
             })
             .catch((err) => {

@@ -96,11 +96,12 @@ const StudentProfile = ({ student }: IProps) => {
                     </a>
                 )}
 
-                {student.has_uploaded_520_capstone && student.is_520_student && (
-                    <a className='inline-flex items-center text-blue-600 hover:underline cursor-pointer'>
-                        Final 520 <MdFileDownload />
-                    </a>
-                )}
+                {student.has_uploaded_520_capstone &&
+                    student.is_520_student && (
+                        <a className='inline-flex items-center text-blue-600 hover:underline cursor-pointer'>
+                            Final 520 <MdFileDownload />
+                        </a>
+                    )}
 
                 {isClicked ? (
                     <>

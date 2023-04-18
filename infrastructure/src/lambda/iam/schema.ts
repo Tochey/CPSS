@@ -45,7 +45,7 @@ const userSchema = new dynamoosee.Schema(
             default: true,
         },
 
-        accessToken : {
+        accessToken: {
             type: String,
             required: true,
         },
@@ -66,7 +66,7 @@ const userSchema = new dynamoosee.Schema(
         has_uploaded_520_capstone: {
             type: Boolean,
             required: true,
-        }
+        },
     },
     {
         saveUnknown: false,

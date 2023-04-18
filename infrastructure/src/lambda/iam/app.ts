@@ -6,8 +6,12 @@ import cors from "cors"
 import express from "express"
 import jwt from "jsonwebtoken"
 import { userModel } from "./schema"
-import { CanvasAssignment, CanvasCourse, CanvasSubmission, CanvasUserObject } from "./types/CanvasApi"
-
+import {
+    CanvasAssignment,
+    CanvasCourse,
+    CanvasSubmission,
+    CanvasUserObject,
+} from "./types/CanvasApi"
 
 const app = express()
 app.use(express.json())
@@ -47,22 +51,32 @@ const getCapstoneCourseId = async (
             },
         })
         .then(async (e: AxiosResponse<CanvasCourse[]>) => {
-            let capstoneSpecCourse = e.data.find((e) =>
-                e.name && (e.name.toLowerCase().includes("capstone project spec") || e.name.toLowerCase().includes("csc 520"))
-            );
+            let capstoneSpecCourse = e.data.find(
+                (e) =>
+                    e.name &&
+                    (e.name.toLowerCase().includes("capstone project spec") ||
+                        e.name.toLowerCase().includes("csc 520"))
+            )
 
             if (!capstoneSpecCourse) {
                 let nextLink = getNextLink(e.headers.link)
                 while (nextLink && !capstoneSpecCourse) {
-                    let res: AxiosResponse<CanvasCourse[]> =
-                        await axios.get(nextLink, {
+                    let res: AxiosResponse<CanvasCourse[]> = await axios.get(
+                        nextLink,
+                        {
                             headers: {
                                 Authorization: `Bearer ${accessToken}`,
                             },
-                        })
-                    let capstoneSpecCourse = res.data.find((e) =>
-                        e.name && (e.name.toLowerCase().includes("capstone project spec") || e.name.toLowerCase().includes("csc 520"))
-                    );
+                        }
+                    )
+                    let capstoneSpecCourse = res.data.find(
+                        (e) =>
+                            e.name &&
+                            (e.name
+                                .toLowerCase()
+                                .includes("capstone project spec") ||
+                                e.name.toLowerCase().includes("csc 520"))
+                    )
 
                     if (!capstoneSpecCourse) {
                         nextLink = getNextLink(res.headers.link)
@@ -92,14 +106,21 @@ const getCapstoneAssignmentId = async (
     accessToken: string
 ): Promise<number> => {
     return await axios
-        .get(`https://canvas.instructure.com/api/v1/courses/${courseId}/assignments`, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        }).then(async (e: AxiosResponse<CanvasAssignment[]>) => {
-            let capstoneSpecAssignment = e.data.find((e) =>
-                e.name && (e.name.toLowerCase().includes("problem description") || e.name.toLowerCase().includes("problem description"))
-            );
+        .get(
+            `https://canvas.instructure.com/api/v1/courses/${courseId}/assignments`,
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        )
+        .then(async (e: AxiosResponse<CanvasAssignment[]>) => {
+            let capstoneSpecAssignment = e.data.find(
+                (e) =>
+                    e.name &&
+                    (e.name.toLowerCase().includes("problem description") ||
+                        e.name.toLowerCase().includes("problem description"))
+            )
 
             if (!capstoneSpecAssignment) {
                 let nextLink = getNextLink(e.headers.link)
@@ -111,7 +132,14 @@ const getCapstoneAssignmentId = async (
                             },
                         })
                     capstoneSpecAssignment = res.data.find(
-                        (e) => e.name && (e.name.toLowerCase().includes("problem description") || e.name.toLowerCase().includes("problem description"))
+                        (e) =>
+                            e.name &&
+                            (e.name
+                                .toLowerCase()
+                                .includes("problem description") ||
+                                e.name
+                                    .toLowerCase()
+                                    .includes("problem description"))
                     )
 
                     if (!capstoneSpecAssignment) {
@@ -137,36 +165,47 @@ const getCapstoneAssignmentId = async (
         })
 }
 
-const getProblemDescAttachmentIdIfPresent = async (courseId: number, assignmentId: number, userId: string, accessToken: string): Promise<number> => {
-    return await axios.get(`https://canvas.instructure.com/api/v1/courses/${courseId}/assignments/${assignmentId}/submissions/${userId}`, {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    }).then(async (e: AxiosResponse<CanvasSubmission>) => {
-
-        if (!e.data.attachments) {
-            throw Error("You have not submitted your problem description yet")
-        }
-
-        if (e.data.attachments.length > 1) {
-            const latestProblemDesc = e.data.attachments.sort((a, b) => {
-                return (
-                    new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+const getProblemDescAttachmentIdIfPresent = async (
+    courseId: number,
+    assignmentId: number,
+    userId: string,
+    accessToken: string
+): Promise<number> => {
+    return await axios
+        .get(
+            `https://canvas.instructure.com/api/v1/courses/${courseId}/assignments/${assignmentId}/submissions/${userId}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        )
+        .then(async (e: AxiosResponse<CanvasSubmission>) => {
+            if (!e.data.attachments) {
+                throw Error(
+                    "You have not submitted your problem description yet"
                 )
-            })[0]
-            return latestProblemDesc.id
-        }
+            }
 
-        return e.data.attachments[0].id
-    }
-    ).catch((e: any) => {
-        if (e instanceof AxiosError<any>) {
-            throw Error(e.response?.data.errors[0].message)
-        }
+            if (e.data.attachments.length > 1) {
+                const latestProblemDesc = e.data.attachments.sort((a, b) => {
+                    return (
+                        new Date(b.created_at).getTime() -
+                        new Date(a.created_at).getTime()
+                    )
+                })[0]
+                return latestProblemDesc.id
+            }
 
-        throw Error(e.message)
-    }
-    )
+            return e.data.attachments[0].id
+        })
+        .catch((e: any) => {
+            if (e instanceof AxiosError<any>) {
+                throw Error(e.response?.data.errors[0].message)
+            }
+
+            throw Error(e.message)
+        })
 }
 
 const getNextLink = (linkHeader: string) => {
@@ -184,7 +223,10 @@ const getNextLink = (linkHeader: string) => {
     return null
 }
 
-const getFileDownloadUrl = async (attachmentId: number, accessToken: string) => {
+const getFileDownloadUrl = async (
+    attachmentId: number,
+    accessToken: string
+) => {
     const problemDescdownloadUrl = await axios
         .get(
             `https://canvas.instructure.com/api/v1/files/${attachmentId.toString()}/public_url`,
@@ -206,16 +248,23 @@ const getFileDownloadUrl = async (attachmentId: number, accessToken: string) => 
     return content
 }
 
-const uploadToS3 = async (name: string, login_id: string, id: number, primary_email: string, content: string): Promise<void> => {
+const uploadToS3 = async (
+    name: string,
+    login_id: string,
+    id: number,
+    primary_email: string,
+    content: string
+): Promise<void> => {
     const fullName = name.toLowerCase().split(" ")
-    const prefix = `${fullName[0].charAt(0) + fullName[1] + "_" + login_id + "/"
-        }`
+    const prefix = `${
+        fullName[0].charAt(0) + fullName[1] + "_" + login_id + "/"
+    }`
     const fileName = prefix + "cpss_index.txt"
-
 
     const client = new S3Client({})
     const command = new PutObjectCommand({
-        Bucket: process.env.INDEXEDBUCKETNAME || "indexed-submission-bucket21312",
+        Bucket:
+            process.env.INDEXEDBUCKETNAME || "indexed-submission-bucket21312",
         Key: fileName,
         ContentType: "text/plain",
         Body: content,
@@ -228,9 +277,7 @@ const uploadToS3 = async (name: string, login_id: string, id: number, primary_em
     })
 
     await client.send(command)
-
 }
-
 
 app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
     const { accessToken } = req.body
@@ -242,7 +289,12 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
         console.log("getting spec folder")
         courseId = await getCapstoneCourseId(user.id.toString(), accessToken)
         problemDescId = await getCapstoneAssignmentId(courseId, accessToken)
-        attachmentId = await getProblemDescAttachmentIdIfPresent(courseId, problemDescId, user.id.toString(), accessToken)
+        attachmentId = await getProblemDescAttachmentIdIfPresent(
+            courseId,
+            problemDescId,
+            user.id.toString(),
+            accessToken
+        )
         const content = await getFileDownloadUrl(attachmentId, accessToken)
         const { id, name, primary_email, login_id } = user as CanvasUserObject
         await uploadToS3(name, login_id, id, primary_email, content)
@@ -263,9 +315,6 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
             has_uploaded_520_capstone: false,
             accessToken: accessToken,
         })
-
-
-
     } catch (error) {
         console.log(error)
         return res.status(403).send(error.message)

@@ -1,6 +1,6 @@
 const axios = require("axios")
-const {S3Client, PutObjectCommand} = require("@aws-sdk/client-s3")
-    
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3")
+
 const client = new S3Client({})
 
 const main = async () => {
@@ -23,7 +23,9 @@ const main = async () => {
                     console.log(res.data)
                     const buffer = Buffer.from(res.data)
                     const command = new PutObjectCommand({
-                        Bucket: process.env.INDEXEDBUCKETNAME || "indexed-submission-bucket",
+                        Bucket:
+                            process.env.INDEXEDBUCKETNAME ||
+                            "indexed-submission-bucket",
                         Key: "text.zip",
                         ContentType: "application/zip",
                         Body: buffer,

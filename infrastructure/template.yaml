@@ -175,8 +175,8 @@ Resources:
                 - LambdaInvokePolicy:
                       FunctionName: !Ref IUpload
                 - S3ReadPolicy:
-                      BucketName: indexed-submission-bucket21312 
-                    #   circular dependency when referencing the bucket name?????
+                      BucketName: indexed-submission-bucket21312
+                      #   circular dependency when referencing the bucket name?????
 
         Metadata:
             BuildMethod: esbuild
@@ -230,7 +230,7 @@ Resources:
                 - DynamoDBCrudPolicy:
                       TableName: !Ref UserTable
                 - SQSSendMessagePolicy:
-                        QueueName: !Ref SyncQueue
+                      QueueName: !Ref SyncQueue
                 - DynamoDBCrudPolicy:
                       TableName: !Ref PresentationTable
                 - DynamoDBCrudPolicy:
@@ -258,27 +258,27 @@ Resources:
             Environment:
                 Variables:
                     "USER_TABLE": !Ref UserTable
-                    "SUBMISSION_BUCKET_NAME" : !Ref PrimarySubmissionBucket
+                    "SUBMISSION_BUCKET_NAME": !Ref PrimarySubmissionBucket
             Policies:
                 - SQSPollerPolicy:
-                    QueueName: !Ref SyncQueue
+                      QueueName: !Ref SyncQueue
                 - S3ReadPolicy:
-                    BucketName: !Ref PrimarySubmissionBucket
+                      BucketName: !Ref PrimarySubmissionBucket
                 - S3WritePolicy:
-                    BucketName: !Ref PrimarySubmissionBucket
+                      BucketName: !Ref PrimarySubmissionBucket
                 - DynamoDBCrudPolicy:
-                    TableName: !Ref UserTable
+                      TableName: !Ref UserTable
                 - DynamoDBCrudPolicy:
-                    TableName: !Ref PresentationTable
+                      TableName: !Ref PresentationTable
                 - DynamoDBCrudPolicy:
-                    TableName: !Ref TimeSlotTable
+                      TableName: !Ref TimeSlotTable
                 - DynamoDBCrudPolicy:
-                    TableName: !Ref RegistrationTable
+                      TableName: !Ref RegistrationTable
             Events:
                 SyncQueueEvent:
                     Type: SQS
                     Properties:
-                        Queue: !GetAtt SyncQueue.Arn       
+                        Queue: !GetAtt SyncQueue.Arn
         Metadata:
             BuildMethod: esbuild
             BuildProperties:

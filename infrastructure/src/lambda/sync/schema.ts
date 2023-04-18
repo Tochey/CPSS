@@ -59,11 +59,10 @@ const userSchema = new dynamoosee.Schema(
             type: Boolean,
             required: true,
         },
-        has_uploaded_520_capstone
-            : {
+        has_uploaded_520_capstone: {
             type: Boolean,
             required: true,
-        }
+        },
     },
     {
         saveUnknown: false,
@@ -133,10 +132,14 @@ const registrationSchema = new dynamoosee.Schema({
     capstone_abstract: String,
 })
 
-const user = dynamoosee.model<User>(process.env.USER_TABLE || "cpss-user", userSchema, {
-    create: false,
-    waitForActive: false,
-})
+const user = dynamoosee.model<User>(
+    process.env.USER_TABLE || "cpss-user",
+    userSchema,
+    {
+        create: false,
+        waitForActive: false,
+    }
+)
 const timeslot = dynamoosee.model("cpss-timeSlot", timeSlotSchema, {
     create: false,
     waitForActive: false,

@@ -52,8 +52,14 @@ function App() {
                         />
                     </Route>
                     <Route path='/' element={<ProtectedRoute role='ADMIN' />}>
-                        <Route path='/admin/520students' element={<Students520 />} />
-                        <Route path='/admin/521students' element={<Students521 />} />
+                        <Route
+                            path='/admin/520students'
+                            element={<Students520 />}
+                        />
+                        <Route
+                            path='/admin/521students'
+                            element={<Students521 />}
+                        />
                         <Route
                             path='/admin/archive'
                             element={<StudentArchive />}
