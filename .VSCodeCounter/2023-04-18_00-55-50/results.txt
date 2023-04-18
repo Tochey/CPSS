@@ -1,0 +1,142 @@
+Date : 2023-04-18 00:55:50
+Directory : /Users/don/Desktop/active_projects/CPSS
+Total : 77 files,  5180 codes, 243 comments, 480 blanks, all 5903 lines
+
+Languages
++--------------------+------------+------------+------------+------------+------------+
+| language           | files      | code       | comment    | blank      | total      |
++--------------------+------------+------------+------------+------------+------------+
+| TypeScript         |         21 |      2,165 |         17 |        204 |      2,386 |
+| TypeScript JSX     |         26 |      2,093 |        171 |        162 |      2,426 |
+| YAML               |          4 |        341 |          4 |         17 |        362 |
+| JSON               |         12 |        261 |         46 |         11 |        318 |
+| Markdown           |          3 |        162 |          0 |         72 |        234 |
+| JavaScript         |          4 |         73 |          3 |          7 |         83 |
+| JSON with Comments |          2 |         36 |          2 |          1 |         39 |
+| CSS                |          1 |         18 |          0 |          3 |         21 |
+| HTML               |          1 |         13 |          0 |          1 |         14 |
+| TOML               |          1 |         10 |          0 |          1 |         11 |
+| Ignore             |          1 |          7 |          0 |          1 |          8 |
+| XML                |          1 |          1 |          0 |          0 |          1 |
++--------------------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                       | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                          |         77 |      5,180 |        243 |        480 |      5,903 |
+| . (Files)                                                                                  |          8 |        181 |          0 |         36 |        217 |
+| FE                                                                                         |         38 |      2,267 |        174 |        181 |      2,622 |
+| FE (Files)                                                                                 |          7 |        107 |          2 |          8 |        117 |
+| FE/public                                                                                  |          1 |          1 |          0 |          0 |          1 |
+| FE/src                                                                                     |         30 |      2,159 |        172 |        173 |      2,504 |
+| FE/src (Files)                                                                             |          4 |        103 |          1 |         10 |        114 |
+| FE/src/components                                                                          |         22 |      1,890 |        171 |        134 |      2,195 |
+| FE/src/components (Files)                                                                  |         10 |        714 |          2 |         52 |        768 |
+| FE/src/components/admin                                                                    |          4 |        326 |         27 |         19 |        372 |
+| FE/src/components/student                                                                  |          8 |        850 |        142 |         63 |      1,055 |
+| FE/src/lib                                                                                 |          3 |        155 |          0 |         28 |        183 |
+| FE/src/types                                                                               |          1 |         11 |          0 |          1 |         12 |
+| infrastructure                                                                             |         31 |      2,732 |         69 |        263 |      3,064 |
+| infrastructure (Files)                                                                     |          3 |        372 |          4 |         57 |        433 |
+| infrastructure/events                                                                      |          1 |         17 |         46 |          0 |         63 |
+| infrastructure/src                                                                         |         27 |      2,343 |         19 |        206 |      2,568 |
+| infrastructure/src (Files)                                                                 |          4 |         70 |         10 |          3 |         83 |
+| infrastructure/src/lambda                                                                  |         22 |      2,211 |          9 |        200 |      2,420 |
+| infrastructure/src/lambda/iam                                                              |          6 |        788 |          0 |         61 |        849 |
+| infrastructure/src/lambda/iam (Files)                                                      |          5 |        580 |          0 |         57 |        637 |
+| infrastructure/src/lambda/iam/types                                                        |          1 |        208 |          0 |          4 |        212 |
+| infrastructure/src/lambda/pre-signed                                                       |          2 |         45 |          9 |          6 |         60 |
+| infrastructure/src/lambda/sync                                                             |          5 |        696 |          0 |         53 |        749 |
+| infrastructure/src/lambda/sync (Files)                                                     |          4 |        488 |          0 |         49 |        537 |
+| infrastructure/src/lambda/sync/types                                                       |          1 |        208 |          0 |          4 |        212 |
+| infrastructure/src/lambda/transform                                                        |          2 |         65 |          0 |          9 |         74 |
+| infrastructure/src/lambda/upload                                                           |          2 |         75 |          0 |         10 |         85 |
+| infrastructure/src/lambda/user                                                             |          5 |        542 |          0 |         61 |        603 |
+| infrastructure/src/tests                                                                   |          1 |         62 |          0 |          3 |         65 |
+| infrastructure/src/tests/unit                                                              |          1 |         62 |          0 |          3 |         65 |
++--------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| filename                                                                                   | language           | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| /Users/don/Desktop/active_projects/CPSS/.prettierignore                                    | Ignore             |          7 |          0 |          1 |          8 |
+| /Users/don/Desktop/active_projects/CPSS/.prettierrc.json                                   | JSON               |          9 |          0 |          1 |         10 |
+| /Users/don/Desktop/active_projects/CPSS/CONTRIBUTING.md                                    | Markdown           |         69 |          0 |         24 |         93 |
+| /Users/don/Desktop/active_projects/CPSS/FE/index.html                                      | HTML               |         13 |          0 |          1 |         14 |
+| /Users/don/Desktop/active_projects/CPSS/FE/package.json                                    | JSON               |         40 |          0 |          1 |         41 |
+| /Users/don/Desktop/active_projects/CPSS/FE/postcss.config.cjs                              | JavaScript         |          6 |          0 |          1 |          7 |
+| /Users/don/Desktop/active_projects/CPSS/FE/public/vite.svg                                 | XML                |          1 |          0 |          0 |          1 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/App.tsx                                     | TypeScript JSX     |         75 |          0 |          4 |         79 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/components/AnimatedSpinner.tsx              | TypeScript JSX     |         24 |          0 |          3 |         27 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/components/CapstoneModal.tsx                | TypeScript JSX     |        113 |          1 |          4 |        118 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/components/LandingPage.tsx                  | TypeScript JSX     |         79 |          0 |          8 |         87 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/components/Navbar.tsx                       | TypeScript JSX     |         12 |          0 |          5 |         17 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/components/NavbarAnimation.tsx              | TypeScript JSX     |         57 |          0 |          3 |         60 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/components/Presentation.tsx                 | TypeScript JSX     |        108 |          0 |          6 |        114 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/components/PresentationAlertToast.tsx       | TypeScript JSX     |         39 |          0 |          3 |         42 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/components/ScheduleModal.tsx                | TypeScript JSX     |        213 |          1 |         11 |        225 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/components/SchedulePDF.tsx                  | TypeScript JSX     |         28 |          0 |          4 |         32 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/components/TimeSlotPill.tsx                 | TypeScript JSX     |         41 |          0 |          5 |         46 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/components/admin/AdminLogin.tsx             | TypeScript JSX     |        142 |          0 |          6 |        148 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/components/admin/AdminNavbar.tsx            | TypeScript JSX     |         79 |          0 |          3 |         82 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/components/admin/AdminSchedule.tsx          | TypeScript JSX     |         67 |         26 |          8 |        101 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/components/admin/AdminSearch.tsx            | TypeScript JSX     |         38 |          1 |          2 |         41 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/components/student/StudentArchive.tsx       | TypeScript JSX     |         63 |          0 |          6 |         69 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/components/student/StudentDashboard.tsx     | TypeScript JSX     |        268 |          0 |         21 |        289 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/components/student/StudentLogin.tsx         | TypeScript JSX     |        136 |          0 |          6 |        142 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/components/student/StudentNavbar.tsx        | TypeScript JSX     |         70 |          0 |          3 |         73 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/components/student/StudentProfile.tsx       | TypeScript JSX     |        126 |          0 |         10 |        136 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/components/student/StudentSearch.tsx        | TypeScript JSX     |         44 |          0 |          3 |         47 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/components/student/Students520.tsx          | TypeScript JSX     |         80 |        142 |          8 |        230 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/components/student/Students521.tsx          | TypeScript JSX     |         63 |          0 |          6 |         69 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/index.css                                   | CSS                |         18 |          0 |          3 |         21 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/lib/AuthContext.tsx                         | TypeScript JSX     |         96 |          0 |         17 |        113 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/lib/ProtectedRoutes.tsx                     | TypeScript JSX     |         22 |          0 |          5 |         27 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/lib/api.ts                                  | TypeScript         |         37 |          0 |          6 |         43 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/main.tsx                                    | TypeScript JSX     |         10 |          0 |          2 |         12 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/types/students.ts                           | TypeScript         |         11 |          0 |          1 |         12 |
+| /Users/don/Desktop/active_projects/CPSS/FE/src/vite-env.d.ts                               | TypeScript         |          0 |          1 |          1 |          2 |
+| /Users/don/Desktop/active_projects/CPSS/FE/tailwind.config.cjs                             | JavaScript         |         12 |          1 |          1 |         14 |
+| /Users/don/Desktop/active_projects/CPSS/FE/tsconfig.json                                   | JSON with Comments |         22 |          0 |          1 |         23 |
+| /Users/don/Desktop/active_projects/CPSS/FE/tsconfig.node.json                              | JSON               |          9 |          0 |          1 |         10 |
+| /Users/don/Desktop/active_projects/CPSS/FE/vite.config.ts                                  | TypeScript         |          5 |          1 |          2 |          8 |
+| /Users/don/Desktop/active_projects/CPSS/README.md                                          | Markdown           |          6 |          0 |          6 |         12 |
+| /Users/don/Desktop/active_projects/CPSS/TODO.yml                                           | YAML               |         37 |          0 |          1 |         38 |
+| /Users/don/Desktop/active_projects/CPSS/amplify.yml                                        | YAML               |         24 |          0 |          1 |         25 |
+| /Users/don/Desktop/active_projects/CPSS/expectations.yml                                   | YAML               |          5 |          0 |          1 |          6 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/README.md                           | Markdown           |         87 |          0 |         42 |        129 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/events/event.json                   | JSON               |         17 |         46 |          0 |         63 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/samconfig.toml                      | TOML               |         10 |          0 |          1 |         11 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/.eslintrc.js                    | JavaScript         |         13 |          2 |          1 |         16 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/jest.config.ts                  | TypeScript         |          9 |          6 |          1 |         16 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/iam/app.local.ts         | TypeScript         |          5 |          0 |          2 |          7 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/iam/app.ts               | TypeScript         |        391 |          0 |         40 |        431 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/iam/iam.ts               | TypeScript         |          3 |          0 |          2 |          5 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/iam/package.json         | JSON               |         31 |          0 |          1 |         32 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/iam/schema.ts            | TypeScript         |        150 |          0 |         12 |        162 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/iam/types/CanvasApi.ts   | TypeScript         |        208 |          0 |          4 |        212 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/pre-signed/package.json  | JSON               |         16 |          0 |          1 |         17 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/pre-signed/pre-signed.ts | TypeScript         |         29 |          9 |          5 |         43 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/sync/package.json        | JSON               |         17 |          0 |          1 |         18 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/sync/schema.ts           | TypeScript         |        151 |          0 |         11 |        162 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/sync/sync.ts             | TypeScript         |        278 |          0 |         33 |        311 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/sync/test.js             | JavaScript         |         42 |          0 |          4 |         46 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/sync/types/CanvasApi.ts  | TypeScript         |        208 |          0 |          4 |        212 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/transform/package.json   | JSON               |         20 |          0 |          1 |         21 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/transform/transform.ts   | TypeScript         |         45 |          0 |          8 |         53 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/upload/package.json      | JSON               |         17 |          0 |          1 |         18 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/upload/upload.ts         | TypeScript         |         58 |          0 |          9 |         67 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/user/app.local.ts        | TypeScript         |          5 |          0 |          1 |          6 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/user/app.ts              | TypeScript         |        355 |          0 |         46 |        401 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/user/package.json        | JSON               |         27 |          0 |          1 |         28 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/user/schema.ts           | TypeScript         |        150 |          0 |         11 |        161 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/user/user.ts             | TypeScript         |          5 |          0 |          2 |          7 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/package.json                    | JSON               |         34 |          0 |          1 |         35 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/tests/unit/test-handler.test.ts | TypeScript         |         62 |          0 |          3 |         65 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/src/tsconfig.json                   | JSON with Comments |         14 |          2 |          0 |         16 |
+| /Users/don/Desktop/active_projects/CPSS/infrastructure/template.yaml                       | YAML               |        275 |          4 |         14 |        293 |
+| /Users/don/Desktop/active_projects/CPSS/package.json                                       | JSON               |         24 |          0 |          1 |         25 |
+| Total                                                                                      |                    |      5,180 |        243 |        480 |      5,903 |
++--------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+

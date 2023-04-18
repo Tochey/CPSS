@@ -370,6 +370,11 @@ app.post("/user/sync/:className", async (req, res) => {
             (student) => !student.has_uploaded_capstone
         )
     }
+
+    if (filteredStudents.length === 0) {
+        return res.status(200).json({ message: "No students to sync" })
+    }
+
     const client = new SQSClient({ region: "us-east-1" })
 
     const messages = filteredStudents.map((student) => {
@@ -392,6 +397,7 @@ app.post("/user/sync/:className", async (req, res) => {
         const command = new SendMessageCommand(input)
         const response = await client.send(command)
         console.log(response)
+  
     }
 
     return res.status(200).send("Success")

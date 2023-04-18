@@ -7,7 +7,6 @@ import { RiCloseCircleFill } from "react-icons/ri"
 import { ImCheckmark } from "react-icons/im"
 import { MdFileDownload } from "react-icons/md"
 import { MdOutlineSettingsBackupRestore } from "react-icons/md"
-import { Student } from "../../types/students"
 
 interface IProps {
     student: {
@@ -35,7 +34,20 @@ const StudentProfile = ({ student }: IProps) => {
         }`
         const fileName = prefix + "cpss_index.txt"
         await psEndpoint
-            .post("/pre-signed", { fileName: fileName })
+            .post("/pre-signed", { Key : "index" , fileName: fileName })
+            .then((res) => {
+                window.open(res.data.url)
+            })
+    }
+
+    const get520Doc = async () => {
+        const fullName = student.name.toLowerCase().split(" ")
+        const prefix = `${
+            fullName[0].charAt(0) + fullName[1] + "_" + student.student_id + "/"
+        }`
+        const fileName = prefix + "520_FINAL_SUBMISSION.zip"
+        await psEndpoint
+            .post("/pre-signed", { Key : "capstone" , fileName: fileName })
             .then((res) => {
                 window.open(res.data.url)
             })
@@ -98,7 +110,7 @@ const StudentProfile = ({ student }: IProps) => {
 
                 {student.has_uploaded_520_capstone &&
                     student.is_520_student && (
-                        <a className='inline-flex items-center text-blue-600 hover:underline cursor-pointer'>
+                        <a className='inline-flex items-center text-blue-600 hover:underline cursor-pointer' onClick={get520Doc}>
                             Final 520 <MdFileDownload />
                         </a>
                     )}

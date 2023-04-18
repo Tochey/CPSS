@@ -1,0 +1,79 @@
+"filename", "language", "JSON with Comments", "TypeScript", "YAML", "JavaScript", "JSON", "Markdown", "TOML", "TypeScript JSX", "Ignore", "CSS", "XML", "HTML", "comment", "blank", "total"
+"/Users/don/Desktop/active_projects/CPSS/.prettierignore", "Ignore", 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 1, 8
+"/Users/don/Desktop/active_projects/CPSS/.prettierrc.json", "JSON", 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 1, 10
+"/Users/don/Desktop/active_projects/CPSS/CONTRIBUTING.md", "Markdown", 0, 0, 0, 0, 0, 69, 0, 0, 0, 0, 0, 0, 0, 24, 93
+"/Users/don/Desktop/active_projects/CPSS/FE/index.html", "HTML", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 1, 14
+"/Users/don/Desktop/active_projects/CPSS/FE/package.json", "JSON", 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 1, 41
+"/Users/don/Desktop/active_projects/CPSS/FE/postcss.config.cjs", "JavaScript", 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7
+"/Users/don/Desktop/active_projects/CPSS/FE/public/vite.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
+"/Users/don/Desktop/active_projects/CPSS/FE/src/App.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 75, 0, 0, 0, 0, 0, 4, 79
+"/Users/don/Desktop/active_projects/CPSS/FE/src/components/AnimatedSpinner.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 3, 27
+"/Users/don/Desktop/active_projects/CPSS/FE/src/components/CapstoneModal.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 113, 0, 0, 0, 0, 1, 4, 118
+"/Users/don/Desktop/active_projects/CPSS/FE/src/components/LandingPage.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 79, 0, 0, 0, 0, 0, 8, 87
+"/Users/don/Desktop/active_projects/CPSS/FE/src/components/Navbar.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 5, 17
+"/Users/don/Desktop/active_projects/CPSS/FE/src/components/NavbarAnimation.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 57, 0, 0, 0, 0, 0, 3, 60
+"/Users/don/Desktop/active_projects/CPSS/FE/src/components/Presentation.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 108, 0, 0, 0, 0, 0, 6, 114
+"/Users/don/Desktop/active_projects/CPSS/FE/src/components/PresentationAlertToast.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 39, 0, 0, 0, 0, 0, 3, 42
+"/Users/don/Desktop/active_projects/CPSS/FE/src/components/ScheduleModal.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 213, 0, 0, 0, 0, 1, 11, 225
+"/Users/don/Desktop/active_projects/CPSS/FE/src/components/SchedulePDF.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 28, 0, 0, 0, 0, 0, 4, 32
+"/Users/don/Desktop/active_projects/CPSS/FE/src/components/TimeSlotPill.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 41, 0, 0, 0, 0, 0, 5, 46
+"/Users/don/Desktop/active_projects/CPSS/FE/src/components/admin/AdminLogin.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 142, 0, 0, 0, 0, 0, 6, 148
+"/Users/don/Desktop/active_projects/CPSS/FE/src/components/admin/AdminNavbar.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 79, 0, 0, 0, 0, 0, 3, 82
+"/Users/don/Desktop/active_projects/CPSS/FE/src/components/admin/AdminSchedule.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 67, 0, 0, 0, 0, 26, 8, 101
+"/Users/don/Desktop/active_projects/CPSS/FE/src/components/admin/AdminSearch.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 38, 0, 0, 0, 0, 1, 2, 41
+"/Users/don/Desktop/active_projects/CPSS/FE/src/components/student/StudentArchive.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 0, 0, 6, 69
+"/Users/don/Desktop/active_projects/CPSS/FE/src/components/student/StudentDashboard.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 268, 0, 0, 0, 0, 0, 21, 289
+"/Users/don/Desktop/active_projects/CPSS/FE/src/components/student/StudentLogin.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 136, 0, 0, 0, 0, 0, 6, 142
+"/Users/don/Desktop/active_projects/CPSS/FE/src/components/student/StudentNavbar.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 70, 0, 0, 0, 0, 0, 3, 73
+"/Users/don/Desktop/active_projects/CPSS/FE/src/components/student/StudentProfile.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 126, 0, 0, 0, 0, 0, 10, 136
+"/Users/don/Desktop/active_projects/CPSS/FE/src/components/student/StudentSearch.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 44, 0, 0, 0, 0, 0, 3, 47
+"/Users/don/Desktop/active_projects/CPSS/FE/src/components/student/Students520.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 142, 8, 230
+"/Users/don/Desktop/active_projects/CPSS/FE/src/components/student/Students521.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 0, 0, 6, 69
+"/Users/don/Desktop/active_projects/CPSS/FE/src/index.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 0, 0, 0, 3, 21
+"/Users/don/Desktop/active_projects/CPSS/FE/src/lib/AuthContext.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 96, 0, 0, 0, 0, 0, 17, 113
+"/Users/don/Desktop/active_projects/CPSS/FE/src/lib/ProtectedRoutes.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 5, 27
+"/Users/don/Desktop/active_projects/CPSS/FE/src/lib/api.ts", "TypeScript", 0, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 43
+"/Users/don/Desktop/active_projects/CPSS/FE/src/main.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 2, 12
+"/Users/don/Desktop/active_projects/CPSS/FE/src/types/students.ts", "TypeScript", 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 12
+"/Users/don/Desktop/active_projects/CPSS/FE/src/vite-env.d.ts", "TypeScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2
+"/Users/don/Desktop/active_projects/CPSS/FE/tailwind.config.cjs", "JavaScript", 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 14
+"/Users/don/Desktop/active_projects/CPSS/FE/tsconfig.json", "JSON with Comments", 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 23
+"/Users/don/Desktop/active_projects/CPSS/FE/tsconfig.node.json", "JSON", 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 1, 10
+"/Users/don/Desktop/active_projects/CPSS/FE/vite.config.ts", "TypeScript", 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 8
+"/Users/don/Desktop/active_projects/CPSS/README.md", "Markdown", 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 6, 12
+"/Users/don/Desktop/active_projects/CPSS/TODO.yml", "YAML", 0, 0, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 38
+"/Users/don/Desktop/active_projects/CPSS/amplify.yml", "YAML", 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 25
+"/Users/don/Desktop/active_projects/CPSS/expectations.yml", "YAML", 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/README.md", "Markdown", 0, 0, 0, 0, 0, 87, 0, 0, 0, 0, 0, 0, 0, 42, 129
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/events/event.json", "JSON", 0, 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 46, 0, 63
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/samconfig.toml", "TOML", 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 1, 11
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/.eslintrc.js", "JavaScript", 0, 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 16
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/jest.config.ts", "TypeScript", 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 1, 16
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/iam/app.local.ts", "TypeScript", 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 7
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/iam/app.ts", "TypeScript", 0, 391, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 431
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/iam/iam.ts", "TypeScript", 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/iam/package.json", "JSON", 0, 0, 0, 0, 31, 0, 0, 0, 0, 0, 0, 0, 0, 1, 32
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/iam/schema.ts", "TypeScript", 0, 150, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 162
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/iam/types/CanvasApi.ts", "TypeScript", 0, 208, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 212
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/pre-signed/package.json", "JSON", 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 1, 17
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/pre-signed/pre-signed.ts", "TypeScript", 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 5, 43
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/sync/package.json", "JSON", 0, 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 0, 1, 18
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/sync/schema.ts", "TypeScript", 0, 151, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 162
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/sync/sync.ts", "TypeScript", 0, 278, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33, 311
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/sync/test.js", "JavaScript", 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 46
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/sync/types/CanvasApi.ts", "TypeScript", 0, 208, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 212
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/transform/package.json", "JSON", 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 1, 21
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/transform/transform.ts", "TypeScript", 0, 45, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 53
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/upload/package.json", "JSON", 0, 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 0, 1, 18
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/upload/upload.ts", "TypeScript", 0, 58, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 67
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/user/app.local.ts", "TypeScript", 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/user/app.ts", "TypeScript", 0, 355, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46, 401
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/user/package.json", "JSON", 0, 0, 0, 0, 27, 0, 0, 0, 0, 0, 0, 0, 0, 1, 28
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/user/schema.ts", "TypeScript", 0, 150, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 161
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/lambda/user/user.ts", "TypeScript", 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 7
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/package.json", "JSON", 0, 0, 0, 0, 34, 0, 0, 0, 0, 0, 0, 0, 0, 1, 35
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/tests/unit/test-handler.test.ts", "TypeScript", 0, 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 65
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/src/tsconfig.json", "JSON with Comments", 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 16
+"/Users/don/Desktop/active_projects/CPSS/infrastructure/template.yaml", "YAML", 0, 0, 275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 14, 293
+"/Users/don/Desktop/active_projects/CPSS/package.json", "JSON", 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 0, 1, 25
+"Total", "-", 36, 2165, 341, 73, 261, 162, 10, 2093, 7, 18, 1, 13, 243, 480, 5903

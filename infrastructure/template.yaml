@@ -23,7 +23,8 @@ Resources:
             Cors:
                 AllowMethods: "'GET,POST,OPTIONS,PUT,DELETE'"
                 AllowHeaders: "'*'"
-                AllowOrigin: "'https://main.d77mtlby88qvh.amplifyapp.com'"
+                AllowOrigin: "'*'" 
+                # change origins later
 
     # S3 Bucket to store primary submissions
     PrimarySubmissionBucket:
@@ -141,7 +142,8 @@ Resources:
             Handler: pre-signed.lambdaHandler
             Environment:
                 Variables:
-                    INDEXEDBUCKETNAME: !Ref IndexedSubmissionBucket
+                    INDEX_BUCKET_NAME: !Ref IndexedSubmissionBucket
+                    PRIMARY_BUCKET_NAME: !Ref PrimarySubmissionBucket
             Events:
                 GetPreSignedUrl:
                     Type: Api
@@ -152,6 +154,8 @@ Resources:
             Policies:
                 - S3ReadPolicy:
                       BucketName: !Ref IndexedSubmissionBucket
+                - S3ReadPolicy:
+                      BucketName: !Ref PrimarySubmissionBucket
         Metadata:
             BuildMethod: esbuild
             BuildProperties:

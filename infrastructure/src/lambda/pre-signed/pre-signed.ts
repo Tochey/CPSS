@@ -22,7 +22,7 @@ export const lambdaHandler: Handler = async (
     const client = new S3Client({})
     const e = JSON.parse(event.body || "{}")
 
-    const params = { Bucket: process.env.INDEXEDBUCKETNAME, Key: e.fileName }
+    const params = { Bucket: e.Key === "index" ? process.env.INDEX_BUCKET_NAME : process.env.PRIMARY_BUCKET_NAME, Key: e.fileName }
     const command = new GetObjectCommand(params)
     const res: string = await getSignedUrl(client, command, {
         expiresIn: 10,

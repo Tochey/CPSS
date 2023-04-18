@@ -3,6 +3,8 @@ import { userEndpoint } from "../../lib/api"
 import { useAuth } from "../../lib/AuthContext"
 import StudentProfile from "./StudentProfile"
 import AdminSearch from "../admin/AdminSearch"
+import moment from "moment"
+import { BsHourglassSplit } from "react-icons/bs"
 
 interface Student {
     ROLE: string
@@ -17,154 +19,14 @@ interface Student {
     has_uploaded_capstone: boolean
     has_uploaded_520_capstone: boolean
 }
-//  const q = [
-//     {
-//         ROLE: "STUDENT",
-//         createdAt: "2022-03-31T18:15:00.000Z",
-//         is_520_student: true,
-//         is_graduated: false,
-//         email: "jane.doe@example.com",
-//         name: "Jane Doe",
-//         updatedAt: "2022-03-31T18:15:00.000Z",
-//         userId: "e7c22a45-55a2-4f70-af24-5a2b33d1f940",
-//     },
-//     {
-//         ROLE: "STUDENT",
-//         createdAt: "2022-03-31T18:20:00.000Z",
-//         is_520_student: false,
-//         is_graduated: true,
-//         email: "john.smith@example.com",
-//         name: "John Smith",
-//         updatedAt: "2022-03-31T18:20:00.000Z",
-//         userId: "f8d33b67-77c2-4e81-ba1d-8c9e44f2f06e",
-//     },
-//     {
-//         ROLE: "STUDENT",
-//         createdAt: "2022-03-31T18:25:00.000Z",
-//         is_520_student: true,
-//         is_graduated: false,
-//         email: "jessica.nguyen@example.com",
-//         name: "Jessica Nguyen",
-//         updatedAt: "2022-03-31T18:25:00.000Z",
-//         userId: "d9e44c89-88d2-4d71-9e3f-3b2a11e4d8b6",
-//     },
-//     {
-//         ROLE: "STUDENT",
-//         createdAt: "2022-03-31T18:15:00.000Z",
-//         is_520_student: true,
-//         is_graduated: false,
-//         email: "jane.doe@example.com",
-//         name: "Jane Doe",
-//         updatedAt: "2022-03-31T18:15:00.000Z",
-//         userId: "e7c22a45-55a2-4f70-af24-5a2b33d1f940",
-//     },
-//     {
-//         ROLE: "STUDENT",
-//         createdAt: "2022-03-31T18:20:00.000Z",
-//         is_520_student: false,
-//         is_graduated: true,
-//         email: "john.smith@example.com",
-//         name: "John Smith",
-//         updatedAt: "2022-03-31T18:20:00.000Z",
-//         userId: "f8d33b67-77c2-4e81-ba1d-8c9e44f2f06e",
-//     },
-//     {
-//         ROLE: "STUDENT",
-//         createdAt: "2022-03-31T18:25:00.000Z",
-//         is_520_student: true,
-//         is_graduated: false,
-//         email: "jessica.nguyen@example.com",
-//         name: "Jessica Nguyen",
-//         updatedAt: "2022-03-31T18:25:00.000Z",
-//         userId: "d9e44c89-88d2-4d71-9e3f-3b2a11e4d8b6",
-//     },
-//     {
-//         ROLE: "STUDENT",
-//         createdAt: "2022-03-31T18:30:00.000Z",
-//         is_520_student: true,
-//         is_graduated: false,
-//         email: "peter.lee@example.com",
-//         name: "Peter Lee",
-//         updatedAt: "2022-03-31T18:30:00.000Z",
-//         userId: "c8b99a43-33e3-4f09-8d3d-1e2f22c5a7df",
-//     },
-//     {
-//         ROLE: "STUDENT",
-//         createdAt: "2022-03-31T18:35:00.000Z",
-//         is_520_student: true,
-//         is_graduated: false,
-//         email: "amy.wang@example.com",
-//         name: "Amy Wang",
-//         updatedAt: "2022-03-31T18:35:00.000Z",
-//         userId: "b7a88b65-44d4-4e77-aabb-0d1c33e7f8ef",
-//     },
-//     {
-//         ROLE: "STUDENT",
-//         createdAt: "2022-03-31T18:40:00.000Z",
-//         is_520_student: false,
-//         is_graduated: true,
-//         email: "michael.kim@example.com",
-//         name: "Michael Kim",
-//         updatedAt: "2022-03-31T18:40:00.000Z",
-//         userId: "a6b77c87-55e5-4d88-bb99-2c3d",
-//     },
-//     {
-//         ROLE: "STUDENT",
-//         createdAt: "2022-03-28T10:05:00Z",
-//         is_520_student: true,
-//         is_graduated: false,
-//         email: "jane.doe@example.com",
-//         name: "Jane Doe",
-//         updatedAt: "2022-04-01T08:20:00Z",
-//         userId: "0123456789",
-//     },
-//     {
-//         ROLE: "STUDENT",
-//         createdAt: "2022-02-15T13:45:00Z",
-//         is_520_student: true,
-//         is_graduated: false,
-//         email: "john.doe@example.com",
-//         name: "John Doe",
-//         updatedAt: "2022-04-01T08:20:00Z",
-//         userId: "9876543210",
-//     },
-//     {
-//         ROLE: "STUDENT",
-//         createdAt: "2022-01-02T09:30:00Z",
-//         is_520_student: false,
-//         is_graduated: true,
-//         email: "mary.smith@example.com",
-//         name: "Mary Smith",
-//         updatedAt: "2022-04-01T08:20:00Z",
-//         userId: "1357902468",
-//     },
-//     {
-//         ROLE: "STUDENT",
-//         createdAt: "2021-12-05T16:15:00Z",
-//         is_520_student: false,
-//         is_graduated: true,
-//         email: "bob.johnson@example.com",
-//         name: "Bob Johnson",
-//         updatedAt: "2022-04-01T08:20:00Z",
-//         userId: "2468013579",
-//     },
-//     {
-//         ROLE: "STUDENT",
-//         createdAt: "2021-11-11T11:11:00Z",
-//         is_520_student: true,
-//         is_graduated: false,
-//         email: "jennifer.lee@example.com",
-//         name: "Jennifer Lee",
-//         updatedAt: "2022-04-01T08:20:00Z",
-//         userId: "3698521470",
-//     },
-// ]
 
-const handle520Sync = () => {
-    userEndpoint
+const handle520Sync = async () => {
+    localStorage.setItem("timeOfLast520Sync", Date.now().toString())
+    await userEndpoint
         .post("user/sync/520")
         .then((res) => {
             console.log(res.data)
+            window.location.reload()
         })
         .catch((err) => {
             console.log(err)
@@ -174,10 +36,27 @@ const handle520Sync = () => {
 const Students520 = () => {
     const [students, setStudents] = useState<Array<Student>>([])
     const [searchQuery, setSearchQuery] = useState("")
+    const [lastSetTime, setLastSetTime] = useState<number | null>(null)
 
     const filteredStudents = students.filter((student) => {
         return student.name.toLowerCase().includes(searchQuery.toLowerCase())
     })
+
+    const shouldRenderButton = () => {
+        if (!lastSetTime) return true
+
+        const timeDifference = Date.now() - lastSetTime
+        const hoursSinceLastSet = timeDifference / (1000 * 60 * 60)
+        const minutesSinceLastSet = timeDifference / (1000 * 60)
+        return hoursSinceLastSet >= 1 || minutesSinceLastSet >= 5
+    }
+
+    useEffect(() => {
+        const storedTime = localStorage.getItem("timeOfLast520Sync")
+        if (storedTime) {
+            setLastSetTime(parseInt(storedTime))
+        }
+    }, [])
 
     useEffect(() => {
         userEndpoint
@@ -208,12 +87,26 @@ const Students520 = () => {
                 RECENTLY done a sync
             </p>
             <div className='container mx-auto '>
-                <button
-                    type='submit'
-                    className='text-gray-400 font-bold py-2 px-4 rounded border border-solid border-gray-400 hover:border-pink-600'
-                    onClick={handle520Sync}>
-                    Sync
-                </button>
+                {shouldRenderButton() ? (
+                    <button
+                        type='submit'
+                        className='text-gray-400 font-bold py-2 px-4 rounded border border-solid border-gray-400 hover:border-pink-600'
+                        onClick={handle520Sync}>
+                        Sync
+                    </button>
+                ) : (
+                    lastSetTime && (
+                        <p className='text-white'>
+                            Next sync in available in{" "}
+                            <span className='text-blue-500 font-bold'>
+                                {moment
+                                    .duration(lastSetTime + 300000 - Date.now())
+                                    .humanize()}
+                                <BsHourglassSplit className='inline-block w-5 h-5' />{" "}
+                            </span>
+                        </p>
+                    )
+                )}
                 <div className=' flex flex-wrap'>
                     {filteredStudents.map((s, idx) => (
                         <div className='w-1/4 mt-5 ' key={idx}>
