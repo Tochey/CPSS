@@ -13,6 +13,7 @@ interface Student {
     userId: string
     student_id: string
     has_uploaded_capstone: boolean
+    has_uploaded_520_capstone: boolean
 }
 
 const StudentArchive = () => {
