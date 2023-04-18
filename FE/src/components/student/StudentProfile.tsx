@@ -34,7 +34,7 @@ const StudentProfile = ({ student }: IProps) => {
         }`
         const fileName = prefix + "cpss_index.txt"
         await psEndpoint
-            .post("/pre-signed", { Key : "index" , fileName: fileName })
+            .post("/pre-signed", { Key: "index", fileName: fileName })
             .then((res) => {
                 window.open(res.data.url)
             })
@@ -47,7 +47,7 @@ const StudentProfile = ({ student }: IProps) => {
         }`
         const fileName = prefix + "520_FINAL_SUBMISSION.zip"
         await psEndpoint
-            .post("/pre-signed", { Key : "capstone" , fileName: fileName })
+            .post("/pre-signed", { Key: "capstone", fileName: fileName })
             .then((res) => {
                 window.open(res.data.url)
             })
@@ -110,7 +110,9 @@ const StudentProfile = ({ student }: IProps) => {
 
                 {student.has_uploaded_520_capstone &&
                     student.is_520_student && (
-                        <a className='inline-flex items-center text-blue-600 hover:underline cursor-pointer' onClick={get520Doc}>
+                        <a
+                            className='inline-flex items-center text-blue-600 hover:underline cursor-pointer'
+                            onClick={get520Doc}>
                             Final 520 <MdFileDownload />
                         </a>
                     )}

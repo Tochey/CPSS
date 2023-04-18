@@ -397,7 +397,6 @@ app.post("/user/sync/:className", async (req, res) => {
         const command = new SendMessageCommand(input)
         const response = await client.send(command)
         console.log(response)
-  
     }
 
     return res.status(200).send("Success")

@@ -23,7 +23,7 @@ Resources:
             Cors:
                 AllowMethods: "'GET,POST,OPTIONS,PUT,DELETE'"
                 AllowHeaders: "'*'"
-                AllowOrigin: "'*'" 
+                AllowOrigin: "'*'"
                 # change origins later
 
     # S3 Bucket to store primary submissions
