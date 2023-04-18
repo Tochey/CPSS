@@ -6,6 +6,8 @@ import cors from "cors"
 import express from "express"
 import jwt from "jsonwebtoken"
 import { userModel } from "./schema"
+import { CanvasAssignment, CanvasCourse, CanvasSubmission, CanvasUserObject } from "./types/CanvasApi"
+
 
 const app = express()
 app.use(express.json())
@@ -18,75 +20,6 @@ app.use(
         credentials: true,
     })
 )
-
-type CanvasUserObject = {
-    id: number
-    name: string
-    short_name: string
-    sortable_name: string
-    title: string | null
-    bio: string | null
-    primary_email: string
-    login_id: string
-    integration_id: string | null
-    time_zone: string
-    locale: string | null
-    effective_locale: "en"
-    calendar: {
-        ics: string
-    }
-    lti_user_id: string
-    k5_user: boolean
-}
-
-type CanvasUserFolderObject = {
-    id: number
-    name: string
-    full_name: string
-    context_id: number
-    context_type: string
-    parent_folder_id: number
-    created_at: string
-    updated_at: string
-    lock_at: null
-    unlock_at: null
-    position: number
-    locked: boolean
-    folders_url: string
-    files_url: string
-    files_count: number
-    folders_count: number
-    hidden: boolean
-    locked_for_user: boolean
-    hidden_for_user: boolean
-    for_submissions: boolean
-    can_upload: boolean
-}
-
-type CanvasUserFileObject = {
-    id: number
-    uuid: string
-    folder_id: number
-    display_name: string
-    filename: string
-    upload_status: string
-    "content-type": string
-    url: string
-    size: number
-    created_at: string
-    updated_at: string
-    unlock_at: null
-    locked: boolean
-    hidden: boolean
-    lock_at: null
-    hidden_for_user: boolean
-    thumbnail_url: null
-    modified_at: string
-    mime_class: string
-    media_entry_id: null
-    category: string
-    locked_for_user: boolean
-}
 
 const getUserInfo = async (accessToken: string): Promise<CanvasUserObject> => {
     return await axios
@@ -103,51 +36,137 @@ const getUserInfo = async (accessToken: string): Promise<CanvasUserObject> => {
         })
 }
 
-const getUserSpecFolder = async (
+const getCapstoneCourseId = async (
     userId: string,
     accessToken: string
-): Promise<CanvasUserFolderObject> => {
+): Promise<number> => {
     return await axios
-        .get(`https://canvas.instructure.com/api/v1/users/${userId}/folders`, {
+        .get(`https://canvas.instructure.com/api/v1/users/${userId}/courses`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
             },
         })
-        .then(async (e: AxiosResponse<CanvasUserFolderObject[]>) => {
-            let specFolder = (e.data as CanvasUserFolderObject[]).find((e) =>
-                e.name.includes("COMP SCI CAPSTONE PROJECT SPEC")
-            )
+        .then(async (e: AxiosResponse<CanvasCourse[]>) => {
+            let capstoneSpecCourse = e.data.find((e) =>
+                e.name && (e.name.toLowerCase().includes("capstone project spec") || e.name.toLowerCase().includes("csc 520"))
+            );
 
-            if (!specFolder) {
+            if (!capstoneSpecCourse) {
                 let nextLink = getNextLink(e.headers.link)
-                while (nextLink && !specFolder) {
-                    let res: AxiosResponse<CanvasUserFolderObject[]> =
+                while (nextLink && !capstoneSpecCourse) {
+                    let res: AxiosResponse<CanvasCourse[]> =
                         await axios.get(nextLink, {
                             headers: {
                                 Authorization: `Bearer ${accessToken}`,
                             },
                         })
-                    specFolder = (res.data as CanvasUserFolderObject[]).find(
-                        (e) => e.name.includes("COMP SCI CAPSTONE PROJECT SPEC")
-                    )
+                    let capstoneSpecCourse = res.data.find((e) =>
+                        e.name && (e.name.toLowerCase().includes("capstone project spec") || e.name.toLowerCase().includes("csc 520"))
+                    );
 
-                    if (!specFolder) {
+                    if (!capstoneSpecCourse) {
                         nextLink = getNextLink(res.headers.link)
                         continue
                     }
 
-                    return specFolder
+                    return capstoneSpecCourse.id
                 }
                 throw Error(
                     "You are not a computer science student, you are not allowed to use this service"
                 )
             }
 
-            return specFolder
+            return capstoneSpecCourse.id
         })
-        .catch((e: AxiosError<any>) => {
+        .catch((e: any) => {
+            if (e instanceof AxiosError<any>) {
+                throw Error(e.response?.data.errors[0].message)
+            }
+
+            throw Error(e.message)
+        })
+}
+
+const getCapstoneAssignmentId = async (
+    courseId: number,
+    accessToken: string
+): Promise<number> => {
+    return await axios
+        .get(`https://canvas.instructure.com/api/v1/courses/${courseId}/assignments`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        }).then(async (e: AxiosResponse<CanvasAssignment[]>) => {
+            let capstoneSpecAssignment = e.data.find((e) =>
+                e.name && (e.name.toLowerCase().includes("problem description") || e.name.toLowerCase().includes("problem description"))
+            );
+
+            if (!capstoneSpecAssignment) {
+                let nextLink = getNextLink(e.headers.link)
+                while (nextLink && !capstoneSpecAssignment) {
+                    let res: AxiosResponse<CanvasAssignment[]> =
+                        await axios.get(nextLink, {
+                            headers: {
+                                Authorization: `Bearer ${accessToken}`,
+                            },
+                        })
+                    capstoneSpecAssignment = res.data.find(
+                        (e) => e.name && (e.name.toLowerCase().includes("problem description") || e.name.toLowerCase().includes("problem description"))
+                    )
+
+                    if (!capstoneSpecAssignment) {
+                        nextLink = getNextLink(res.headers.link)
+                        continue
+                    }
+
+                    return capstoneSpecAssignment.id
+                }
+                throw Error(
+                    "The Problem Description assignment is not found, please contact the instructor - Bo Hatfield"
+                )
+            }
+
+            return capstoneSpecAssignment.id
+        })
+        .catch((e: any) => {
+            if (e instanceof AxiosError<any>) {
+                throw Error(e.response?.data.errors[0].message)
+            }
+
+            throw Error(e.message)
+        })
+}
+
+const getProblemDescAttachmentIdIfPresent = async (courseId: number, assignmentId: number, userId: string, accessToken: string): Promise<number> => {
+    return await axios.get(`https://canvas.instructure.com/api/v1/courses/${courseId}/assignments/${assignmentId}/submissions/${userId}`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    }).then(async (e: AxiosResponse<CanvasSubmission>) => {
+
+        if (!e.data.attachments) {
+            throw Error("You have not submitted your problem description yet")
+        }
+
+        if (e.data.attachments.length > 1) {
+            const latestProblemDesc = e.data.attachments.sort((a, b) => {
+                return (
+                    new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+                )
+            })[0]
+            return latestProblemDesc.id
+        }
+
+        return e.data.attachments[0].id
+    }
+    ).catch((e: any) => {
+        if (e instanceof AxiosError<any>) {
             throw Error(e.response?.data.errors[0].message)
-        })
+        }
+
+        throw Error(e.message)
+    }
+    )
 }
 
 const getNextLink = (linkHeader: string) => {
@@ -165,78 +184,10 @@ const getNextLink = (linkHeader: string) => {
     return null
 }
 
-app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
-    const { accessToken } = req.body
-    let user, specFolder
-
-    try {
-        user = await getUserInfo(accessToken)
-        user = { ...user, ROLE: "STUDENT" }
-        console.log("getting spec folder")
-        specFolder = await getUserSpecFolder(user.id.toString(), accessToken)
-        const { id, name, primary_email } = user as CanvasUserObject
-        const student = await userModel.get({ userId: id.toString() })
-        if (student) {
-            throw Error("This access token has been used already")
-        }
-    } catch (error) {
-        return res.status(403).send(error.message)
-    }
-
-    const { id, name, primary_email, login_id } = user as CanvasUserObject
-
-    const { files_url } = specFolder as CanvasUserFolderObject
-    const files = await axios
-        .get(files_url, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        })
-        .then(async (e: AxiosResponse<CanvasUserFileObject[]>) => {
-            let paginatedVersions: Array<CanvasUserFileObject> = []
-
-            let problemDescFile = (e.data as CanvasUserFileObject[]).filter(
-                (e) =>
-                    e.filename.includes("problem_desc.txt") &&
-                    e["content-type"] === "text/plain"
-            )
-
-            let nextLink = getNextLink(e.headers.link)
-            while (nextLink) {
-                let res: AxiosResponse<CanvasUserFileObject[]> =
-                    await axios.get(nextLink, {
-                        headers: {
-                            Authorization: `Bearer ${accessToken}`,
-                        },
-                    })
-                paginatedVersions = (res.data as CanvasUserFileObject[]).filter(
-                    (e) =>
-                        e.filename.includes("problem_desc.txt") &&
-                        e["content-type"] === "text/plain"
-                )
-                problemDescFile.push(...paginatedVersions)
-                nextLink = getNextLink(res.headers.link)
-            }
-            return problemDescFile
-        })
-
-    if (files.length === 0) {
-        return res
-            .status(401)
-            .send(
-                "Could not find problem.desc file. Upload it on canvas with the format problem_desc.txt"
-            )
-    }
-
-    const latestProblemDesc = files.sort((a, b) => {
-        return (
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        )
-    })[0]
-
+const getFileDownloadUrl = async (attachmentId: number, accessToken: string) => {
     const problemDescdownloadUrl = await axios
         .get(
-            `https://canvas.instructure.com/api/v1/files/${latestProblemDesc.id}/public_url`,
+            `https://canvas.instructure.com/api/v1/files/${attachmentId.toString()}/public_url`,
             {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
@@ -252,17 +203,19 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
         .then((e: AxiosResponse<string>) => {
             return e.data
         })
+    return content
+}
 
+const uploadToS3 = async (name: string, login_id: string, id: number, primary_email: string, content: string): Promise<void> => {
     const fullName = name.toLowerCase().split(" ")
-    const prefix = `${
-        fullName[0].charAt(0) + fullName[1] + "_" + login_id + "/"
-    }`
+    const prefix = `${fullName[0].charAt(0) + fullName[1] + "_" + login_id + "/"
+        }`
     const fileName = prefix + "cpss_index.txt"
 
-    // consider encoding with user netadata
+
     const client = new S3Client({})
     const command = new PutObjectCommand({
-        Bucket: "indexed-submission-bucket",
+        Bucket: process.env.INDEXEDBUCKETNAME || "indexed-submission-bucket21312",
         Key: fileName,
         ContentType: "text/plain",
         Body: content,
@@ -274,7 +227,30 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
         },
     })
 
+    await client.send(command)
+
+}
+
+
+app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
+    const { accessToken } = req.body
+    let user, courseId: number, problemDescId: number, attachmentId: number
+
     try {
+        user = await getUserInfo(accessToken)
+        user = { ...user, ROLE: "STUDENT", accessToken: accessToken }
+        console.log("getting spec folder")
+        courseId = await getCapstoneCourseId(user.id.toString(), accessToken)
+        problemDescId = await getCapstoneAssignmentId(courseId, accessToken)
+        attachmentId = await getProblemDescAttachmentIdIfPresent(courseId, problemDescId, user.id.toString(), accessToken)
+        const content = await getFileDownloadUrl(attachmentId, accessToken)
+        const { id, name, primary_email, login_id } = user as CanvasUserObject
+        await uploadToS3(name, login_id, id, primary_email, content)
+        const student = await userModel.get({ userId: id.toString() })
+        if (student) {
+            throw Error("This access token has been used already")
+        }
+
         await userModel.create({
             name: name,
             userId: id.toString(),
@@ -284,13 +260,15 @@ app.post("/iam/signup", async (req: express.Request, res: express.Response) => {
             is_520_student: true,
             student_id: user.login_id,
             has_uploaded_capstone: false,
+            has_uploaded_520_capstone: false,
+            accessToken: accessToken,
         })
 
-        await client.send(command)
+
+
     } catch (error) {
-        res.status(500).send(
-            "Files were found but failed to upload to s3. Proceed to login"
-        )
+        console.log(error)
+        return res.status(403).send(error.message)
     }
     res.status(200).send("Successfully onboarded")
 })

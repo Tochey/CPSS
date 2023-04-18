@@ -11,9 +11,10 @@ import { StudentLogin } from "./components/student/StudentLogin"
 import { useAuth } from "./lib/AuthContext"
 import ProtectedRoute from "./lib/ProtectedRoutes"
 import { Navbar } from "./components/Navbar"
-import Students from "./components/student/Students"
+import Students520 from "./components/student/Students520"
 import StudentArchive from "./components/student/StudentArchive"
 import AdminSchedule from "./components/admin/AdminSchedule"
+import Students521 from "./components/student/Students521"
 
 function App() {
     const { user } = useAuth()
@@ -51,7 +52,8 @@ function App() {
                         />
                     </Route>
                     <Route path='/' element={<ProtectedRoute role='ADMIN' />}>
-                        <Route path='/admin/students' element={<Students />} />
+                        <Route path='/admin/520students' element={<Students520 />} />
+                        <Route path='/admin/521students' element={<Students521 />} />
                         <Route
                             path='/admin/archive'
                             element={<StudentArchive />}

@@ -33,3 +33,5 @@ Main:
         26: Export capstone schedules into pdf
         27: Figure out origins for s3 and lambda
         28: Get amplify to delpoy SAM
+        29: Add additionam time slots if needed - edit size of timeslots
+        30: Protect all endpoints

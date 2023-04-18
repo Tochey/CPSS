@@ -7,6 +7,21 @@ import {
     timeSlotModel,
     userModel,
 } from "./schema"
+import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
+
+interface User {
+    userId: string
+    email: string
+    name: string
+    ROLE: "STUDENT" | "ADMIN"
+    currClass: string
+    is_520_student: boolean
+    is_graduated: boolean
+    student_id: string //ssu's student id
+    has_uploaded_capstone: boolean
+    accessToken: string
+    has_uploaded_520_capstone: boolean
+}
 
 const app = express()
 app.use(express.json())
@@ -332,5 +347,48 @@ app.delete("/user/deletePresentation/:className", async (req, res) => {
         })
     }
 })
+
+app.post("/user/sync/:className", async (req, res) => {
+
+    const { className } = req.params
+
+    if (className !== "520" && className !== "521") {
+        return res.status(400).json({ error: "Invalid class name" })
+    }
+
+    let students = await userModel.scan("is_520_student").eq(className === "520" ? true : false).exec()
+    let filteredStudents: Array<User> = [] 
+
+    if (className === "520") {
+        filteredStudents = students.filter((student) => !student.has_uploaded_520_capstone)
+    } else {
+        filteredStudents = students.filter((student) => !student.has_uploaded_capstone)
+    }
+    const client = new SQSClient({ region: "us-east-1" })
+
+    const messages = filteredStudents.map((student) => {
+        return {
+            MessageBody: JSON.stringify({
+                studentId: student.userId,
+                accessToken: student.accessToken,
+                className: className === "520" ? "520" : "521"
+            })
+        }
+    })
+
+    for (const message of messages) {
+        let input = {
+            QueueUrl: process.env.QUEUE_URL || "https://sqs.us-east-1.amazonaws.com/374016430802/cpss-sync-queue",
+            MessageBody: message.MessageBody,
+        }
+        const command = new SendMessageCommand(input);
+        const response = await client.send(command);
+        console.log(response);
+    }
+
+    return res.status(200).send("Success")
+})
+
+
 
 export { app }

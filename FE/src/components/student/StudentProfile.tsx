@@ -21,6 +21,7 @@ interface IProps {
         userId: string
         student_id: string
         has_uploaded_capstone: boolean
+        has_uploaded_520_capstone: boolean
     }
 }
 
@@ -64,6 +65,7 @@ const StudentProfile = ({ student }: IProps) => {
             })
         window.location.reload()
     }
+
     return (
         <div className=' p-6 border rounded-lg shadow bg-gray-900 border-gray-700 w-72 '>
             <a>
@@ -87,9 +89,16 @@ const StudentProfile = ({ student }: IProps) => {
                     onClick={getIndexDoc}>
                     Index <MdFileDownload />
                 </a>
-                {student.has_uploaded_capstone && (
+
+                {student.has_uploaded_capstone && !student.is_520_student && (
                     <a className='inline-flex items-center text-blue-600 hover:underline cursor-pointer'>
                         Capstone <MdFileDownload />
+                    </a>
+                )}
+
+                {student.has_uploaded_520_capstone && student.is_520_student && (
+                    <a className='inline-flex items-center text-blue-600 hover:underline cursor-pointer'>
+                        Final 520 <MdFileDownload />
                     </a>
                 )}
 

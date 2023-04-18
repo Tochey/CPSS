@@ -15,6 +15,7 @@ interface Student {
     userId: string
     student_id: string
     has_uploaded_capstone: boolean
+    has_uploaded_520_capstone: boolean
 }
 //  const q = [
 //     {
@@ -159,7 +160,18 @@ interface Student {
 //     },
 // ]
 
-const Students = () => {
+const handle520Sync = () => {
+    userEndpoint
+        .post("user/sync/520")
+        .then((res) => {
+            console.log(res.data)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+}
+
+const Students520 = () => {
     const [students, setStudents] = useState<Array<Student>>([])
     const [searchQuery, setSearchQuery] = useState("")
 
@@ -171,8 +183,11 @@ const Students = () => {
         userEndpoint
             .get("user/getAllStudents")
             .then((res) => {
+                console.log(res.data)
                 setStudents(
-                    res.data.filter((s: any) => s.is_graduated === false)
+                    res.data.filter(
+                        (s: Student) => !s.is_graduated && s.is_520_student
+                    )
                 )
             })
             .catch((err) => {
@@ -185,11 +200,20 @@ const Students = () => {
             <div className='container mx-auto px-4 py-4 items-center justify-center '>
                 <AdminSearch sq={setSearchQuery} />
             </div>
-            <p className='font-bold p-4 text-center text-lg text-blue-600'>
-                Note: Capstone Documents are available to download ONLY if you
-                have RECENTLY done a sync
+            <h1 className='font-bold p-4 text-center text-2xl text-blue-600'>
+                520 Students
+            </h1>
+            <p className='font-bold p-4 text-center text-lg text-red-600'>
+                Note: 520 Documents are available to download ONLY if you have
+                RECENTLY done a sync
             </p>
             <div className='container mx-auto '>
+                <button
+                    type='submit'
+                    className='text-gray-400 font-bold py-2 px-4 rounded border border-solid border-gray-400 hover:border-pink-600'
+                    onClick={handle520Sync}>
+                    Sync
+                </button>
                 <div className=' flex flex-wrap'>
                     {filteredStudents.map((s, idx) => (
                         <div className='w-1/4 mt-5 ' key={idx}>
@@ -202,4 +226,4 @@ const Students = () => {
     )
 }
 
-export default Students
+export default Students520

@@ -11,9 +11,16 @@ const AdminNavbar = () => {
             <nav className='md:py flex justify-evenly shadow-lg py-10'>
                 <ul className='flex items-center gap-10'>
                     <li>
-                        <Link to={"/admin/students"}>
+                        <Link to={"/admin/520students"}>
                             <p className='text-gray-400 font-bold hover:underline hover:text-white'>
-                                Students
+                                520 Students
+                            </p>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to={"/admin/521students"}>
+                            <p className='text-gray-400 font-bold hover:underline hover:text-white'>
+                                521 Students
                             </p>
                         </Link>
                     </li>

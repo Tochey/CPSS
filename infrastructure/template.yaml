@@ -29,13 +29,13 @@ Resources:
     PrimarySubmissionBucket:
         Type: AWS::S3::Bucket
         Properties:
-            BucketName: primary-submission-bucket
+            BucketName: primary-submission-bucket21312
 
     # S3 Bucket to store indexed submissions
     IndexedSubmissionBucket:
         Type: AWS::S3::Bucket
         Properties:
-            BucketName: indexed-submission-bucket
+            BucketName: indexed-submission-bucket21312
             CorsConfiguration:
                 CorsRules:
                     - AllowedHeaders:
@@ -52,21 +52,9 @@ Resources:
             AttributeDefinitions:
                 - AttributeName: userId
                   AttributeType: S
-                - AttributeName: ROLE
-                  AttributeType: S
             KeySchema:
                 - AttributeName: userId
                   KeyType: HASH
-            GlobalSecondaryIndexes:
-                - IndexName: ROLE-index
-                  KeySchema:
-                      - AttributeName: ROLE
-                        KeyType: HASH
-                  Projection:
-                      ProjectionType: ALL
-                  ProvisionedThroughput:
-                      ReadCapacityUnits: 1
-                      WriteCapacityUnits: 1
             ProvisionedThroughput:
                 ReadCapacityUnits: 1
                 WriteCapacityUnits: 1
@@ -78,21 +66,9 @@ Resources:
             AttributeDefinitions:
                 - AttributeName: presentation_id
                   AttributeType: S
-                - AttributeName: className
-                  AttributeType: S
             KeySchema:
                 - AttributeName: presentation_id
                   KeyType: HASH
-            GlobalSecondaryIndexes:
-                - IndexName: classNameIndex
-                  KeySchema:
-                      - AttributeName: className
-                        KeyType: HASH
-                  Projection:
-                      ProjectionType: ALL
-                  ProvisionedThroughput:
-                      ReadCapacityUnits: 1
-                      WriteCapacityUnits: 1
             ProvisionedThroughput:
                 ReadCapacityUnits: 1
                 WriteCapacityUnits: 1
@@ -100,7 +76,7 @@ Resources:
     TimeSlotTable:
         Type: AWS::DynamoDB::Table
         Properties:
-            TableName: cpss-timeSlot
+            TableName: cpss-timelot
             AttributeDefinitions:
                 - AttributeName: time_slot_id
                   AttributeType: S
@@ -118,26 +94,12 @@ Resources:
             AttributeDefinitions:
                 - AttributeName: registration_id
                   AttributeType: S
-                - AttributeName: student_id
-                  AttributeType: S
             KeySchema:
                 - AttributeName: registration_id
                   KeyType: HASH
-                - AttributeName: student_id
-                  KeyType: RANGE
             ProvisionedThroughput:
                 ReadCapacityUnits: 1
                 WriteCapacityUnits: 1
-            GlobalSecondaryIndexes:
-                - IndexName: studentIdIndex
-                  KeySchema:
-                      - AttributeName: student_id
-                        KeyType: HASH
-                  Projection:
-                      ProjectionType: ALL
-                  ProvisionedThroughput:
-                      ReadCapacityUnits: 1
-                      WriteCapacityUnits: 1
 
     IIam:
         Type: AWS::Serverless::Function
@@ -213,7 +175,8 @@ Resources:
                 - LambdaInvokePolicy:
                       FunctionName: !Ref IUpload
                 - S3ReadPolicy:
-                      BucketName: indexed-submission-bucket
+                      BucketName: indexed-submission-bucket21312 
+                    #   circular dependency when referencing the bucket name?????
 
         Metadata:
             BuildMethod: esbuild
@@ -255,6 +218,7 @@ Resources:
             Environment:
                 Variables:
                     NODE_ENV: "production"
+                    QUEUE_URL: !GetAtt SyncQueue.QueueUrl
             Events:
                 ExpressLambdaProxy:
                     Type: Api
@@ -265,13 +229,14 @@ Resources:
             Policies:
                 - DynamoDBCrudPolicy:
                       TableName: !Ref UserTable
+                - SQSSendMessagePolicy:
+                        QueueName: !Ref SyncQueue
                 - DynamoDBCrudPolicy:
                       TableName: !Ref PresentationTable
                 - DynamoDBCrudPolicy:
                       TableName: !Ref TimeSlotTable
                 - DynamoDBCrudPolicy:
                       TableName: !Ref RegistrationTable
-
         Metadata:
             BuildMethod: esbuild
             BuildProperties:
@@ -279,7 +244,48 @@ Resources:
                 Target: "es2020"
                 EntryPoints:
                     - user.ts
+    SyncQueue:
+        Type: AWS::SQS::Queue
+        Properties:
+            QueueName: cpss-sync-queue
+            VisibilityTimeout: 120
 
+    SyncWorkers:
+        Type: AWS::Serverless::Function
+        Properties:
+            CodeUri: src/lambda/sync/
+            Handler: sync.handler
+            Environment:
+                Variables:
+                    "USER_TABLE": !Ref UserTable
+                    "SUBMISSION_BUCKET_NAME" : !Ref PrimarySubmissionBucket
+            Policies:
+                - SQSPollerPolicy:
+                    QueueName: !Ref SyncQueue
+                - S3ReadPolicy:
+                    BucketName: !Ref PrimarySubmissionBucket
+                - S3WritePolicy:
+                    BucketName: !Ref PrimarySubmissionBucket
+                - DynamoDBCrudPolicy:
+                    TableName: !Ref UserTable
+                - DynamoDBCrudPolicy:
+                    TableName: !Ref PresentationTable
+                - DynamoDBCrudPolicy:
+                    TableName: !Ref TimeSlotTable
+                - DynamoDBCrudPolicy:
+                    TableName: !Ref RegistrationTable
+            Events:
+                SyncQueueEvent:
+                    Type: SQS
+                    Properties:
+                        Queue: !GetAtt SyncQueue.Arn       
+        Metadata:
+            BuildMethod: esbuild
+            BuildProperties:
+                Minify: true
+                Target: "es2020"
+                EntryPoints:
+                    - sync.ts
 Outputs:
     BeseAPiEndpoint:
         Description: "Base API Endpoint"

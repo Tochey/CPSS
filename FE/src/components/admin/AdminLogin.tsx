@@ -37,7 +37,7 @@ const AdminLogin = () => {
         ) {
             setError(error.response.data)
         } else {
-            navigate("/admin/students")
+            navigate("/admin/520students")
         }
     }
 

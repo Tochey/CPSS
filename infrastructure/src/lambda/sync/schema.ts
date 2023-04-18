@@ -1,9 +1,6 @@
 import dynamoosee from "dynamoose"
 import { Item } from "dynamoose/dist/Item"
 
-if (process.env.NODE_ENV !== "production") {
-    dynamoosee.aws.ddb.local()
-}
 interface User extends Item {
     userId: string
     email: string
@@ -14,8 +11,8 @@ interface User extends Item {
     is_graduated: boolean
     student_id: string //ssu's student id
     has_uploaded_capstone: boolean
-    has_uploaded_520_capstone: boolean
     accessToken: string
+    has_uploaded_520_capstone: boolean
 }
 
 const userSchema = new dynamoosee.Schema(
@@ -44,7 +41,7 @@ const userSchema = new dynamoosee.Schema(
             default: true,
         },
 
-        accessToken : {
+        accessToken: {
             type: String,
             required: true,
         },
@@ -62,7 +59,8 @@ const userSchema = new dynamoosee.Schema(
             type: Boolean,
             required: true,
         },
-        has_uploaded_520_capstone: {
+        has_uploaded_520_capstone
+            : {
             type: Boolean,
             required: true,
         }
@@ -135,7 +133,7 @@ const registrationSchema = new dynamoosee.Schema({
     capstone_abstract: String,
 })
 
-const user = dynamoosee.model<User>("cpss-user", userSchema, {
+const user = dynamoosee.model<User>(process.env.USER_TABLE || "cpss-user", userSchema, {
     create: false,
     waitForActive: false,
 })

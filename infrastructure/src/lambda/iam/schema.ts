@@ -15,6 +15,8 @@ interface User extends Item {
     is_graduated: boolean
     student_id: string //ssu's student id
     has_uploaded_capstone: boolean
+    has_uploaded_520_capstone: boolean
+    accessToken: string
 }
 
 const userSchema = new dynamoosee.Schema(
@@ -36,14 +38,16 @@ const userSchema = new dynamoosee.Schema(
             type: String,
             required: true,
             default: "STUDENT",
-            index: {
-                name: "ROLE-index",
-            },
         },
         is_520_student: {
             type: Boolean,
             required: true,
             default: true,
+        },
+
+        accessToken : {
+            type: String,
+            required: true,
         },
 
         is_graduated: {
@@ -59,6 +63,10 @@ const userSchema = new dynamoosee.Schema(
             type: Boolean,
             required: true,
         },
+        has_uploaded_520_capstone: {
+            type: Boolean,
+            required: true,
+        }
     },
     {
         saveUnknown: false,
@@ -71,16 +79,37 @@ const presentationSchema = new dynamoosee.Schema({
         type: String,
         hashKey: true,
     },
-    start_time: Number,
-    end_time: Number,
-    presentation_duration: Number,
-    break_time: Number,
+
+    className: {
+        type: String,
+        required: true,
+    },
+    start_time: {
+        type: Number,
+        required: true,
+    },
+    end_time: {
+        type: Number,
+        required: true,
+    },
+    presentation_duration: {
+        type: Number,
+        required: true,
+    },
+    break_time: {
+        type: Number,
+        required: true,
+    },
 })
 
 const timeSlotSchema = new dynamoosee.Schema({
     time_slot_id: {
         type: String,
         hashKey: true,
+    },
+    className: {
+        type: String,
+        required: true,
     },
     start_time: Number,
     end_time: Number,
@@ -96,9 +125,10 @@ const registrationSchema = new dynamoosee.Schema({
     student_id: {
         type: String,
         required: true,
-        index: {
-            name: "studentIdIndex",
-        },
+    },
+    className: {
+        type: String,
+        required: true,
     },
     time_slot_id: String,
     registration_timestamp: Number,
