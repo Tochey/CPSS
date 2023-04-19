@@ -77,7 +77,7 @@ Resources:
     TimeSlotTable:
         Type: AWS::DynamoDB::Table
         Properties:
-            TableName: cpss-timelot
+            TableName: cpss-timeSlot
             AttributeDefinitions:
                 - AttributeName: time_slot_id
                   AttributeType: S
