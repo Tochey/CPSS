@@ -110,7 +110,7 @@ const Students520 = () => {
                 <div className=' flex flex-wrap'>
                     {filteredStudents.map((s, idx) => (
                         <div className='w-1/4 mt-5 ' key={idx}>
-                            <StudentProfile key={idx} student={s} />
+                            <StudentProfile key={idx} student={s} setStudent={setStudents} />
                         </div>
                     ))}
                 </div>

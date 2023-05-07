@@ -9,6 +9,7 @@ import { BsTrash } from "react-icons/bs"
 import { RiCloseCircleFill } from "react-icons/ri"
 import { ImCheckmark } from "react-icons/im"
 import CapstoneModal from "../CapstoneModal"
+import AnimatedSpinner from "../AnimatedSpinner"
 
 interface Student {
     ROLE: string
@@ -21,6 +22,7 @@ interface Student {
     userId: string
     student_id: string
     has_uploaded_capstone: boolean
+    has_uploaded_520_capstone: boolean
 }
 
 interface PresentationProps {
@@ -173,7 +175,7 @@ const StudentDashboard = () => {
             </div>
             <div className='container mx-auto mt-10'>
                 {presentation.length > 0 && (
-                    <div className='block max-w-md p-6 bg-white border rounded-lg shadow dark:bg-gray-800 border-gray-700 hover:bg-gray-700'>
+                    <div className='block max-w-md p-6 border rounded-lg shadow bg-gray-800 border-gray-700 hover:bg-gray-700'>
                         <h1 className='text-xl text-blue-600'>
                             Presentation Date:{" "}
                             <span className='text-white font-bold'>

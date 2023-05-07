@@ -13,7 +13,6 @@ Globals:
         Runtime: nodejs14.x
         Architectures:
             - x86_64
-
 Resources:
     CPSSApiGateway:
         Type: AWS::Serverless::Api
@@ -261,8 +260,8 @@ Resources:
             Handler: sync.handler
             Environment:
                 Variables:
-                    "USER_TABLE": !Ref UserTable
-                    "SUBMISSION_BUCKET_NAME": !Ref PrimarySubmissionBucket
+                    USER_TABLE: !Ref UserTable
+                    SUBMISSION_BUCKET_NAME: !Ref PrimarySubmissionBucket
             Policies:
                 - SQSPollerPolicy:
                       QueueName: !Ref SyncQueue

@@ -15,6 +15,7 @@ import Students520 from "./components/student/Students520"
 import StudentArchive from "./components/student/StudentArchive"
 import AdminSchedule from "./components/admin/AdminSchedule"
 import Students521 from "./components/student/Students521"
+import Hits from "./components/Hits"
 
 function App() {
     const { user } = useAuth()
@@ -49,6 +50,10 @@ function App() {
                         <Route
                             path='/dashboard'
                             element={<StudentDashboard />}
+                        />
+                        <Route
+                            path='/hits'
+                            element={<Hits />}
                         />
                     </Route>
                     <Route path='/' element={<ProtectedRoute role='ADMIN' />}>

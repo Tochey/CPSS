@@ -22,9 +22,10 @@ interface IProps {
         has_uploaded_capstone: boolean
         has_uploaded_520_capstone: boolean
     }
+    setStudent: any
 }
 
-const StudentProfile = ({ student }: IProps) => {
+const StudentProfile = ({ student, setStudent }: IProps) => {
     const [isClicked, setIsClicked] = useState(false)
 
     const getIndexDoc = async () => {
@@ -62,7 +63,9 @@ const StudentProfile = ({ student }: IProps) => {
             .catch((err) => {
                 alert("Something went wrong :(")
             })
-        window.location.reload()
+        setStudent((prev: any) => {
+            return prev.filter((s: any) => s.userId !== userId)
+        })
     }
 
     const handleStudentArchive = async () => {
@@ -75,17 +78,22 @@ const StudentProfile = ({ student }: IProps) => {
             .catch((err) => {
                 alert("Something went wrong :(")
             })
-        window.location.reload()
+
+        setStudent((prev: any) => {
+            return prev.filter((s: any) => s.userId !== userId)
+        })
+
+        // window.location.reload()
     }
 
     return (
         <div className=' p-6 border rounded-lg shadow bg-gray-900 border-gray-700 w-72 '>
             <a>
-                <h5 className='mb-1 text-lg font-semibold  text-gray-900 dark:text-white'>
+                <h5 className='mb-1 text-lg font-semibold  text-white '>
                     {student.name}
                 </h5>
             </a>
-            <p className='mb-2 text-gray-500 dark:text-gray-400 font-bold'>
+            <p className='mb-2  text-gray-400 font-bold'>
                 {student.is_520_student ? "520 Student" : "521 Student"}
             </p>
             <div>
@@ -113,7 +121,7 @@ const StudentProfile = ({ student }: IProps) => {
                         <a
                             className='inline-flex items-center text-blue-600 hover:underline cursor-pointer'
                             onClick={get520Doc}>
-                            Final 520 <MdFileDownload />
+                            520 <MdFileDownload />
                         </a>
                     )}
 
