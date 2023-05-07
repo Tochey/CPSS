@@ -51,10 +51,7 @@ function App() {
                             path='/dashboard'
                             element={<StudentDashboard />}
                         />
-                        <Route
-                            path='/hits'
-                            element={<Hits />}
-                        />
+                        <Route path='/hits' element={<Hits />} />
                     </Route>
                     <Route path='/' element={<ProtectedRoute role='ADMIN' />}>
                         <Route

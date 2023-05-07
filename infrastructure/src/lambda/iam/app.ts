@@ -341,8 +341,10 @@ app.post("/iam/login", async (req: express.Request, res: express.Response) => {
             throw Error("The email or access token was not found")
         }
 
-        if(student.is_graduated){
-            throw Error("You are a graduated student, you cannot use this service")
+        if (student.is_graduated) {
+            throw Error(
+                "You are a graduated student, you cannot use this service"
+            )
         }
 
         const Cookie = serialize(

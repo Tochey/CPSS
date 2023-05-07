@@ -46,7 +46,6 @@ const HitCard = ({ hits }) => {
             })
     }
 
-    
     return (
         <div className='w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mt-10'>
             <svg
@@ -73,14 +72,13 @@ const HitCard = ({ hits }) => {
             <p className='mb-3 font-normal text-gray-500 dark:text-gray-400'>
                 {processText(hits.raw_text)}
             </p>
-            {student && student.has_uploaded_520_capstone &&
-                   
-                        <a
-                            className='inline-flex items-center text-blue-600 hover:underline cursor-pointer'
-                            onClick={() => get520Doc(student)}>
-                            Final 520 Doc <MdFileDownload />
-                        </a>
-                    }
+            {student && student.has_uploaded_520_capstone && (
+                <a
+                    className='inline-flex items-center text-blue-600 hover:underline cursor-pointer'
+                    onClick={() => get520Doc(student)}>
+                    Final 520 Doc <MdFileDownload />
+                </a>
+            )}
         </div>
     )
 }
