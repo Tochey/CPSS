@@ -175,7 +175,7 @@ const getCapstoneDocAttachmentIdIfPresent = async (
         )
         .then(async (e: AxiosResponse<CanvasSubmission>) => {
             if (!e.data.attachments) {
-                throw Error("You have not final Capstone Document yet")
+                throw Error("You have not submitted your final Capstone Document yet")
             }
 
             if (e.data.attachments.length > 1) {
@@ -187,10 +187,7 @@ const getCapstoneDocAttachmentIdIfPresent = async (
                 })[0]
                 return latestProblemDesc.id
             }
-
-            if (e.data.attachments[0]["content-type"] !== "application/zip") {
-                throw Error("Your capstone document has to be a zip file")
-            }
+           
 
             return e.data.attachments[0].id
         })
@@ -280,26 +277,27 @@ const Sync520Documents: SyncRespose = async (sid, accessToken) => {
 const Sync521Documents = () => {}
 
 export const handler = async (event: CustomSQSEvent) => {
+    console.log(event)
     const { Records } = event
     const body: CustomSQSBody = JSON.parse(Records[0].body as unknown as string)
 
     const { studentId, accessToken, className } = body
 
-    try {
+  
         if (className === "520") {
             await Sync520Documents(studentId, accessToken)
         } else if (className === "521") {
             Sync521Documents()
         }
-    } catch (error) {
-        console.log(error)
-        return {
-            statusCode: 500,
-            body: JSON.stringify({
-                error: error.message,
-            }),
-        }
-    }
+    // } catch (error) {
+    //     console.log(error)
+    //     return {
+    //         statusCode: 500,
+    //         body: JSON.stringify({
+    //             error: error.message,
+    //         }),
+    //     }
+    // }
 
     const response = {
         statusCode: 200,

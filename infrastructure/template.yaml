@@ -252,6 +252,14 @@ Resources:
         Properties:
             QueueName: cpss-sync-queue
             VisibilityTimeout: 120
+            RedrivePolicy:
+                deadLetterTargetArn: !GetAtt DeadLetterSyncQueue.Arn
+                maxReceiveCount: 1
+
+    DeadLetterSyncQueue:
+        Type: AWS::SQS::Queue
+        Properties:
+            QueueName: cpss-sync-queue-dead-letter
 
     SyncWorkers:
         Type: AWS::Serverless::Function
@@ -282,6 +290,7 @@ Resources:
                     Type: SQS
                     Properties:
                         Queue: !GetAtt SyncQueue.Arn
+                        BatchSize: 1
         Metadata:
             BuildMethod: esbuild
             BuildProperties:
