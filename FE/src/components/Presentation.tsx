@@ -92,10 +92,10 @@ const Presentation = ({
                             </li>
                         )}
 
-                        <li className='flex'>
+                        {/* <li className='flex'>
                             <BsFillPersonFill className='h-6 w-6 text-blue-600 hover:text-white' />
                             <span className='text-lg text-white ml-2'>20</span>
-                        </li>
+                        </li> */}
                         <li>
                             <PDFDownloadLink
                                 document={<SchedulePDF />}
