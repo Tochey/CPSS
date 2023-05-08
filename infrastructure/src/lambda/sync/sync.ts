@@ -175,7 +175,9 @@ const getCapstoneDocAttachmentIdIfPresent = async (
         )
         .then(async (e: AxiosResponse<CanvasSubmission>) => {
             if (!e.data.attachments) {
-                throw Error("You have not submitted your final Capstone Document yet")
+                throw Error(
+                    "You have not submitted your final Capstone Document yet"
+                )
             }
 
             if (e.data.attachments.length > 1) {
@@ -187,7 +189,6 @@ const getCapstoneDocAttachmentIdIfPresent = async (
                 })[0]
                 return latestProblemDesc.id
             }
-           
 
             return e.data.attachments[0].id
         })
@@ -283,12 +284,11 @@ export const handler = async (event: CustomSQSEvent) => {
 
     const { studentId, accessToken, className } = body
 
-  
-        if (className === "520") {
-            await Sync520Documents(studentId, accessToken)
-        } else if (className === "521") {
-            Sync521Documents()
-        }
+    if (className === "520") {
+        await Sync520Documents(studentId, accessToken)
+    } else if (className === "521") {
+        Sync521Documents()
+    }
     // } catch (error) {
     //     console.log(error)
     //     return {
