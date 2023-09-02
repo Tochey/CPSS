@@ -9,3 +9,5 @@ Faculty members have a comprehensive overview of their supervisees and their res
 The administrator of the CPSS has full control over the system, with the ability to perform CRUD actions on accounts, set up a project presentation schedule, and revoke faculty access as necessary. This level of control ensures that the system is well-maintained and secure, while also enabling efficient administration and oversight.
 
 Overall, the CPSS represents a cutting-edge approach to capstone project management, providing a wealth of resources and tools to ensure success for students, faculty, and administrators alike.
+
+![image](https://github.com/Tochey/CPSS/assets/54341970/1f6c82ec-53a3-48b9-87e0-b1af5a460f42)
